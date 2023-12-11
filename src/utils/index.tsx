@@ -8,7 +8,7 @@ import { IApiEmployee } from '../interfaces/ApiDataInterface';
 import { Button, LinkButton } from '../components';
 import { locations } from '../pages/ManageEmployees/constants';
 
-//sort array object by sortKey (slice create a new array)
+//sort array object by sortKey (slice() to create a new array)
 export const sortObjByKey = (srcObjArray: any[], sortKey: string) => {
     return srcObjArray
         .slice()
