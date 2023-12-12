@@ -24,6 +24,7 @@ const StyledModal = styled.div<{ $isOpen: boolean }>`
     translate: -50% -50%;
     overflow: hidden auto;
     min-width: 250px;
+    max-width: 550px;
     border: 1px solid black;
     z-index: 4;
     background-color: #fff;

@@ -1,6 +1,11 @@
 import styled from 'styled-components';
 
 const StyledEmployeeDeleteModal = styled.div`
+    .confirm-dialog-heading {
+        font-size: 1.5em;
+        margin: 15px 0;
+    }
+
     .confirm-dialog-msg {
         font-size: 1.2em;
     }
