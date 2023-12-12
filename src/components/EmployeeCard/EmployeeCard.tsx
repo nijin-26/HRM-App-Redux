@@ -2,7 +2,7 @@ import { CardBody, CardContainer, CardHeader } from "./EmployeeCard.styles";
 
 import avatar from "../../assets/images/employee-avatar.svg";
 import { IDeleteEmployee, IEmployeeListing } from "../../interfaces/common";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const EmployeeCard = ({
   employeeData,
@@ -13,52 +13,60 @@ const EmployeeCard = ({
   setIsModalOpen: (isOpen: boolean) => void;
   setDeleteEmployee: (deleteEmployee: IDeleteEmployee) => void;
 }) => {
+  const navigate = useNavigate();
+
   return (
-    <CardContainer>
-      <CardHeader>
-        <div className="icons">
-          <Link to={`/edit-employee/${employeeData.id}`}>
-            <span className="material-symbols-rounded">edit_square</span>
-          </Link>
-          <span
-            className="material-symbols-rounded"
-            onClick={() => {
-              setDeleteEmployee({
-                isDeleting: false,
-                empIdToDelete: employeeData.id,
-              });
-              setIsModalOpen(true);
-            }}
-          >
-            person_remove
-          </span>
-        </div>
-        <img
-          src={employeeData.photoId === "" ? avatar : employeeData.photoId}
-          alt=""
-        />
-      </CardHeader>
-      <CardBody>
-        <h3>{employeeData.fullName}</h3>
-        <p className="role">{`${employeeData.role} - ${employeeData.department}`}</p>
-        <div className="details_wrapper">
-          <div>
-            <span className="material-symbols-rounded">mail</span>
-            <p>
-              <a href={`mailto:${employeeData.email}`}>{employeeData.email}</a>
-            </p>
+    <div>
+      <CardContainer
+        onClick={() => navigate(`/view-employee/${employeeData.id}`)}
+      >
+        <CardHeader>
+          <div className="icons">
+            <Link to={`/edit-employee/${employeeData.id}`}>
+              <span className="material-symbols-rounded">edit_square</span>
+            </Link>
+            <span
+              className="material-symbols-rounded"
+              onClick={() => {
+                setDeleteEmployee({
+                  isDeleting: false,
+                  empIdToDelete: employeeData.id,
+                });
+                setIsModalOpen(true);
+              }}
+            >
+              person_remove
+            </span>
           </div>
-          <div>
-            <span className="material-symbols-rounded">location_on</span>
-            <p>{employeeData.location}</p>
-          </div>
-          {/* <div>
+          <img
+            src={employeeData.photoId === "" ? avatar : employeeData.photoId}
+            alt=""
+          />
+        </CardHeader>
+        <CardBody>
+          <h3>{employeeData.fullName}</h3>
+          <p className="role">{`${employeeData.role} - ${employeeData.department}`}</p>
+          <div className="details_wrapper">
+            <div>
+              <span className="material-symbols-rounded">mail</span>
+              <p>
+                <a href={`mailto:${employeeData.email}`}>
+                  {employeeData.email}
+                </a>
+              </p>
+            </div>
+            <div>
+              <span className="material-symbols-rounded">location_on</span>
+              <p>{employeeData.location}</p>
+            </div>
+            {/* <div>
             <span className="material-symbols-rounded">calendar_month</span>
             <p>{employeeData.dateOfJoining}</p>
           </div> */}
-        </div>
-      </CardBody>
-    </CardContainer>
+          </div>
+        </CardBody>
+      </CardContainer>
+    </div>
   );
 };
 
