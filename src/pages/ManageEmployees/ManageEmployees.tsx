@@ -11,6 +11,7 @@ import {
     EmployeesTableFilter,
     LinkButton,
     Loader,
+    EmployeeDeleteModal,
 } from '../../components';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../../core/contexts/AppContext';
@@ -160,12 +161,14 @@ const ManageEmployees: React.FC = () => {
 
                     <Modal
                         $isOpen={isModalopen}
-                        text="Are you sure you want to permanently delete the employee
-                    record?"
-                        type="yesCancel"
-                        confirmClickHandler={deleteConfirmHandler}
                         cancelClickHandler={() => setIsModalOpen(false)}
-                    />
+                    >
+                        <EmployeeDeleteModal
+                            confirmClickHandler={deleteConfirmHandler}
+                            cancelClickHandler={() => setIsModalOpen(false)}
+                            employeeIdToDelete={deleteEmployee.empIdToDelete}
+                        />
+                    </Modal>
                 </>
             )}
         </>
