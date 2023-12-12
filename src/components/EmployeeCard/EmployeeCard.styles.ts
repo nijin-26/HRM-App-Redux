@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-  flex: 1 0 300px;
-  height: 280px;
+  flex: 1 0 350px;
+  height: 320px;
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0px 0px 10px #ccc;
@@ -10,15 +10,14 @@ export const CardContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 12px;
-  cursor: pointer;
 
-  &:hover {
+  /* &:hover {
     scale: 1.02;
-  }
+  } */
 `;
 
 export const CardHeader = styled.div`
-  height: 80px;
+  min-height: 80px;
   background-color: var(--primary-clr);
   border-radius: 8px 8px 0 0;
   padding: 16px;
@@ -35,32 +34,8 @@ export const CardHeader = styled.div`
     border-radius: 50%;
     object-fit: cover;
     background-color: #fff;
-    border: 2px solid var(--primary-clr);
-  }
-
-  .icons {
-    display: flex;
-    justify-content: right;
-    gap: 10px;
-    color: #fff;
-    transition: all 0.3s;
-  }
-
-  .icons a {
-    color: inherit;
-    transition: all 0.3s;
-  }
-
-  .icons a:hover {
-    color: #000;
-  }
-
-  .icons > span {
-    transition: all 0.3s;
-  }
-
-  .icons > span:hover {
-    color: #000;
+    /* border: 2px solid var(--primary-clr); */
+    box-shadow: 0px 0px 10px #ccc;
   }
 `;
 
@@ -68,8 +43,7 @@ export const CardBody = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: 20px;
-  padding: 28px 20px;
+  margin-top: 35px;
   text-align: center;
 
   & * {
@@ -85,7 +59,12 @@ export const CardBody = styled.div`
     margin-bottom: 8px;
   }
 
+  .card_header {
+    margin-top: 10px;
+  }
+
   .details_wrapper {
+    padding: 0 16px;
     margin: 10px 0;
     width: 230px;
     display: flex;
@@ -99,15 +78,49 @@ export const CardBody = styled.div`
     gap: 10px;
     align-items: center;
     justify-content: center;
+    word-wrap: normal;
     color: #000;
   }
 
   a {
     color: #000;
+    line-break: anywhere;
   }
 
   a:hover {
     text-decoration: underline;
+  }
+
+  .divider {
+    width: 100%;
+    border: 1px solid #ccc;
+  }
+
+  .icons {
+    padding: 12px 0;
+    display: flex;
+    justify-content: right;
+    gap: 10px;
+    color: #000;
+    transition: all 0.3s;
+  }
+
+  .icons a {
+    color: inherit;
+    transition: all 0.3s;
+  }
+
+  .icons a:hover {
+    color: #000;
+  }
+
+  .icons > span {
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+
+  .icons > span:hover {
+    color: #000;
   }
 `;
 

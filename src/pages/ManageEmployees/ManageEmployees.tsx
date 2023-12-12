@@ -158,11 +158,11 @@ const ManageEmployees: React.FC = () => {
                 />
               ))}
             </div>
-            <StyledEmployeesTable
+            {/* <StyledEmployeesTable
               tableHeaders={empTableHeaders}
               tableData={employees.length ? filterEmployeesList(employees) : []}
               loading={loading}
-            />
+            /> */}
             {employeesList && !isSearchFilters() ? (
               <Pagination
                 totalEntries={employeesList.data.count}
