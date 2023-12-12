@@ -50,7 +50,7 @@ const ManageEmployees: React.FC = () => {
                 method: 'DELETE',
                 url: `/employee/${deleteEmployee.empIdToDelete}`,
             });
-            toast.success('Employee Added Successfully');
+            toast.success('Employee deleted Successfully');
             refreshEmployeesList();
         } catch (error) {
             toast.error('Employee deletion failed');
