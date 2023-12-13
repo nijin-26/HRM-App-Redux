@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-  flex: 1 0 350px;
+  box-sizing: border-box;
   height: 320px;
   border: 1px solid #ccc;
   border-radius: 8px;

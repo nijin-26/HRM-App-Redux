@@ -3,6 +3,7 @@ import { empTableHeaders, initQueryParams } from "./constants";
 import {
   StyledManageEmployeesWrap,
   StyledEmployeesTable,
+  GridContainer,
 } from "./ManageEmployees.style";
 import { useSearchParams } from "react-router-dom";
 import {
@@ -140,16 +141,7 @@ const ManageEmployees: React.FC = () => {
                 <span className="material-symbols-rounded">person_add</span>
               </LinkButton>
             </div>
-            <div
-              style={{
-                margin: "0 auto",
-                display: "flex",
-                gap: "20px",
-                flexWrap: "wrap",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <GridContainer>
               {filterEmployeesList(employees)?.map((employee) => (
                 <EmployeeCard
                   employeeData={employee}
@@ -157,7 +149,7 @@ const ManageEmployees: React.FC = () => {
                   setDeleteEmployee={setDeleteEmployee}
                 />
               ))}
-            </div>
+            </GridContainer>
             {/* <StyledEmployeesTable
               tableHeaders={empTableHeaders}
               tableData={employees.length ? filterEmployeesList(employees) : []}
