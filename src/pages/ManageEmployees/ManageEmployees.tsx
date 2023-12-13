@@ -15,28 +15,56 @@ import {
 } from '../../components';
 import { toast } from 'react-toastify';
 import { useAppContext } from '../../core/contexts/AppContext';
-import useApi, { API } from '../../core/api/useApi';
-import { IApiFetchEmployeesArray } from '../../interfaces/ApiDataInterface';
-import { IEmployeeListing, IDeleteEmployee } from '../../interfaces/common';
+import { API } from '../../core/api/useApi';
+import {
+    IEmployeeListing,
+    IDeleteEmployee,
+    IQueryParams,
+} from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchEmployees } from '../../core/store/employees/actions';
+import { IState } from '../../core/store';
 
 const ManageEmployees: React.FC = () => {
     const { appState } = useAppContext();
     const [searchParams] = useSearchParams();
+    const dispatch = useDispatch();
 
     const [isModalopen, setIsModalOpen] = useState(false);
-    const [employees, setEmployees] = useState<IEmployeeListing[]>([]);
     const [deleteEmployee, setDeleteEmployee] = useState<IDeleteEmployee>({
         isDeleting: false,
         empIdToDelete: undefined,
     });
 
-    const getFetchURL = () => {
-        const limit = searchParams.get('limit') ?? initQueryParams.limit;
-        const offset = searchParams.get('offset') ?? initQueryParams.offset;
-        const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
-        const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
-        return `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`;
+    const employeesList = useSelector(
+        (state: IState) => state.employees.employeesList
+    );
+    const employeesFetchLoading = useSelector(
+        (state: IState) => state.employees.loading
+    );
+    const employeesCount = useSelector(
+        (state: IState) => state.employees.count
+    );
+
+    useEffect(() => {
+        dispatch<any>(fetchEmployees(getSearchParams()));
+    }, [searchParams]);
+
+    const getSearchParams = (): IQueryParams => {
+        const limit =
+            Number(searchParams.get('limit')) ?? initQueryParams.limit;
+        const offset =
+            Number(searchParams.get('offset')) ?? initQueryParams.offset;
+        const sortBy =
+            (searchParams.get('sortBy') as typeof initQueryParams.sortBy) ??
+            initQueryParams.sortBy;
+        const sortDir =
+            (searchParams.get('sortDir') as typeof initQueryParams.sortDir) ??
+            initQueryParams.sortDir;
+
+        return { limit, offset, sortBy, sortDir };
     };
 
     const deleteConfirmHandler = async () => {
@@ -51,7 +79,7 @@ const ManageEmployees: React.FC = () => {
                 url: `/employee/${deleteEmployee.empIdToDelete}`,
             });
             toast.success('Employee deleted Successfully');
-            refreshEmployeesList();
+            // refreshEmployeesList();
         } catch (error) {
             toast.error('Employee deletion failed');
             console.log('delete Failed!', error);
@@ -97,32 +125,6 @@ const ManageEmployees: React.FC = () => {
         return true;
     };
 
-    const {
-        response: employeesList,
-        loading,
-        refresh: refreshEmployeesList,
-        error: fetchError,
-    } = useApi<IApiFetchEmployeesArray>('GET', getFetchURL());
-
-    useEffect(() => {
-        if (fetchError) {
-            toast.error(
-                'Could not fetch employees List. Please try reloading the page.'
-            );
-        }
-
-        if (employeesList) {
-            const EmployeesData = employeesList.data.employees;
-            setEmployees(
-                getEmployeesListingData(
-                    EmployeesData,
-                    setIsModalOpen,
-                    setDeleteEmployee
-                )
-            );
-        }
-    }, [loading]);
-
     return (
         <>
             {deleteEmployee.isDeleting ? (
@@ -145,15 +147,21 @@ const ManageEmployees: React.FC = () => {
                         <StyledEmployeesTable
                             tableHeaders={empTableHeaders}
                             tableData={
-                                employees.length
-                                    ? filterEmployeesList(employees)
+                                employeesList.length
+                                    ? filterEmployeesList(
+                                          getEmployeesListingData(
+                                              employeesList,
+                                              setIsModalOpen,
+                                              setDeleteEmployee
+                                          )
+                                      )
                                     : []
                             }
-                            loading={loading}
+                            loading={employeesFetchLoading}
                         />
                         {employeesList && !isSearchFilters() ? (
                             <Pagination
-                                totalEntries={employeesList.data.count}
+                                totalEntries={employeesCount}
                                 key={searchParams.get('offset')}
                             />
                         ) : null}

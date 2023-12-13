@@ -1,7 +1,7 @@
 import {
     IEmployee,
     IReactSelectOption,
-    IInitQueryParams,
+    IQueryParams,
 } from '../../interfaces/common';
 
 export const empTableHeaders = [
@@ -129,7 +129,7 @@ export const prefillDataOnEmployeeAdd: IEmployee = {
     photoId: '',
 };
 
-export const initQueryParams: IInitQueryParams = {
+export const initQueryParams: IQueryParams = {
     offset: 0,
     limit: 10,
     sortBy: 'id',

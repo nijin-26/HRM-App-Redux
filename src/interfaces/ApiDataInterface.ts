@@ -16,12 +16,14 @@ export interface IApiEmployee {
     moreDetails: string;
 }
 
+export interface IApiEmployeesData {
+    employees: IApiEmployee[];
+    count: number;
+}
+
 export interface IApiFetchEmployeesArray {
     message: string;
-    data: {
-        employees: IApiEmployee[];
-        count: number;
-    };
+    data: IApiEmployeesData;
 }
 
 export interface IApiFetchEmployee {

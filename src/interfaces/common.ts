@@ -50,7 +50,7 @@ export interface IDeleteEmployee {
     empIdToDelete: number | undefined;
 }
 
-export interface IInitQueryParams {
+export interface IQueryParams {
     offset: number;
     limit: number;
     sortBy: keyof IEmployee;
