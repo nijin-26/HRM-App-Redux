@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { empTableHeaders, initQueryParams } from "./constants";
 import {
   StyledManageEmployeesWrap,
@@ -32,9 +32,14 @@ const ManageEmployees: React.FC = () => {
     empIdToDelete: undefined,
   });
 
+  const observerTarget = useRef(null);
+
+  const limit = 10;
+  let offset = 0;
+
   const getFetchURL = () => {
-    const limit = searchParams.get("limit") ?? initQueryParams.limit;
-    const offset = searchParams.get("offset") ?? initQueryParams.offset;
+    // const limit = searchParams.get("limit") ?? initQueryParams.limit;
+    // const offset = searchParams.get("offset") ?? initQueryParams.offset;
     const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
     const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
     return `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`;
@@ -102,6 +107,7 @@ const ManageEmployees: React.FC = () => {
     response: employeesList,
     loading,
     refresh: refreshEmployeesList,
+    fetchData,
     error: fetchError,
   } = useApi<IApiFetchEmployeesArray>("GET", getFetchURL());
 
@@ -114,15 +120,37 @@ const ManageEmployees: React.FC = () => {
 
     if (employeesList) {
       const EmployeesData = employeesList.data.employees;
-      setEmployees(
-        getEmployeesListingData(
-          EmployeesData,
-          setIsModalOpen,
-          setDeleteEmployee
-        )
+      const formattedData = getEmployeesListingData(
+        EmployeesData,
+        setIsModalOpen,
+        setDeleteEmployee
       );
+      setEmployees((prev) => [...prev, ...formattedData]);
     }
   }, [loading]);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          offset = offset + limit;
+          fetchData(getFetchURL());
+          // refreshEmployeesList();
+        }
+      },
+      { threshold: 1 }
+    );
+
+    if (observerTarget.current) {
+      observer.observe(observerTarget.current);
+    }
+
+    return () => {
+      if (observerTarget.current) {
+        observer.unobserve(observerTarget.current);
+      }
+    };
+  }, [observerTarget]);
 
   return (
     <>
@@ -144,23 +172,26 @@ const ManageEmployees: React.FC = () => {
             <GridContainer>
               {filterEmployeesList(employees)?.map((employee) => (
                 <EmployeeCard
+                  key={employee.id}
                   employeeData={employee}
                   setIsModalOpen={setIsModalOpen}
                   setDeleteEmployee={setDeleteEmployee}
                 />
               ))}
             </GridContainer>
+            {loading && <Loader />}
+            <div ref={observerTarget}></div>
             {/* <StyledEmployeesTable
               tableHeaders={empTableHeaders}
               tableData={employees.length ? filterEmployeesList(employees) : []}
               loading={loading}
             /> */}
-            {employeesList && !isSearchFilters() ? (
+            {/* {employeesList && !isSearchFilters() ? (
               <Pagination
                 totalEntries={employeesList.data.count}
                 key={searchParams.get("offset")}
               />
-            ) : null}
+            ) : null} */}
           </StyledManageEmployeesWrap>
 
           <Modal
