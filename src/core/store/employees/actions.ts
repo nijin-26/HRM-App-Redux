@@ -21,6 +21,19 @@ export interface IFETCH_EMPLOYEES_FAILURE {
     payload: AxiosError;
 }
 
+export interface IDELETE_EMPLOYEE_REQUEST {
+    type: 'DELETE_EMPLOYEE_REQUEST';
+}
+
+export interface IDELETE_EMPLOYEE_SUCCESS {
+    type: 'DELETE_EMPLOYEE_SUCCESS';
+}
+
+export interface IDELETE_EMPLOYEE_FAILURE {
+    type: 'DELETE_EMPLOYEE_FAILURE';
+    payload: AxiosError;
+}
+
 //Union Action Type
 export type ActionType =
     | IFETCH_EMPLOYEES_REQUEST
@@ -28,6 +41,8 @@ export type ActionType =
     | IFETCH_EMPLOYEES_FAILURE;
 
 //Action Creators
+
+//EMPLOYEES LIST FETCH
 export const fetchEmployeesRequest = (): IFETCH_EMPLOYEES_REQUEST => ({
     type: 'FETCH_EMPLOYEES_REQUEST',
 });
@@ -68,3 +83,19 @@ export const fetchEmployees = (
         }
     };
 };
+
+//EMPLOYEE DELETE
+export const deleteEmployeeRequest = (): IDELETE_EMPLOYEE_REQUEST => ({
+    type: 'DELETE_EMPLOYEE_REQUEST',
+});
+
+export const deleteEmployeeSuccess = (): IDELETE_EMPLOYEE_SUCCESS => ({
+    type: 'DELETE_EMPLOYEE_SUCCESS',
+});
+
+export const deleteEmployeeFailure = (
+    error: AxiosError
+): IDELETE_EMPLOYEE_FAILURE => ({
+    type: 'DELETE_EMPLOYEE_FAILURE',
+    payload: error,
+});

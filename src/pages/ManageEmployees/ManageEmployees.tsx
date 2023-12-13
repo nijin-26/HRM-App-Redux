@@ -53,16 +53,14 @@ const ManageEmployees: React.FC = () => {
     }, [searchParams]);
 
     const getSearchParams = (): IQueryParams => {
-        const limit =
-            Number(searchParams.get('limit')) ?? initQueryParams.limit;
-        const offset =
-            Number(searchParams.get('offset')) ?? initQueryParams.offset;
-        const sortBy =
-            (searchParams.get('sortBy') as typeof initQueryParams.sortBy) ??
-            initQueryParams.sortBy;
-        const sortDir =
-            (searchParams.get('sortDir') as typeof initQueryParams.sortDir) ??
-            initQueryParams.sortDir;
+        const limit = searchParams.get('limit')
+            ? Number(searchParams.get('limit'))
+            : initQueryParams.limit;
+        const offset = searchParams.get('offset')
+            ? Number(searchParams.get('offset'))
+            : initQueryParams.offset;
+        const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
+        const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
 
         return { limit, offset, sortBy, sortDir };
     };

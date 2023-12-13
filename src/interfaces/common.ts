@@ -50,9 +50,16 @@ export interface IDeleteEmployee {
     empIdToDelete: number | undefined;
 }
 
+// export interface IQueryParams {
+//     offset: number;
+//     limit: number;
+//     sortBy: keyof IEmployee;
+//     sortDir: 'asc' | 'desc';
+// }
+
 export interface IQueryParams {
     offset: number;
     limit: number;
-    sortBy: keyof IEmployee;
-    sortDir: 'asc' | 'desc';
+    sortBy: string;
+    sortDir: string;
 }
