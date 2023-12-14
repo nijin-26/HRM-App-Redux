@@ -13,7 +13,6 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from '../../components';
-import { useAppContext } from '../../core/contexts/AppContext';
 import { IEmployeeListing, IQueryParams } from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
 
@@ -25,7 +24,6 @@ import {
 import { IState } from '../../core/store';
 
 const ManageEmployees: React.FC = () => {
-    const { appState } = useAppContext();
     const [searchParams] = useSearchParams();
     const dispatch = useDispatch();
 
@@ -45,6 +43,14 @@ const ManageEmployees: React.FC = () => {
     );
     const employeeDeleteLoading = useSelector(
         (state: IState) => state.employees.employeeDeleteLoading
+    );
+    const employeeNameFilter = useSelector(
+        (state: IState) =>
+            state.employees.employeesListFilter.employeeNameFilter
+    );
+    const employeeSkillsFilter = useSelector(
+        (state: IState) =>
+            state.employees.employeesListFilter.employeeSkillsFilter
     );
 
     useEffect(() => {
@@ -76,10 +82,10 @@ const ManageEmployees: React.FC = () => {
             let shouldInclude = true;
 
             const employeeName = employee.fullName.trim().toLowerCase();
-            const selectedSkillsForFilter = appState.skillsFilter.map((skill) =>
+            const selectedSkillsForFilter = employeeSkillsFilter.map((skill) =>
                 Number(skill.value)
             );
-            if (!(employeeName.indexOf(appState.employeeNameFilter) > -1)) {
+            if (!(employeeName.indexOf(employeeNameFilter) > -1)) {
                 shouldInclude = false;
             }
 
@@ -96,10 +102,7 @@ const ManageEmployees: React.FC = () => {
     };
 
     const isSearchFilters = () => {
-        if (
-            appState.employeeNameFilter === '' &&
-            appState.skillsFilter.length === 0
-        ) {
+        if (employeeNameFilter === '' && employeeSkillsFilter.length === 0) {
             return false;
         }
         return true;

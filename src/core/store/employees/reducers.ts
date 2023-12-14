@@ -1,6 +1,13 @@
 import { AxiosError } from 'axios';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { ActionType } from './actions';
+import { MultiValue } from 'react-select';
+import { IReactSelectOption } from '../../../interfaces/common';
+
+interface IEmployeesListFilter {
+    employeeNameFilter: string;
+    employeeSkillsFilter: MultiValue<IReactSelectOption>;
+}
 
 export interface IEmployeesState {
     employeesList: IApiEmployee[];
@@ -9,6 +16,7 @@ export interface IEmployeesState {
     employeesFetchError: AxiosError | null;
     employeeDeleteLoading: boolean;
     employeeDeleteError: AxiosError | null;
+    employeesListFilter: IEmployeesListFilter;
 }
 
 const initialState: IEmployeesState = {
@@ -18,6 +26,10 @@ const initialState: IEmployeesState = {
     employeesFetchError: null,
     employeeDeleteLoading: false,
     employeeDeleteError: null,
+    employeesListFilter: {
+        employeeNameFilter: '',
+        employeeSkillsFilter: [],
+    },
 };
 
 const employeesReducer = (
@@ -66,6 +78,30 @@ const employeesReducer = (
                 ...state,
                 employeeDeleteLoading: false,
                 employeeDeleteError: action.payload,
+            };
+        case 'EMPLOYEE_NAME_FILTER_CHANGE':
+            return {
+                ...state,
+                employeesListFilter: {
+                    ...state.employeesListFilter,
+                    employeeNameFilter: action.payload,
+                },
+            };
+        case 'EMPLOYEE_SKILLS_FILTER_CHANGE':
+            return {
+                ...state,
+                employeesListFilter: {
+                    ...state.employeesListFilter,
+                    employeeSkillsFilter: action.payload,
+                },
+            };
+        case 'EMPLOYEE_LIST_FILTER_CLEAR':
+            return {
+                ...state,
+                employeesListFilter: {
+                    employeeNameFilter: '',
+                    employeeSkillsFilter: [],
+                },
             };
         default:
             return state;
