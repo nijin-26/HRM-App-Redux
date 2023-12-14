@@ -45,10 +45,10 @@ export interface IReactSelectOption {
     value: string;
 }
 
-export interface IDeleteEmployee {
-    isDeleting: boolean;
-    empIdToDelete: number | undefined;
-}
+// export interface IDeleteEmployee {
+//     isDeleting: boolean;
+//     empIdToDelete: number | undefined;
+// }
 
 // export interface IQueryParams {
 //     offset: number;

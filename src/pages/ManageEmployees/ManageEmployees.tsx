@@ -13,18 +13,15 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from '../../components';
-import { toast } from 'react-toastify';
 import { useAppContext } from '../../core/contexts/AppContext';
-import { API } from '../../core/api/useApi';
-import {
-    IEmployeeListing,
-    IDeleteEmployee,
-    IQueryParams,
-} from '../../interfaces/common';
+import { IEmployeeListing, IQueryParams } from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchEmployees } from '../../core/store/employees/actions';
+import {
+    fetchEmployees,
+    deleteEmployeeAction,
+} from '../../core/store/employees/actions';
 import { IState } from '../../core/store';
 
 const ManageEmployees: React.FC = () => {
@@ -33,19 +30,21 @@ const ManageEmployees: React.FC = () => {
     const dispatch = useDispatch();
 
     const [isModalopen, setIsModalOpen] = useState(false);
-    const [deleteEmployee, setDeleteEmployee] = useState<IDeleteEmployee>({
-        isDeleting: false,
-        empIdToDelete: undefined,
-    });
+    const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
+        undefined
+    );
 
     const employeesList = useSelector(
         (state: IState) => state.employees.employeesList
     );
     const employeesFetchLoading = useSelector(
-        (state: IState) => state.employees.loading
+        (state: IState) => state.employees.employeesFetchloading
     );
     const employeesCount = useSelector(
         (state: IState) => state.employees.count
+    );
+    const employeeDeleteLoading = useSelector(
+        (state: IState) => state.employees.employeeDeleteLoading
     );
 
     useEffect(() => {
@@ -65,27 +64,10 @@ const ManageEmployees: React.FC = () => {
         return { limit, offset, sortBy, sortDir };
     };
 
-    const deleteConfirmHandler = async () => {
-        setDeleteEmployee({
-            isDeleting: true,
-            empIdToDelete: deleteEmployee.empIdToDelete,
-        });
+    const deleteConfirmHandler = () => {
         setIsModalOpen(false);
-        try {
-            await API({
-                method: 'DELETE',
-                url: `/employee/${deleteEmployee.empIdToDelete}`,
-            });
-            toast.success('Employee deleted Successfully');
-            // refreshEmployeesList();
-        } catch (error) {
-            toast.error('Employee deletion failed');
-            console.log('delete Failed!', error);
-        } finally {
-            setDeleteEmployee({
-                isDeleting: false,
-                empIdToDelete: undefined,
-            });
+        if (empIdToDelete) {
+            dispatch<any>(deleteEmployeeAction(empIdToDelete));
         }
     };
 
@@ -125,7 +107,7 @@ const ManageEmployees: React.FC = () => {
 
     return (
         <>
-            {deleteEmployee.isDeleting ? (
+            {employeeDeleteLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (
                 <>
@@ -150,7 +132,7 @@ const ManageEmployees: React.FC = () => {
                                           getEmployeesListingData(
                                               employeesList,
                                               setIsModalOpen,
-                                              setDeleteEmployee
+                                              setEmpIdToDelete
                                           )
                                       )
                                     : []
@@ -172,7 +154,7 @@ const ManageEmployees: React.FC = () => {
                         <EmployeeDeleteModal
                             confirmClickHandler={deleteConfirmHandler}
                             cancelClickHandler={() => setIsModalOpen(false)}
-                            employeeIdToDelete={deleteEmployee.empIdToDelete}
+                            employeeIdToDelete={empIdToDelete}
                         />
                     </Modal>
                 </>

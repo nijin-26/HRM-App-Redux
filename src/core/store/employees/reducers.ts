@@ -5,15 +5,19 @@ import { ActionType } from './actions';
 export interface IEmployeesState {
     employeesList: IApiEmployee[];
     count: number;
-    loading: boolean;
-    error: AxiosError | null;
+    employeesFetchloading: boolean;
+    employeesFetchError: AxiosError | null;
+    employeeDeleteLoading: boolean;
+    employeeDeleteError: AxiosError | null;
 }
 
 const initialState: IEmployeesState = {
     count: 0,
     employeesList: [],
-    loading: false,
-    error: null,
+    employeesFetchloading: false,
+    employeesFetchError: null,
+    employeeDeleteLoading: false,
+    employeeDeleteError: null,
 };
 
 const employeesReducer = (
@@ -22,17 +26,47 @@ const employeesReducer = (
 ): IEmployeesState => {
     switch (action.type) {
         case 'FETCH_EMPLOYEES_REQUEST':
-            return { ...state, loading: true, error: null };
+            return {
+                ...state,
+                employeesFetchloading: true,
+                employeesFetchError: null,
+            };
         case 'FETCH_EMPLOYEES_SUCCESS':
             return {
                 ...state,
                 count: action.payload.count,
                 employeesList: [...action.payload.employees],
-                loading: false,
-                error: null,
+                employeesFetchloading: false,
+                employeesFetchError: null,
             };
         case 'FETCH_EMPLOYEES_FAILURE':
-            return { ...state, loading: false, error: action.payload };
+            return {
+                ...state,
+                employeesFetchloading: false,
+                employeesFetchError: action.payload,
+            };
+        case 'DELETE_EMPLOYEE_REQUEST':
+            return {
+                ...state,
+                employeeDeleteLoading: true,
+                employeeDeleteError: null,
+            };
+        case 'DELETE_EMPLOYEE_SUCCESS':
+            return {
+                ...state,
+                count: state.count - 1,
+                employeesList: state.employeesList.filter(
+                    (emp) => emp.id !== action.payload
+                ),
+                employeeDeleteLoading: false,
+                employeeDeleteError: null,
+            };
+        case 'DELETE_EMPLOYEE_FAILURE':
+            return {
+                ...state,
+                employeeDeleteLoading: false,
+                employeeDeleteError: action.payload,
+            };
         default:
             return state;
     }

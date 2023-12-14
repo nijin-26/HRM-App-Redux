@@ -24,7 +24,13 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
                 To confirm the deletion of this employee, please enter their ID
                 in the field below.
             </p>
-            <form action="">
+            <form
+                action=""
+                onSubmit={(e) => {
+                    e.preventDefault();
+                    confirmClickHandler();
+                }}
+            >
                 <input
                     type="text"
                     value={inputEmpId}
@@ -37,11 +43,16 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
                         type="submit"
                         className="primary"
                         disabled={!isEmpIdEqual}
-                        onClick={confirmClickHandler}
                     >
                         Delete
                     </Button>
-                    <Button className="outline" onClick={cancelClickHandler}>
+                    <Button
+                        className="outline"
+                        onClick={() => {
+                            setInputEmpId('');
+                            cancelClickHandler();
+                        }}
+                    >
                         Cancel
                     </Button>
                 </div>
