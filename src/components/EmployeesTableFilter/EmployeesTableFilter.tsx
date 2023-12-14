@@ -1,4 +1,3 @@
-import { useAppContext } from '../../core/contexts/AppContext';
 import { Input, Button } from '..';
 import Select, { MultiValue } from 'react-select';
 import {
@@ -14,11 +13,13 @@ import {
     employeeSkillsFilterChange,
     employeeListFilterClear,
 } from '../../core/store/employees/actions';
+import { useEffect } from 'react';
+import { fetchSkills } from '../../core/store/dropdownData/actions';
 
 const EmployeesTableFilter: React.FC = () => {
-    const { appState } = useAppContext();
     const dispatch = useDispatch();
 
+    const skillData = useSelector((state: IState) => state.dropdownData.skills);
     const employeeNameFilter = useSelector(
         (state: IState) =>
             state.employees.employeesListFilter.employeeNameFilter
@@ -38,6 +39,10 @@ const EmployeesTableFilter: React.FC = () => {
         );
     };
 
+    useEffect(() => {
+        dispatch<any>(fetchSkills());
+    }, []);
+
     return (
         <StyledEmployeesFilterWrap>
             <Input
@@ -47,7 +52,7 @@ const EmployeesTableFilter: React.FC = () => {
                 className="table-control-field"
             />
             <Select
-                options={appState.skills}
+                options={skillData}
                 value={employeeSkillsFilter}
                 name="searchSkills"
                 isMulti

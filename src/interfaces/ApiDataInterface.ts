@@ -48,17 +48,14 @@ export interface IApiEmployeeSubmission {
     moreDetails: string;
 }
 
-export interface IApiFetchSkill {
-    message: string;
-    data: {
-        id: number;
-        skill: string;
-    }[];
-}
-
 export interface IApiSkill {
     id: number;
     skill: string;
+}
+
+export interface IApiFetchSkill {
+    message: string;
+    data: IApiSkill[];
 }
 
 export interface IApiDepartment {

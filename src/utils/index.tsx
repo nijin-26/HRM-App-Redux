@@ -36,7 +36,7 @@ export const modifySelectOption = (optionObj: any, curLabelKey: string) => {
 
 //modify each option object in options array to {value: string, label: string}
 export const modifySelectOptionsArray = (
-    optionsArr: any,
+    optionsArr: any[],
     curLabelKey: string
 ) => {
     let newOptionsArr: IReactSelectOption[] = [];

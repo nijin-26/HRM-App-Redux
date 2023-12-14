@@ -102,7 +102,9 @@ export const fetchEmployees = (
             dispatch(fetchEmployeesSuccess(response.data.data));
         } catch (error) {
             dispatch(fetchEmployeesFailure(error as AxiosError));
-            toast.error('Could not fetch employee details');
+            toast.error(
+                'Could not fetch employee details. Please try reloading the page.'
+            );
         }
     };
 };
