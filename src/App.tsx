@@ -3,8 +3,6 @@ import GlobalStyle from './globalStyles.ts';
 import { Provider } from 'react-redux';
 import store from './core/store/index.ts';
 
-import { AppContextProvider } from './core/contexts/AppContext.tsx';
-
 import { RouterProvider } from 'react-router-dom';
 import router from './core/routes/router.tsx';
 
@@ -14,10 +12,8 @@ import 'react-toastify/dist/ReactToastify.css';
 function App() {
     return (
         <Provider store={store}>
-            <AppContextProvider>
-                <GlobalStyle />
-                <RouterProvider router={router} />
-            </AppContextProvider>
+            <GlobalStyle />
+            <RouterProvider router={router} />
             <ToastContainer
                 position="bottom-right"
                 autoClose={5000}
