@@ -53,10 +53,6 @@ const ManageEmployees: React.FC = () => {
             state.employees.employeesListFilter.employeeSkillsFilter
     );
 
-    useEffect(() => {
-        dispatch<any>(fetchEmployees(getSearchParams()));
-    }, [searchParams]);
-
     const getSearchParams = (): IQueryParams => {
         const limit = searchParams.get('limit')
             ? Number(searchParams.get('limit'))
@@ -107,6 +103,10 @@ const ManageEmployees: React.FC = () => {
         }
         return true;
     };
+
+    useEffect(() => {
+        dispatch<any>(fetchEmployees(getSearchParams()));
+    }, [searchParams]);
 
     return (
         <>

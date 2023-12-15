@@ -13,8 +13,6 @@ import {
     employeeSkillsFilterChange,
     employeeListFilterClear,
 } from '../../core/store/employees/actions';
-import { useEffect } from 'react';
-import { fetchSkills } from '../../core/store/dropdownData/skills/actions';
 
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useDispatch();
@@ -40,10 +38,6 @@ const EmployeesTableFilter: React.FC = () => {
             )
         );
     };
-
-    useEffect(() => {
-        dispatch<any>(fetchSkills());
-    }, []);
 
     return (
         <StyledEmployeesFilterWrap>

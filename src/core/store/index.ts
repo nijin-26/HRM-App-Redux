@@ -14,10 +14,12 @@ const rootReducer = combineReducers({
     dropdownData: dropdownReducer,
 });
 
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
+
 const store = legacy_createStore(
     rootReducer,
     undefined,
-    composeWithDevTools(applyMiddleware(thunk))
+    composeEnhancers(applyMiddleware(thunk))
 );
 
 export default store;
