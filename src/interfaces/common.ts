@@ -45,14 +45,21 @@ export interface IReactSelectOption {
     value: string;
 }
 
-export interface IDeleteEmployee {
-    isDeleting: boolean;
-    empIdToDelete: number | undefined;
-}
+// export interface IDeleteEmployee {
+//     isDeleting: boolean;
+//     empIdToDelete: number | undefined;
+// }
 
-export interface IInitQueryParams {
+// export interface IQueryParams {
+//     offset: number;
+//     limit: number;
+//     sortBy: keyof IEmployee;
+//     sortDir: 'asc' | 'desc';
+// }
+
+export interface IQueryParams {
     offset: number;
     limit: number;
-    sortBy: keyof IEmployee;
-    sortDir: 'asc' | 'desc';
+    sortBy: string;
+    sortDir: string;
 }

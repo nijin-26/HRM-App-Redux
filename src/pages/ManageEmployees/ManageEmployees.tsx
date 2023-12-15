@@ -7,24 +7,56 @@ import {
 } from "./ManageEmployees.style";
 import { useSearchParams } from "react-router-dom";
 import {
-  Modal,
-  Pagination,
-  EmployeesTableFilter,
-  LinkButton,
-  Loader,
-} from "../../components";
-import { toast } from "react-toastify";
-import { useAppContext } from "../../core/contexts/AppContext";
-import useApi, { API } from "../../core/api/useApi";
-import { IApiFetchEmployeesArray } from "../../interfaces/ApiDataInterface";
-import { IEmployeeListing, IDeleteEmployee } from "../../interfaces/common";
-import { getEmployeesListingData } from "../../utils";
-import EmployeeCard from "../../components/EmployeeCard/EmployeeCard";
+    Modal,
+    Pagination,
+    EmployeesTableFilter,
+    LinkButton,
+    Loader,
+    EmployeeDeleteModal,
+} from '../../components';
+import { IEmployeeListing, IQueryParams } from '../../interfaces/common';
+import { getEmployeesListingData } from '../../utils';
+
+import { useDispatch, useSelector } from 'react-redux';
+import {
+    fetchEmployees,
+    deleteEmployeeAction,
+} from '../../core/store/employees/actions';
+import { IState } from '../../core/store';
 
 const ManageEmployees: React.FC = () => {
-  const { appState } = useAppContext();
-  const [searchParams] = useSearchParams();
+    const [searchParams] = useSearchParams();
+    const dispatch = useDispatch();
 
+    const [isModalopen, setIsModalOpen] = useState(false);
+    const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
+        undefined
+    );
+
+    const employeesList = useSelector(
+        (state: IState) => state.employees.employeesList
+    );
+    const employeesFetchLoading = useSelector(
+        (state: IState) => state.employees.employeesFetchloading
+    );
+    const employeesCount = useSelector(
+        (state: IState) => state.employees.count
+    );
+    const employeeDeleteLoading = useSelector(
+        (state: IState) => state.employees.employeeDeleteLoading
+    );
+    const employeeNameFilter = useSelector(
+        (state: IState) =>
+            state.employees.employeesListFilter.employeeNameFilter
+    );
+    const employeeSkillsFilter = useSelector(
+        (state: IState) =>
+            state.employees.employeesListFilter.employeeSkillsFilter
+    );
+
+    useEffect(() => {
+        dispatch<any>(fetchEmployees(getSearchParams()));
+    }, [searchParams]);
   const [isModalopen, setIsModalOpen] = useState(false);
   const [employees, setEmployees] = useState<IEmployeeListing[]>([]);
   const [deleteEmployee, setDeleteEmployee] = useState<IDeleteEmployee>({
@@ -45,41 +77,24 @@ const ManageEmployees: React.FC = () => {
     return `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`;
   };
 
-  const deleteConfirmHandler = async () => {
-    setDeleteEmployee({
-      isDeleting: true,
-      empIdToDelete: deleteEmployee.empIdToDelete,
-    });
-    setIsModalOpen(false);
-    try {
-      await API({
-        method: "DELETE",
-        url: `/employee/${deleteEmployee.empIdToDelete}`,
-      });
-      toast.success("Employee Added Successfully");
-      refreshEmployeesList();
-    } catch (error) {
-      toast.error("Employee deletion failed");
-      console.log("delete Failed!", error);
-    } finally {
-      setDeleteEmployee({
-        isDeleting: false,
-        empIdToDelete: undefined,
-      });
-    }
-  };
+    const deleteConfirmHandler = () => {
+        setIsModalOpen(false);
+        if (empIdToDelete) {
+            dispatch<any>(deleteEmployeeAction(empIdToDelete));
+        }
+    };
 
   const filterEmployeesList = (employeesList: IEmployeeListing[]) => {
     return employeesList.filter((employee) => {
       let shouldInclude = true;
 
-      const employeeName = employee.fullName.trim().toLowerCase();
-      const selectedSkillsForFilter = appState.skillsFilter.map((skill) =>
-        Number(skill.value)
-      );
-      if (!(employeeName.indexOf(appState.employeeNameFilter) > -1)) {
-        shouldInclude = false;
-      }
+            const employeeName = employee.fullName.trim().toLowerCase();
+            const selectedSkillsForFilter = employeeSkillsFilter.map((skill) =>
+                Number(skill.value)
+            );
+            if (!(employeeName.indexOf(employeeNameFilter) > -1)) {
+                shouldInclude = false;
+            }
 
       if (
         !selectedSkillsForFilter.every((skill) =>
@@ -93,6 +108,12 @@ const ManageEmployees: React.FC = () => {
     });
   };
 
+    const isSearchFilters = () => {
+        if (employeeNameFilter === '' && employeeSkillsFilter.length === 0) {
+            return false;
+        }
+        return true;
+    };
   const isSearchFilters = () => {
     if (
       appState.employeeNameFilter === "" &&
@@ -152,60 +173,62 @@ const ManageEmployees: React.FC = () => {
     };
   }, [observerTarget]);
 
-  return (
-    <>
-      {deleteEmployee.isDeleting ? (
-        <Loader className="full-screen-loader" />
-      ) : (
+    return (
         <>
-          <StyledManageEmployeesWrap>
-            <div className="employees-table-controls">
-              <EmployeesTableFilter />
-              <LinkButton
-                to="/add-employee"
-                className="primary icon-btn table-control-field"
-              >
-                <span>Add Employee</span>
-                <span className="material-symbols-rounded">person_add</span>
-              </LinkButton>
-            </div>
-            <GridContainer>
-              {filterEmployeesList(employees)?.map((employee) => (
-                <EmployeeCard
-                  key={employee.id}
-                  employeeData={employee}
-                  setIsModalOpen={setIsModalOpen}
-                  setDeleteEmployee={setDeleteEmployee}
-                />
-              ))}
-            </GridContainer>
-            {loading && <Loader />}
-            <div ref={observerTarget}></div>
-            {/* <StyledEmployeesTable
-              tableHeaders={empTableHeaders}
-              tableData={employees.length ? filterEmployeesList(employees) : []}
-              loading={loading}
-            /> */}
-            {/* {employeesList && !isSearchFilters() ? (
-              <Pagination
-                totalEntries={employeesList.data.count}
-                key={searchParams.get("offset")}
-              />
-            ) : null} */}
-          </StyledManageEmployeesWrap>
+            {employeeDeleteLoading ? (
+                <Loader className="full-screen-loader" />
+            ) : (
+                <>
+                    <StyledManageEmployeesWrap>
+                        <div className="employees-table-controls">
+                            <EmployeesTableFilter />
+                            <LinkButton
+                                to="/add-employee"
+                                className="primary icon-btn table-control-field"
+                            >
+                                <span>Add Employee</span>
+                                <span className="material-symbols-rounded">
+                                    person_add
+                                </span>
+                            </LinkButton>
+                        </div>
+                        <StyledEmployeesTable
+                            tableHeaders={empTableHeaders}
+                            tableData={
+                                employeesList.length
+                                    ? filterEmployeesList(
+                                          getEmployeesListingData(
+                                              employeesList,
+                                              setIsModalOpen,
+                                              setEmpIdToDelete
+                                          )
+                                      )
+                                    : []
+                            }
+                            loading={employeesFetchLoading}
+                        />
+                        {employeesList && !isSearchFilters() ? (
+                            <Pagination
+                                totalEntries={employeesCount}
+                                key={searchParams.get('offset')}
+                            />
+                        ) : null}
+                    </StyledManageEmployeesWrap>
 
-          <Modal
-            $isOpen={isModalopen}
-            text="Are you sure you want to permanently delete the employee
-                    record?"
-            type="yesCancel"
-            confirmClickHandler={deleteConfirmHandler}
-            cancelClickHandler={() => setIsModalOpen(false)}
-          />
+                    <Modal
+                        $isOpen={isModalopen}
+                        cancelClickHandler={() => setIsModalOpen(false)}
+                    >
+                        <EmployeeDeleteModal
+                            confirmClickHandler={deleteConfirmHandler}
+                            cancelClickHandler={() => setIsModalOpen(false)}
+                            employeeIdToDelete={empIdToDelete}
+                        />
+                    </Modal>
+                </>
+            )}
         </>
-      )}
-    </>
-  );
+    );
 };
 
 export default ManageEmployees;

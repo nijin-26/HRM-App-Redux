@@ -57,7 +57,7 @@ const AppContextProvider: React.FC<IAppContextProvider> = ({ children }) => {
         response: rolesFetchResponse,
         error: rolesFetchError,
         loading: rolesFetchLoading,
-    } = useApi<IApiRole>('GET', '/roles');
+    } = useApi<IApiRole[]>('GET', '/roles');
     useEffect(() => {
         if (rolesFetchError) {
             toast.error(
@@ -78,7 +78,7 @@ const AppContextProvider: React.FC<IAppContextProvider> = ({ children }) => {
         response: departmentsFetchResponse,
         error: departmentsFetchError,
         loading: departmentsFetchLoading,
-    } = useApi<IApiDepartment>('GET', '/departments');
+    } = useApi<IApiDepartment[]>('GET', '/departments');
     useEffect(() => {
         if (departmentsFetchError) {
             toast.error(
