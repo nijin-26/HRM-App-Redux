@@ -12,7 +12,7 @@ import {
     employeeNameFilterChange,
     employeeSkillsFilterChange,
     employeeListFilterClear,
-} from '../../core/store/employees/actions';
+} from '../../core/store/employeesList/actions';
 
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useDispatch();

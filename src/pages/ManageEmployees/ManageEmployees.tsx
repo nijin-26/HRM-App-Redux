@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchEmployees,
     deleteEmployeeAction,
-} from '../../core/store/employees/actions';
+} from '../../core/store/employeesList/actions';
 import { IState } from '../../core/store';
 
 const ManageEmployees: React.FC = () => {
