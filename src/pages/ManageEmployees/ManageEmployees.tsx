@@ -3,98 +3,103 @@ import { empTableHeaders, initQueryParams } from "./constants";
 import {
   StyledManageEmployeesWrap,
   StyledEmployeesTable,
-  GridContainer,
 } from "./ManageEmployees.style";
 import { useSearchParams } from "react-router-dom";
+import { GridContainer } from "./ManageEmployees.style";
 import {
-    Modal,
-    Pagination,
-    EmployeesTableFilter,
-    LinkButton,
-    Loader,
-    EmployeeDeleteModal,
-} from '../../components';
-import { IEmployeeListing, IQueryParams } from '../../interfaces/common';
-import { getEmployeesListingData } from '../../utils';
+  Modal,
+  Pagination,
+  EmployeesTableFilter,
+  LinkButton,
+  Loader,
+  EmployeeDeleteModal,
+} from "../../components";
+import { IEmployeeListing, IQueryParams } from "../../interfaces/common";
+import { getEmployeesListingData } from "../../utils";
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import {
-    fetchEmployees,
-    deleteEmployeeAction,
-} from '../../core/store/employees/actions';
-import { IState } from '../../core/store';
+  fetchEmployees,
+  deleteEmployeeAction,
+} from "../../core/store/employees/actions";
+import { IState } from "../../core/store";
+import EmployeeCard from "../../components/EmployeeCard/EmployeeCard";
+import { off } from "firebase/database";
 
 const ManageEmployees: React.FC = () => {
-    const [searchParams] = useSearchParams();
-    const dispatch = useDispatch();
+  const [searchParams] = useSearchParams();
+  const dispatch = useDispatch();
+  const isInitialRender = useRef(0);
 
-    const [isModalopen, setIsModalOpen] = useState(false);
-    const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
-        undefined
-    );
-
-    const employeesList = useSelector(
-        (state: IState) => state.employees.employeesList
-    );
-    const employeesFetchLoading = useSelector(
-        (state: IState) => state.employees.employeesFetchloading
-    );
-    const employeesCount = useSelector(
-        (state: IState) => state.employees.count
-    );
-    const employeeDeleteLoading = useSelector(
-        (state: IState) => state.employees.employeeDeleteLoading
-    );
-    const employeeNameFilter = useSelector(
-        (state: IState) =>
-            state.employees.employeesListFilter.employeeNameFilter
-    );
-    const employeeSkillsFilter = useSelector(
-        (state: IState) =>
-            state.employees.employeesListFilter.employeeSkillsFilter
-    );
-
-    useEffect(() => {
-        dispatch<any>(fetchEmployees(getSearchParams()));
-    }, [searchParams]);
   const [isModalopen, setIsModalOpen] = useState(false);
-  const [employees, setEmployees] = useState<IEmployeeListing[]>([]);
-  const [deleteEmployee, setDeleteEmployee] = useState<IDeleteEmployee>({
-    isDeleting: false,
-    empIdToDelete: undefined,
-  });
+  const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
+    undefined
+  );
+  const [offset, setOffset] = useState(0);
+
+  const employeesList = useSelector(
+    (state: IState) => state.employees.employeesList
+  );
+  const employeesFetchLoading = useSelector(
+    (state: IState) => state.employees.employeesFetchloading
+  );
+  const employeesCount = useSelector((state: IState) => state.employees.count);
+
+  const employeeDeleteLoading = useSelector(
+    (state: IState) => state.employees.employeeDeleteLoading
+  );
+  const employeeNameFilter = useSelector(
+    (state: IState) => state.employees.employeesListFilter.employeeNameFilter
+  );
+  const employeeSkillsFilter = useSelector(
+    (state: IState) => state.employees.employeesListFilter.employeeSkillsFilter
+  );
+
+  console.log(employeesList.length, employeesCount, "length", "count");
+  let hasMore = employeesList.length < employeesCount;
+  console.log(hasMore, "hasMore");
+
+  // useEffect(() => {
+  //   dispatch<any>(fetchEmployees(getSearchParams()));
+  // }, [searchParams, offset]);
 
   const observerTarget = useRef(null);
 
   const limit = 10;
-  let offset = 0;
 
-  const getFetchURL = () => {
-    // const limit = searchParams.get("limit") ?? initQueryParams.limit;
-    // const offset = searchParams.get("offset") ?? initQueryParams.offset;
+  const getSearchParams = (): IQueryParams => {
+    // const limit = searchParams.get("limit")
+    //   ? Number(searchParams.get("limit"))
+    //   : initQueryParams.limit;
+    // const offset = searchParams.get("offset")
+    //   ? Number(searchParams.get("offset"))
+    //   : initQueryParams.offset;
     const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
     const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
-    return `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`;
+
+    // console.log("get search params is called", limit, offset);
+
+    return { limit, offset, sortBy, sortDir };
   };
 
-    const deleteConfirmHandler = () => {
-        setIsModalOpen(false);
-        if (empIdToDelete) {
-            dispatch<any>(deleteEmployeeAction(empIdToDelete));
-        }
-    };
+  const deleteConfirmHandler = () => {
+    setIsModalOpen(false);
+    if (empIdToDelete) {
+      dispatch<any>(deleteEmployeeAction(empIdToDelete));
+    }
+  };
 
   const filterEmployeesList = (employeesList: IEmployeeListing[]) => {
     return employeesList.filter((employee) => {
       let shouldInclude = true;
 
-            const employeeName = employee.fullName.trim().toLowerCase();
-            const selectedSkillsForFilter = employeeSkillsFilter.map((skill) =>
-                Number(skill.value)
-            );
-            if (!(employeeName.indexOf(employeeNameFilter) > -1)) {
-                shouldInclude = false;
-            }
+      const employeeName = employee.fullName.trim().toLowerCase();
+      const selectedSkillsForFilter = employeeSkillsFilter.map((skill) =>
+        Number(skill.value)
+      );
+      if (!(employeeName.indexOf(employeeNameFilter) > -1)) {
+        shouldInclude = false;
+      }
 
       if (
         !selectedSkillsForFilter.every((skill) =>
@@ -108,127 +113,130 @@ const ManageEmployees: React.FC = () => {
     });
   };
 
-    const isSearchFilters = () => {
-        if (employeeNameFilter === '' && employeeSkillsFilter.length === 0) {
-            return false;
-        }
-        return true;
-    };
+  // Pagination Condition
   const isSearchFilters = () => {
-    if (
-      appState.employeeNameFilter === "" &&
-      appState.skillsFilter.length === 0
-    ) {
+    if (employeeNameFilter === "" && employeeSkillsFilter.length === 0) {
       return false;
     }
     return true;
   };
 
-  const {
-    response: employeesList,
-    loading,
-    refresh: refreshEmployeesList,
-    fetchData,
-    error: fetchError,
-  } = useApi<IApiFetchEmployeesArray>("GET", getFetchURL());
-
-  useEffect(() => {
-    if (fetchError) {
-      toast.error(
-        "Could not fetch employees List. Please try reloading the page."
-      );
-    }
-
-    if (employeesList) {
-      const EmployeesData = employeesList.data.employees;
-      const formattedData = getEmployeesListingData(
-        EmployeesData,
-        setIsModalOpen,
-        setDeleteEmployee
-      );
-      setEmployees((prev) => [...prev, ...formattedData]);
-    }
-  }, [loading]);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0].isIntersecting) {
-          offset = offset + limit;
-          fetchData(getFetchURL());
-          // refreshEmployeesList();
-        }
-      },
-      { threshold: 1 }
+  const handleLoadData = () => {
+    console.log(
+      employeesFetchLoading || hasMore,
+      employeesList.length,
+      "before has more"
     );
+    if (employeesFetchLoading || hasMore) return;
+    console.log("after has more");
+    dispatch<any>(fetchEmployees(getSearchParams()));
+    setOffset((prev) => prev + limit);
+  };
 
-    if (observerTarget.current) {
-      observer.observe(observerTarget.current);
+  useEffect(() => {
+    const { current } = observerTarget;
+
+    const handleIntersection: IntersectionObserverCallback = (entries) => {
+      console.log("handle intersectio is called");
+      if (entries[0].isIntersecting) {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            handleLoadData();
+          }
+        });
+      }
+    };
+
+    const observer = new IntersectionObserver(handleIntersection, {
+      root: null, // Use the viewport as the root
+      rootMargin: "0px", // No margin around the root
+      threshold: 0.1, // Trigger when 10% of the element is visible
+    });
+
+    if (current) {
+      observer.observe(current);
     }
 
     return () => {
-      if (observerTarget.current) {
-        observer.unobserve(observerTarget.current);
+      if (current) {
+        observer.unobserve(current);
       }
     };
-  }, [observerTarget]);
+  }, [employeesList]);
 
-    return (
+  return (
+    <>
+      {employeeDeleteLoading ? (
+        <Loader className="full-screen-loader" />
+      ) : (
         <>
-            {employeeDeleteLoading ? (
-                <Loader className="full-screen-loader" />
-            ) : (
-                <>
-                    <StyledManageEmployeesWrap>
-                        <div className="employees-table-controls">
-                            <EmployeesTableFilter />
-                            <LinkButton
-                                to="/add-employee"
-                                className="primary icon-btn table-control-field"
-                            >
-                                <span>Add Employee</span>
-                                <span className="material-symbols-rounded">
-                                    person_add
-                                </span>
-                            </LinkButton>
-                        </div>
-                        <StyledEmployeesTable
-                            tableHeaders={empTableHeaders}
-                            tableData={
-                                employeesList.length
-                                    ? filterEmployeesList(
-                                          getEmployeesListingData(
-                                              employeesList,
-                                              setIsModalOpen,
-                                              setEmpIdToDelete
-                                          )
-                                      )
-                                    : []
-                            }
-                            loading={employeesFetchLoading}
-                        />
-                        {employeesList && !isSearchFilters() ? (
-                            <Pagination
-                                totalEntries={employeesCount}
-                                key={searchParams.get('offset')}
-                            />
-                        ) : null}
-                    </StyledManageEmployeesWrap>
+          <StyledManageEmployeesWrap>
+            <div className="employees-table-controls">
+              <EmployeesTableFilter />
+              <LinkButton
+                to="/add-employee"
+                className="primary icon-btn table-control-field"
+              >
+                <span>Add Employee</span>
+                <span className="material-symbols-rounded">person_add</span>
+              </LinkButton>
+            </div>
+            <GridContainer>
+              {filterEmployeesList(
+                getEmployeesListingData(
+                  employeesList,
+                  setIsModalOpen,
+                  setEmpIdToDelete
+                )
+              )?.map((employee) => (
+                <EmployeeCard
+                  key={employee.id}
+                  employeeData={employee}
+                  setIsModalOpen={setIsModalOpen}
+                  setDeleteEmployee={setEmpIdToDelete}
+                />
+              ))}
+            </GridContainer>
+            {employeesFetchLoading && <Loader />}
+            <div ref={observerTarget}></div>
 
-                    <Modal
-                        $isOpen={isModalopen}
-                        cancelClickHandler={() => setIsModalOpen(false)}
-                    >
-                        <EmployeeDeleteModal
-                            confirmClickHandler={deleteConfirmHandler}
-                            cancelClickHandler={() => setIsModalOpen(false)}
-                            employeeIdToDelete={empIdToDelete}
-                        />
-                    </Modal>
-                </>
-            )}
+            {/* <StyledEmployeesTable
+              tableHeaders={empTableHeaders}
+              tableData={
+                employeesList.length
+                  ? filterEmployeesList(
+                      getEmployeesListingData(
+                        employeesList,
+                        setIsModalOpen,
+                        setEmpIdToDelete
+                      )
+                    )
+                  : []
+              }
+              loading={employeesFetchLoading}
+            />
+            {employeesList && !isSearchFilters() ? (
+              <Pagination
+                totalEntries={employeesCount}
+                key={searchParams.get("offset")}
+              />
+            ) : null} */}
+          </StyledManageEmployeesWrap>
+
+          <Modal
+            $isOpen={isModalopen}
+            cancelClickHandler={() => setIsModalOpen(false)}
+          >
+            <EmployeeDeleteModal
+              confirmClickHandler={deleteConfirmHandler}
+              cancelClickHandler={() => setIsModalOpen(false)}
+              employeeIdToDelete={empIdToDelete}
+            />
+          </Modal>
         </>
-    );
+      )}
+    </>
+  );
 };
 
 export default ManageEmployees;

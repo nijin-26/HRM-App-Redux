@@ -23,11 +23,6 @@ const useApi = <T,>(
   let cancelled = false;
 
   const fetchData = async (updatedURL?: string) => {
-    console.log(updatedURL, "updatedURL");
-    console.log(
-      updatedURL && updatedURL !== "" ? updatedURL : url,
-      "check condition"
-    );
     setLoading(true);
     try {
       const response: AxiosResponse<T> = await API({

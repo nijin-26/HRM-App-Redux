@@ -1,7 +1,7 @@
 import { CardBody, CardContainer, CardHeader } from "./EmployeeCard.styles";
 
 import avatar from "../../assets/images/employee-avatar.svg";
-import { IDeleteEmployee, IEmployeeListing } from "../../interfaces/common";
+import { IEmployeeListing } from "../../interfaces/common";
 import { Link, useNavigate } from "react-router-dom";
 
 const EmployeeCard = ({
@@ -11,30 +11,13 @@ const EmployeeCard = ({
 }: {
   employeeData: IEmployeeListing;
   setIsModalOpen: (isOpen: boolean) => void;
-  setDeleteEmployee: (deleteEmployee: IDeleteEmployee) => void;
+  setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
   const navigate = useNavigate();
 
   return (
     <CardContainer>
       <CardHeader>
-        {/* <div className="icons">
-            <Link to={`/edit-employee/${employeeData.id}`}>
-              <span className="material-symbols-rounded">edit_square</span>
-            </Link>
-            <span
-              className="material-symbols-rounded"
-              onClick={() => {
-                setDeleteEmployee({
-                  isDeleting: false,
-                  empIdToDelete: employeeData.id,
-                });
-                setIsModalOpen(true);
-              }}
-            >
-              person_remove
-            </span>
-          </div> */}
         <img
           src={employeeData.photoId === "" ? avatar : employeeData.photoId}
           alt=""
@@ -77,10 +60,7 @@ const EmployeeCard = ({
           <span
             className="material-symbols-rounded"
             onClick={() => {
-              setDeleteEmployee({
-                isDeleting: false,
-                empIdToDelete: employeeData.id,
-              });
+              setDeleteEmployee(employeeData.id);
               setIsModalOpen(true);
             }}
           >
