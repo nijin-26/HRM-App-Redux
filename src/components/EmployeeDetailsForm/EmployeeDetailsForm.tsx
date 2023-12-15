@@ -16,11 +16,13 @@ import {
     prefillDataOnEmployeeAdd,
 } from '../../pages/ManageEmployees/constants';
 import validate from './validation';
-import { useAppContext } from '../../core/contexts/AppContext';
 import { IEmployee } from '../../interfaces/common';
 import handleFormSubmit from './handleFormSubmit';
 import { sortObjByKey } from '../../utils';
 import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
+
+import { useSelector } from 'react-redux';
+import { IState } from '../../core/store';
 
 interface IEmployeeDetailsForm {
     empId?: string | null;
@@ -33,7 +35,16 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
-    const { appState } = useAppContext();
+    const selectSkills = useSelector(
+        (state: IState) => state.dropdownData.skills.skillsData
+    );
+    const selectDepartments = useSelector(
+        (state: IState) => state.dropdownData.departments.departmentsData
+    );
+    const selectRoles = useSelector(
+        (state: IState) => state.dropdownData.roles.rolesData
+    );
+
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
@@ -166,7 +177,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             <CustomSelect
                                                 name="role"
                                                 label="Role"
-                                                options={appState.roles}
+                                                options={selectRoles}
                                                 placeholder="Select a Role"
                                                 required
                                             />
@@ -175,7 +186,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             <CustomSelect
                                                 name="department"
                                                 label="Department"
-                                                options={appState.departments}
+                                                options={selectDepartments}
                                                 placeholder="Select a Department"
                                                 required
                                             />
@@ -208,7 +219,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             <CustomSelect
                                                 name="skills"
                                                 label="Skills"
-                                                options={appState.skills}
+                                                options={selectSkills}
                                                 placeholder="Select one or more skills"
                                                 isMulti
                                                 closeMenuOnSelect={false}

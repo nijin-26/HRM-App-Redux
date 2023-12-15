@@ -1,7 +1,7 @@
 import { legacy_createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
 import employeesReducer, { IEmployeesState } from './employees/reducers';
-import dropdownReducer, { IDropdownsState } from './dropdownData/reducers';
+import dropdownReducer, { IDropdownsState } from './dropdownData/reducer';
 import { thunk } from 'redux-thunk';
 
 export interface IState {

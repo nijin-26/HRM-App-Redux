@@ -14,17 +14,19 @@ import {
     employeeListFilterClear,
 } from '../../core/store/employees/actions';
 import { useEffect } from 'react';
-import { fetchSkills } from '../../core/store/dropdownData/actions';
+import { fetchSkills } from '../../core/store/dropdownData/skills/actions';
 
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useDispatch();
 
-    const skillData = useSelector((state: IState) => state.dropdownData.skills);
-    const employeeNameFilter = useSelector(
+    const selectSkillsData = useSelector(
+        (state: IState) => state.dropdownData.skills.skillsData
+    );
+    const selectEmployeeNameFilter = useSelector(
         (state: IState) =>
             state.employees.employeesListFilter.employeeNameFilter
     );
-    const employeeSkillsFilter = useSelector(
+    const selectEmployeeSkillsFilter = useSelector(
         (state: IState) =>
             state.employees.employeesListFilter.employeeSkillsFilter
     );
@@ -47,13 +49,13 @@ const EmployeesTableFilter: React.FC = () => {
         <StyledEmployeesFilterWrap>
             <Input
                 placeholder="Filter by Employee Name"
-                value={employeeNameFilter}
+                value={selectEmployeeNameFilter}
                 onChange={handleSearchInputChange}
                 className="table-control-field"
             />
             <Select
-                options={skillData}
-                value={employeeSkillsFilter}
+                options={selectSkillsData}
+                value={selectEmployeeSkillsFilter}
                 name="searchSkills"
                 isMulti
                 closeMenuOnSelect={false}
