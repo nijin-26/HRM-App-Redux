@@ -1,6 +1,6 @@
 import { AxiosError, AxiosResponse } from 'axios';
-import { IApiSkill } from '../../../interfaces/ApiDataInterface';
-import { API } from '../../api/useApi';
+import { IApiSkill } from '../../../../interfaces/ApiDataInterface';
+import { API } from '../../../api/useApi';
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';

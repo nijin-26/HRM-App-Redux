@@ -1,7 +1,7 @@
 import { legacy_createStore, combineReducers, applyMiddleware } from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
-import employeesReducer, { IEmployeesState } from './employees/reducers';
-import dropdownReducer, { IDropdownsState } from './dropdownData/reducers';
+import employeesReducer, { IEmployeesState } from './employeesList/reducers';
+import dropdownReducer, { IDropdownsState } from './dropdownData/reducer';
 import { thunk } from 'redux-thunk';
 
 export interface IState {
@@ -14,10 +14,12 @@ const rootReducer = combineReducers({
     dropdownData: dropdownReducer,
 });
 
+const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
+
 const store = legacy_createStore(
     rootReducer,
     undefined,
-    composeWithDevTools(applyMiddleware(thunk))
+    composeEnhancers(applyMiddleware(thunk))
 );
 
 export default store;

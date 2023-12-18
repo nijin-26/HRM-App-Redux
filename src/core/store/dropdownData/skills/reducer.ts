@@ -1,24 +1,24 @@
 import { AxiosError } from 'axios';
 import { ActionType } from './actions';
-import { IReactSelectOption } from '../../../interfaces/common';
-import { modifySelectOptionsArray } from '../../../utils';
+import { IReactSelectOption } from '../../../../interfaces/common';
+import { modifySelectOptionsArray } from '../../../../utils';
 
-export interface IDropdownsState {
-    skills: IReactSelectOption[];
+export interface ISkillsState {
+    skillsData: IReactSelectOption[];
     skillsFetchLoading: boolean;
     skillsFetchError: AxiosError | null;
 }
 
-const initialState: IDropdownsState = {
-    skills: [],
+const initialState: ISkillsState = {
+    skillsData: [],
     skillsFetchLoading: false,
     skillsFetchError: null,
 };
 
-const dropdownReducer = (
+const skillsReducer = (
     state = initialState,
     action: ActionType
-): IDropdownsState => {
+): ISkillsState => {
     switch (action.type) {
         case 'FETCH_SKILLS_REQUEST':
             return {
@@ -30,7 +30,7 @@ const dropdownReducer = (
                 ...state,
                 skillsFetchLoading: false,
                 skillsFetchError: null,
-                skills: modifySelectOptionsArray(action.payload, 'skill'),
+                skillsData: modifySelectOptionsArray(action.payload, 'skill'),
             };
         case 'FETCH_SKILLS_FAILURE':
             return {
@@ -43,4 +43,4 @@ const dropdownReducer = (
     }
 };
 
-export default dropdownReducer;
+export default skillsReducer;

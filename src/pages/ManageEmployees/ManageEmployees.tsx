@@ -21,12 +21,11 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   fetchEmployees,
   deleteEmployeeAction,
-} from "../../core/store/employees/actions";
+} from "../../core/store/employeesList/actions";
 import { IState } from "../../core/store";
 import EmployeeCard from "../../components/EmployeeCard/EmployeeCard";
-import { off } from "firebase/database";
 
-const ManageEmployees: React.FC = () => {
+const ManageEmployees = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useDispatch();
   const isInitialRender = useRef(0);
@@ -55,16 +54,13 @@ const ManageEmployees: React.FC = () => {
     (state: IState) => state.employees.employeesListFilter.employeeSkillsFilter
   );
 
-  console.log(employeesList.length, employeesCount, "length", "count");
   let hasMore = employeesList.length < employeesCount;
-  console.log(hasMore, "hasMore");
 
   // useEffect(() => {
   //   dispatch<any>(fetchEmployees(getSearchParams()));
   // }, [searchParams, offset]);
 
   const observerTarget = useRef(null);
-
   const limit = 10;
 
   const getSearchParams = (): IQueryParams => {
@@ -76,9 +72,7 @@ const ManageEmployees: React.FC = () => {
     //   : initQueryParams.offset;
     const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
     const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
-
     // console.log("get search params is called", limit, offset);
-
     return { limit, offset, sortBy, sortDir };
   };
 
@@ -114,19 +108,14 @@ const ManageEmployees: React.FC = () => {
   };
 
   // Pagination Condition
-  const isSearchFilters = () => {
-    if (employeeNameFilter === "" && employeeSkillsFilter.length === 0) {
-      return false;
-    }
-    return true;
-  };
+  // const isSearchFilters = () => {
+  //   if (employeeNameFilter === "" && employeeSkillsFilter.length === 0) {
+  //     return false;
+  //   }
+  //   return true;
+  // };
 
   const handleLoadData = () => {
-    console.log(
-      employeesFetchLoading || hasMore,
-      employeesList.length,
-      "before has more"
-    );
     if (employeesFetchLoading || hasMore) return;
     console.log("after has more");
     dispatch<any>(fetchEmployees(getSearchParams()));
@@ -162,7 +151,7 @@ const ManageEmployees: React.FC = () => {
         observer.unobserve(current);
       }
     };
-  }, [employeesList]);
+  }, []);
 
   return (
     <>
