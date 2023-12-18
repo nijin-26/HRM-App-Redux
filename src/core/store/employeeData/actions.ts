@@ -4,6 +4,7 @@ import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { API } from '../../api/useApi';
 import { toast } from 'react-toastify';
+import { IState } from '..';
 
 //Action Types
 interface IFETCH_EMPLOYEE_REQUEST {
@@ -17,7 +18,7 @@ interface IFETCH_EMPLOYEE_SUCCESS {
 
 interface IFETCH_EMPLOYEE_FAILURE {
     type: 'FETCH_EMPLOYEE_FAILURE';
-    payload: AxiosError;
+    payload: Error;
 }
 
 export type ActionType =
@@ -38,7 +39,7 @@ export const fetchEmployeeSuccess = (
 });
 
 export const fetchEmployeeFailure = (
-    error: AxiosError
+    error: Error
 ): IFETCH_EMPLOYEE_FAILURE => ({
     type: 'FETCH_EMPLOYEE_FAILURE',
     payload: error,
@@ -46,17 +47,36 @@ export const fetchEmployeeFailure = (
 
 export const fetchEmployee = (
     employeeId: number
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+): ThunkAction<Promise<void>, IState, {}, AnyAction> => {
     return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
+        dispatch: ThunkDispatch<{}, {}, AnyAction>,
+        getState: () => IState
     ): Promise<void> => {
         dispatch(fetchEmployeeRequest());
+
+        const employeesList = getState().employees.employeesList;
+
+        const employeeInState = employeesList.find(
+            (employee) => employee.id === employeeId
+        );
+
         try {
-            const response: AxiosResponse = await API.get(
-                `/employee/${employeeId}`
-            );
-            dispatch(fetchEmployeeSuccess(response.data));
+            if (!employeeInState) {
+                const response: AxiosResponse = await API.get(
+                    `/employee/${employeeId}`
+                );
+                if (response.data.data) {
+                    console.log('here');
+                    dispatch(fetchEmployeeSuccess(response.data.data));
+                } else {
+                    toast.error('Could not find the requested employee.');
+                    throw new Error('Could not find the requested employee');
+                }
+            } else {
+                dispatch(fetchEmployeeSuccess(employeeInState));
+            }
         } catch (error) {
+            console.log(error);
             dispatch(fetchEmployeeFailure(error as AxiosError));
             toast.error(
                 'Could not fetch employee details. Please try reloading the page.'
