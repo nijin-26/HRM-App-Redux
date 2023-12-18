@@ -54,12 +54,6 @@ const ManageEmployees = () => {
     (state: IState) => state.employees.employeesListFilter.employeeSkillsFilter
   );
 
-  let hasMore = employeesList.length < employeesCount;
-
-  // useEffect(() => {
-  //   dispatch<any>(fetchEmployees(getSearchParams()));
-  // }, [searchParams, offset]);
-
   const observerTarget = useRef(null);
   const limit = 10;
 
@@ -116,8 +110,14 @@ const ManageEmployees = () => {
   // };
 
   const handleLoadData = () => {
-    if (employeesFetchLoading || hasMore) return;
-    console.log("after has more");
+    let hasMore = true;
+
+    if (employeesCount === undefined) hasMore = true;
+    else if (employeesList.length >= employeesCount || employeesCount === 0) {
+      hasMore = false;
+    }
+
+    if (employeesFetchLoading || !hasMore) return;
     dispatch<any>(fetchEmployees(getSearchParams()));
     setOffset((prev) => prev + limit);
   };
@@ -126,7 +126,6 @@ const ManageEmployees = () => {
     const { current } = observerTarget;
 
     const handleIntersection: IntersectionObserverCallback = (entries) => {
-      console.log("handle intersectio is called");
       if (entries[0].isIntersecting) {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
@@ -151,7 +150,7 @@ const ManageEmployees = () => {
         observer.unobserve(current);
       }
     };
-  }, []);
+  }, [employeesFetchLoading]);
 
   return (
     <>
