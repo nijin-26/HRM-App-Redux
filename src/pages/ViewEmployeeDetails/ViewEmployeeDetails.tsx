@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import profilePictureAvatar from '../../assets/images/employee-avatar.svg';
 import { useDispatch, useSelector } from 'react-redux';
 import { IState } from '../../core/store';
-import { fetchEmployee } from '../../core/store/employeeData/actions';
+import { fetchEmployee } from '../../core/store/employee/actions';
 
 const ViewEmployeeDetails = () => {
     const { employeeId } = useParams();

@@ -1,9 +1,9 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { IApiRole } from '../../../../interfaces/ApiDataInterface';
-import { API } from '../../../api/useApi';
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';
+import { getRoles } from '../../../api';
 
 // Actions definitions
 interface IFETCH_ROLES_REQUEST {
@@ -51,8 +51,8 @@ export const fetchRoles = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     ): Promise<void> => {
         dispatch(fetchRolesRequest());
         try {
-            const response: AxiosResponse = await API.get('/roles');
-            dispatch(fetchRolesSuccess(response.data));
+            const { data } = await getRoles();
+            dispatch(fetchRolesSuccess(data));
         } catch (error) {
             console.log(error);
             dispatch(fetchRolesFailure(error as AxiosError));

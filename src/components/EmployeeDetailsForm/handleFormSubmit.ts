@@ -1,8 +1,8 @@
 import { IEmployee } from '../../interfaces/common';
 import { IApiEmployeeSubmission } from '../../interfaces/ApiDataInterface';
-import { API } from '../../core/api/useApi';
+import { API } from '../../core/api';
 import { toast } from 'react-toastify';
-import { getPhotoUrl } from '../../core/api/firebase';
+import { getPhotoUrl } from '../../core/api/config/firebase';
 
 const handleFormSubmit = async (
     formSubmitData: IEmployee,

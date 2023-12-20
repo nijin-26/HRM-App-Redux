@@ -1,9 +1,9 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { IApiSkill } from '../../../../interfaces/ApiDataInterface';
-import { API } from '../../../api/useApi';
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';
+import { getSkills } from '../../../api';
 
 //Actions definitions
 interface IFETCH_SKILLS_REQUEST {
@@ -58,8 +58,8 @@ export const fetchSkills = (): ThunkAction<
     ): Promise<void> => {
         dispatch(fetchSkillsRequest());
         try {
-            const response: AxiosResponse = await API.get('/skills');
-            dispatch(fetchSkillsSuccess(response.data.data));
+            const { data: fetchResponse } = await getSkills();
+            dispatch(fetchSkillsSuccess(fetchResponse.data));
         } catch (error) {
             console.log(error);
             dispatch(fetchSkillsFailure(error as AxiosError));

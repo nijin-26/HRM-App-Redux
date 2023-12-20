@@ -16,6 +16,8 @@ export interface IEmployeesState {
     employeesFetchError: AxiosError | null;
     employeeDeleteLoading: boolean;
     employeeDeleteError: AxiosError | null;
+    employeeAddLoading: boolean;
+    employeeAddError: AxiosError | null;
     employeesListFilter: IEmployeesListFilter;
 }
 
@@ -26,6 +28,8 @@ const initialState: IEmployeesState = {
     employeesFetchError: null,
     employeeDeleteLoading: false,
     employeeDeleteError: null,
+    employeeAddLoading: false,
+    employeeAddError: null,
     employeesListFilter: {
         employeeNameFilter: '',
         employeeSkillsFilter: [],
@@ -79,6 +83,19 @@ const employeesReducer = (
                 employeeDeleteLoading: false,
                 employeeDeleteError: action.payload,
             };
+        case 'ADD_EMPLOYEE_REQUEST':
+            return {
+                ...state,
+                employeeAddLoading: true,
+                employeeAddError: null,
+            };
+        // case 'ADD_EMPLOYEE_SUCCESS': return {
+        //     ...state,
+        //     employeeAddLoading: false,
+        //     employeeAddError: null,
+        //     count: state.count + 1,
+        //     employeesList: [...state.employeesList, action.payload]
+        // }
         case 'EMPLOYEE_NAME_FILTER_CHANGE':
             return {
                 ...state,

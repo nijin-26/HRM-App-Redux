@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 
 export const API = axios.create({
     baseURL: 'https://vipinms.cloud/',
-    timeout: 10000,
+    timeout: 5000,
 });
 
 const useApi = <T,>(

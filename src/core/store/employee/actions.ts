@@ -2,7 +2,7 @@ import { AxiosError, AxiosResponse } from 'axios';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { API } from '../../api/useApi';
+import { API } from '../../api';
 import { toast } from 'react-toastify';
 import { IState } from '..';
 
@@ -66,7 +66,6 @@ export const fetchEmployee = (
                     `/employee/${employeeId}`
                 );
                 if (response.data.data) {
-                    console.log('here');
                     dispatch(fetchEmployeeSuccess(response.data.data));
                 } else {
                     toast.error('Could not find the requested employee.');

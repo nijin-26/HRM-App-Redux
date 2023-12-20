@@ -1,9 +1,9 @@
 import { AxiosError, AxiosResponse } from 'axios';
 import { IApiDepartment } from '../../../../interfaces/ApiDataInterface';
-import { API } from '../../../api/useApi';
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';
+import { getDepartments } from '../../../api';
 
 // Actions definitions
 interface IFETCH_DEPARTMENTS_REQUEST {
@@ -58,8 +58,8 @@ export const fetchDepartments = (): ThunkAction<
     ): Promise<void> => {
         dispatch(fetchDepartmentsRequest());
         try {
-            const response: AxiosResponse = await API.get('/departments');
-            dispatch(fetchDepartmentsSuccess(response.data));
+            const { data } = await getDepartments();
+            dispatch(fetchDepartmentsSuccess(data));
         } catch (error) {
             console.log(error);
             dispatch(fetchDepartmentsFailure(error as AxiosError));
