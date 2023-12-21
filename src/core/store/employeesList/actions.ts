@@ -12,7 +12,12 @@ import { IQueryParams, IReactSelectOption } from '../../../interfaces/common';
 import { toast } from 'react-toastify';
 import { MultiValue } from 'react-select';
 
-import { getEmployeesList, deleteEmployee, addEmployee } from '../../api';
+import {
+    getEmployeesList,
+    deleteEmployee,
+    addEmployee,
+    editEmployee,
+} from '../../api';
 
 //Action Definitions
 interface IFETCH_EMPLOYEES_REQUEST {
@@ -253,6 +258,7 @@ const editEmployeeError = (error: AxiosError): IEDIT_EMPLOYEE_FAILURE => ({
 
 //thunk function
 export const editEmployeeAction = (
+    employeeId: number,
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
 ): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
@@ -261,8 +267,7 @@ export const editEmployeeAction = (
     ): Promise<void> => {
         dispatch(editEmployeeRequest());
         try {
-            console.log(storeData);
-            await addEmployee(apiSubmissionData);
+            await editEmployee(employeeId, apiSubmissionData);
             dispatch(editEmployeeSuccess(apiSubmissionData, storeData));
             toast.success('Employee details edited successfully.');
         } catch (error) {

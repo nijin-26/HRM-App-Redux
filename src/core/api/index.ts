@@ -5,6 +5,7 @@ import {
     getEmployee,
     deleteEmployee,
     addEmployee,
+    editEmployee,
 } from './services/employees';
 
 export {
@@ -16,4 +17,5 @@ export {
     getEmployee,
     deleteEmployee,
     addEmployee,
+    editEmployee,
 };

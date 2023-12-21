@@ -31,7 +31,7 @@ import {
 } from '../../core/store/employeesList/actions';
 
 interface IEmployeeDetailsForm {
-    empId?: Number;
+    empId?: number;
     prefillData?: IEmployee;
 }
 
@@ -94,6 +94,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                             empId
                                 ? dispatch<any>(
                                       editEmployeeAction(
+                                          empId,
                                           apiSubmitData,
                                           storeData
                                       )

@@ -1,50 +1,61 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import useApi from '../../core/api/useApi';
+import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import StyledEditEmployeeDetails from './EditEmployeeDetails.style';
 import { EmployeeDetailsForm, Loader } from '../../components';
-import { toast } from 'react-toastify';
-import { IApiFetchEmployee } from '../../interfaces/ApiDataInterface';
+import { IState } from '../../core/store';
 import { modifyFetchedEmployeeData } from '../../utils';
+import { fetchEmployee } from '../../core/store/employee/actions';
 
 const EditEmployeeDetails: React.FC = () => {
-    const { employeeId } = useParams();
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const { employeeId } = useParams();
 
     if (!employeeId) {
         navigate('/view-employee', { replace: true });
         return;
     }
 
-    const { response, loading, error } = useApi<IApiFetchEmployee>(
-        'GET',
-        `/employee/${employeeId}`
+    const employeeDetails = useSelector((state: IState) => {
+        if (state.employee.employeeData) {
+            return modifyFetchedEmployeeData(state.employee.employeeData);
+        } else {
+            return null;
+        }
+    });
+    const employeeFetchLoading = useSelector(
+        (state: IState) => state.employee.employeeFetchloading
+    );
+    const employeeFetchError = useSelector(
+        (state: IState) => state.employee.employeeFetchError
     );
 
     useEffect(() => {
-        if (error) {
-            toast.error(`Could not fetch the requested employee's details`);
-            navigate('/', { replace: true });
-        }
+        dispatch<any>(fetchEmployee(Number(employeeId)));
+    }, [employeeId]);
 
-        if (response && !response.data) {
-            toast.error('Could not find the requested employee.');
+    useEffect(() => {
+        if (employeeFetchError) {
             navigate('/view-employee', { replace: true });
         }
-    }, [loading]);
+    }, [employeeFetchError]);
 
     return (
         <>
-            {loading && <Loader className="full-screen-loader" />}
-            {response?.data && (
-                <StyledEditEmployeeDetails>
-                    <h2 className="text-center">Edit Employee Details</h2>
+            {employeeFetchLoading ? (
+                <Loader className="full-screen-loader" />
+            ) : (
+                employeeDetails && (
+                    <StyledEditEmployeeDetails>
+                        <h2 className="text-center">Edit Employee Details</h2>
 
-                    <EmployeeDetailsForm
-                        empId={Number(employeeId)}
-                        prefillData={modifyFetchedEmployeeData(response.data)}
-                    />
-                </StyledEditEmployeeDetails>
+                        <EmployeeDetailsForm
+                            empId={Number(employeeId)}
+                            prefillData={employeeDetails}
+                        />
+                    </StyledEditEmployeeDetails>
+                )
             )}
         </>
     );

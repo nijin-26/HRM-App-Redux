@@ -1,12 +1,12 @@
-import StyledEmpDetailsWrap from './ViewEmployeeDetails.style';
-import { modifyFetchedEmployeeData } from '../../utils';
-import { Loader, Chip, LinkButton, Button } from '../../components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import profilePictureAvatar from '../../assets/images/employee-avatar.svg';
 import { useDispatch, useSelector } from 'react-redux';
+import StyledEmpDetailsWrap from './ViewEmployeeDetails.style';
+import { Loader, Chip, LinkButton, Button } from '../../components';
+import profilePictureAvatar from '../../assets/images/employee-avatar.svg';
 import { IState } from '../../core/store';
 import { fetchEmployee } from '../../core/store/employee/actions';
+import { modifyFetchedEmployeeData } from '../../utils';
 
 const ViewEmployeeDetails = () => {
     const dispatch = useDispatch();
