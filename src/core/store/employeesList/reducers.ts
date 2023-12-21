@@ -18,6 +18,8 @@ export interface IEmployeesState {
     employeeDeleteError: AxiosError | null;
     employeeAddLoading: boolean;
     employeeAddError: AxiosError | null;
+    employeeEditLoading: boolean;
+    employeeEditError: AxiosError | null;
     employeesListFilter: IEmployeesListFilter;
 }
 
@@ -30,6 +32,8 @@ const initialState: IEmployeesState = {
     employeeDeleteError: null,
     employeeAddLoading: false,
     employeeAddError: null,
+    employeeEditLoading: false,
+    employeeEditError: null,
     employeesListFilter: {
         employeeNameFilter: '',
         employeeSkillsFilter: [],
@@ -89,13 +93,46 @@ const employeesReducer = (
                 employeeAddLoading: true,
                 employeeAddError: null,
             };
-        // case 'ADD_EMPLOYEE_SUCCESS': return {
-        //     ...state,
-        //     employeeAddLoading: false,
-        //     employeeAddError: null,
-        //     count: state.count + 1,
-        //     employeesList: [...state.employeesList, action.payload]
-        // }
+        case 'ADD_EMPLOYEE_SUCCESS':
+            return {
+                ...state,
+                employeeAddLoading: false,
+                employeeAddError: null,
+                count: state.count + 1,
+                employeesList: [
+                    ...state.employeesList,
+                    action.payload.storeData,
+                ],
+            };
+        case 'ADD_EMPLOYEE_FAILURE':
+            return {
+                ...state,
+                employeeAddLoading: false,
+                employeeAddError: action.payload,
+            };
+        case 'EDIT_EMPLOYEE_REQUEST':
+            return {
+                ...state,
+                employeeEditLoading: true,
+                employeeEditError: null,
+            };
+        case 'EDIT_EMPLOYEE_SUCCESS':
+            return {
+                ...state,
+                employeeEditLoading: false,
+                employeeEditError: null,
+                employeesList: state.employeesList.map((employee) =>
+                    employee.id === action.payload.storeData.id
+                        ? action.payload.storeData
+                        : employee
+                ),
+            };
+        case 'EDIT_EMPLOYEE_FAILURE':
+            return {
+                ...state,
+                employeeEditLoading: false,
+                employeeEditError: action.payload,
+            };
         case 'EMPLOYEE_NAME_FILTER_CHANGE':
             return {
                 ...state,

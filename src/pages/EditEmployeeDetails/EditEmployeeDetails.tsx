@@ -11,6 +11,11 @@ const EditEmployeeDetails: React.FC = () => {
     const { employeeId } = useParams();
     const navigate = useNavigate();
 
+    if (!employeeId) {
+        navigate('/view-employee', { replace: true });
+        return;
+    }
+
     const { response, loading, error } = useApi<IApiFetchEmployee>(
         'GET',
         `/employee/${employeeId}`
@@ -36,7 +41,7 @@ const EditEmployeeDetails: React.FC = () => {
                     <h2 className="text-center">Edit Employee Details</h2>
 
                     <EmployeeDetailsForm
-                        empId={employeeId}
+                        empId={Number(employeeId)}
                         prefillData={modifyFetchedEmployeeData(response.data)}
                     />
                 </StyledEditEmployeeDetails>

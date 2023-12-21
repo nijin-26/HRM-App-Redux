@@ -2,6 +2,7 @@ import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
 
 import {
+    IApiEmployee,
     IApiEmployeeSubmission,
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
@@ -48,11 +49,31 @@ interface IADD_EMPLOYEE_REQUEST {
 
 interface IADD_EMPLOYEE_SUCCESS {
     type: 'ADD_EMPLOYEE_SUCCESS';
-    payload: IApiEmployeeSubmission;
+    payload: {
+        apiSubmissionData: IApiEmployeeSubmission;
+        storeData: IApiEmployee;
+    };
 }
 
 interface IADD_EMPLOYEE_FAILURE {
     type: 'ADD_EMPLOYEE_FAILURE';
+    payload: AxiosError;
+}
+
+interface IEDIT_EMPLOYEE_REQUEST {
+    type: 'EDIT_EMPLOYEE_REQUEST';
+}
+
+interface IEDIT_EMPLOYEE_SUCCESS {
+    type: 'EDIT_EMPLOYEE_SUCCESS';
+    payload: {
+        apiSubmissionData: IApiEmployeeSubmission;
+        storeData: IApiEmployee;
+    };
+}
+
+interface IEDIT_EMPLOYEE_FAILURE {
+    type: 'EDIT_EMPLOYEE_FAILURE';
     payload: AxiosError;
 }
 
@@ -81,6 +102,9 @@ export type ActionType =
     | IADD_EMPLOYEE_REQUEST
     | IADD_EMPLOYEE_SUCCESS
     | IADD_EMPLOYEE_FAILURE
+    | IEDIT_EMPLOYEE_REQUEST
+    | IEDIT_EMPLOYEE_SUCCESS
+    | IEDIT_EMPLOYEE_FAILURE
     | IEMPLOYEE_NAME_FILTER_CHANGE
     | IEMPLOYEE_SKILLS_FILTER_CHANGE
     | IEMPLOYEE_LIST_FILTER_CLEAR;
@@ -176,10 +200,11 @@ const addEmployeeRequest = (): IADD_EMPLOYEE_REQUEST => ({
 });
 
 const addEmployeeSuccess = (
-    employeeData: IApiEmployeeSubmission
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
 ): IADD_EMPLOYEE_SUCCESS => ({
     type: 'ADD_EMPLOYEE_SUCCESS',
-    payload: employeeData,
+    payload: { apiSubmissionData, storeData },
 });
 
 const addEmployeeError = (error: AxiosError): IADD_EMPLOYEE_FAILURE => ({
@@ -189,19 +214,61 @@ const addEmployeeError = (error: AxiosError): IADD_EMPLOYEE_FAILURE => ({
 
 //thunk function
 export const addEmployeeAction = (
-    employeeData: IApiEmployeeSubmission
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
 ): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
     return async (
         dispatch: ThunkDispatch<{}, {}, AnyAction>
     ): Promise<void> => {
         dispatch(addEmployeeRequest());
         try {
-            await addEmployee(employeeData);
-            dispatch(addEmployeeSuccess(employeeData));
+            const { data } = await addEmployee(apiSubmissionData);
+            storeData.id = data.data.id;
+            dispatch(addEmployeeSuccess(apiSubmissionData, storeData));
             toast.success('Employee details added successfully.');
         } catch (error) {
+            console.log(error);
             dispatch(addEmployeeError(error as AxiosError));
             toast.error('Could not add employee details. Please try again.');
+        }
+    };
+};
+
+const editEmployeeRequest = (): IEDIT_EMPLOYEE_REQUEST => ({
+    type: 'EDIT_EMPLOYEE_REQUEST',
+});
+
+const editEmployeeSuccess = (
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
+): IEDIT_EMPLOYEE_SUCCESS => ({
+    type: 'EDIT_EMPLOYEE_SUCCESS',
+    payload: { apiSubmissionData, storeData },
+});
+
+const editEmployeeError = (error: AxiosError): IEDIT_EMPLOYEE_FAILURE => ({
+    type: 'EDIT_EMPLOYEE_FAILURE',
+    payload: error,
+});
+
+//thunk function
+export const editEmployeeAction = (
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (
+        dispatch: ThunkDispatch<{}, {}, AnyAction>
+    ): Promise<void> => {
+        dispatch(editEmployeeRequest());
+        try {
+            console.log(storeData);
+            await addEmployee(apiSubmissionData);
+            dispatch(editEmployeeSuccess(apiSubmissionData, storeData));
+            toast.success('Employee details edited successfully.');
+        } catch (error) {
+            console.log(error);
+            dispatch(editEmployeeError(error as AxiosError));
+            toast.error('Could not edit employee details. Please try again.');
         }
     };
 };

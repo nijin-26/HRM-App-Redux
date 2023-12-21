@@ -1,4 +1,5 @@
 import {
+    IApiEmployeePostRepsonse,
     IApiEmployeeSubmission,
     IApiFetchEmployeesArray,
 } from '../../../interfaces/ApiDataInterface';
@@ -20,7 +21,7 @@ export const deleteEmployee = (employeeId: number) => {
 };
 
 export const addEmployee = (employeeData: IApiEmployeeSubmission) => {
-    return API.post('/employee', employeeData);
+    return API.post<IApiEmployeePostRepsonse>('/employee', employeeData);
 };
 
 export const editEmployee = (
