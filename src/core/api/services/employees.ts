@@ -1,6 +1,7 @@
 import {
     IApiEmployeePostRepsonse,
     IApiEmployeeSubmission,
+    IApiFetchEmployee,
     IApiFetchEmployeesArray,
 } from '../../../interfaces/ApiDataInterface';
 import { API } from '../config/axios';
@@ -14,6 +15,10 @@ export const getEmployeesList = (
     return API.get<IApiFetchEmployeesArray>(
         `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`
     );
+};
+
+export const getEmployee = (employeeId: number) => {
+    return API.get<IApiFetchEmployee>(`/employee/${employeeId}`);
 };
 
 export const deleteEmployee = (employeeId: number) => {

@@ -1,10 +1,10 @@
-import { AxiosError, AxiosResponse } from 'axios';
+import { AxiosError } from 'axios';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { AnyAction } from 'redux';
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { API } from '../../api';
 import { toast } from 'react-toastify';
 import { IState } from '..';
+import { getEmployee } from '../../api';
 
 //Action Types
 interface IFETCH_EMPLOYEE_REQUEST {
@@ -62,24 +62,27 @@ export const fetchEmployee = (
 
         try {
             if (!employeeInState) {
-                const response: AxiosResponse = await API.get(
-                    `/employee/${employeeId}`
-                );
-                if (response.data.data) {
-                    dispatch(fetchEmployeeSuccess(response.data.data));
+                const { data: response } = await getEmployee(employeeId);
+                if (response.data) {
+                    dispatch(fetchEmployeeSuccess(response.data));
                 } else {
                     toast.error('Could not find the requested employee.');
-                    throw new Error('Could not find the requested employee');
+                    dispatch(
+                        fetchEmployeeFailure(
+                            new Error('Could not find requested employee')
+                        )
+                    );
                 }
             } else {
                 dispatch(fetchEmployeeSuccess(employeeInState));
             }
         } catch (error) {
-            console.log(error);
             dispatch(fetchEmployeeFailure(error as AxiosError));
-            toast.error(
-                'Could not fetch employee details. Please try reloading the page.'
-            );
+            {
+                toast.error(
+                    'Could not fetch employee details. Please try reloading the page.'
+                );
+            }
         }
     };
 };
