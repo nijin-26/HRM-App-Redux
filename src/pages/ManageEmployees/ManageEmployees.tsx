@@ -58,12 +58,12 @@ const ManageEmployees = () => {
   const limit = 10;
 
   const getSearchParams = (): IQueryParams => {
-    // const limit = searchParams.get("limit")
-    //   ? Number(searchParams.get("limit"))
-    //   : initQueryParams.limit;
-    // const offset = searchParams.get("offset")
-    //   ? Number(searchParams.get("offset"))
-    //   : initQueryParams.offset;
+    const limit = searchParams.get("limit")
+      ? Number(searchParams.get("limit"))
+      : initQueryParams.limit;
+    const offset = searchParams.get("offset")
+      ? Number(searchParams.get("offset"))
+      : initQueryParams.offset;
     const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
     const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
     // console.log("get search params is called", limit, offset);
@@ -102,12 +102,12 @@ const ManageEmployees = () => {
   };
 
   // Pagination Condition
-  // const isSearchFilters = () => {
-  //   if (employeeNameFilter === "" && employeeSkillsFilter.length === 0) {
-  //     return false;
-  //   }
-  //   return true;
-  // };
+  const isSearchFilters = () => {
+    if (employeeNameFilter === "" && employeeSkillsFilter.length === 0) {
+      return false;
+    }
+    return true;
+  };
 
   const handleLoadData = () => {
     let hasMore = true;
@@ -151,6 +151,10 @@ const ManageEmployees = () => {
       }
     };
   }, [employeesFetchLoading]);
+
+  // useEffect(() => {
+  //   dispatch<any>(fetchEmployees(getSearchParams()));
+  // }, [searchParams]);
 
   return (
     <>

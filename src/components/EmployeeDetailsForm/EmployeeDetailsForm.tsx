@@ -24,8 +24,14 @@ import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
 import { useSelector } from 'react-redux';
 import { IState } from '../../core/store';
 
+import { useDispatch } from 'react-redux';
+import {
+    addEmployeeAction,
+    editEmployeeAction,
+} from '../../core/store/employeesList/actions';
+
 interface IEmployeeDetailsForm {
-    empId?: string | null;
+    empId?: Number;
     prefillData?: IEmployee;
 }
 
@@ -35,6 +41,8 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
+    const dispatch = useDispatch();
+
     const selectSkills = useSelector(
         (state: IState) => state.dropdownData.skills.skillsData
     );
@@ -75,14 +83,29 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                     <Formik
                         initialValues={prefillData}
                         validationSchema={validate}
-                        onSubmit={async (values) => {
+                        onSubmit={async (values, { setSubmitting }) => {
                             setLoading(true);
-                            await handleFormSubmit(
-                                values,
-                                empId,
-                                photoRef.current
-                            );
-                            navigate(`/`);
+                            const { apiSubmitData, storeData } =
+                                await handleFormSubmit(
+                                    values,
+                                    photoRef.current
+                                );
+
+                            empId
+                                ? dispatch<any>(
+                                      editEmployeeAction(
+                                          apiSubmitData,
+                                          storeData
+                                      )
+                                  )
+                                : dispatch<any>(
+                                      addEmployeeAction(
+                                          apiSubmitData,
+                                          storeData
+                                      )
+                                  );
+                            // navigate(`/`);
+                            setSubmitting(false);
                             setLoading(false);
                         }}
                     >

@@ -1,11 +1,10 @@
-import { AxiosError } from 'axios';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { ActionType } from './actions';
 
 export interface IEmployeeState {
     employeeData: IApiEmployee | null;
     employeeFetchloading: boolean;
-    employeeFetchError: AxiosError | null;
+    employeeFetchError: Error | null;
 }
 
 const initialState: IEmployeeState = {
@@ -38,6 +37,8 @@ const employeeReducer = (
                 employeeFetchloading: false,
                 employeeFetchError: action.payload,
             };
+        default:
+            return state;
     }
 };
 

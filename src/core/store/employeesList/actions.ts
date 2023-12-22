@@ -1,13 +1,18 @@
 import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { AnyAction } from 'redux';
-import { API } from '../../api/useApi';
 
-import { IApiEmployeesData } from '../../../interfaces/ApiDataInterface';
-import { AxiosError, AxiosResponse } from 'axios';
+import {
+    IApiEmployee,
+    IApiEmployeeSubmission,
+    IApiEmployeesData,
+} from '../../../interfaces/ApiDataInterface';
+import { AxiosError } from 'axios';
 import { IQueryParams, IReactSelectOption } from '../../../interfaces/common';
 
 import { toast } from 'react-toastify';
 import { MultiValue } from 'react-select';
+
+import { getEmployeesList, deleteEmployee, addEmployee } from '../../api';
 
 //Action Definitions
 interface IFETCH_EMPLOYEES_REQUEST {
@@ -38,6 +43,40 @@ interface IDELETE_EMPLOYEE_FAILURE {
     payload: AxiosError;
 }
 
+interface IADD_EMPLOYEE_REQUEST {
+    type: 'ADD_EMPLOYEE_REQUEST';
+}
+
+interface IADD_EMPLOYEE_SUCCESS {
+    type: 'ADD_EMPLOYEE_SUCCESS';
+    payload: {
+        apiSubmissionData: IApiEmployeeSubmission;
+        storeData: IApiEmployee;
+    };
+}
+
+interface IADD_EMPLOYEE_FAILURE {
+    type: 'ADD_EMPLOYEE_FAILURE';
+    payload: AxiosError;
+}
+
+interface IEDIT_EMPLOYEE_REQUEST {
+    type: 'EDIT_EMPLOYEE_REQUEST';
+}
+
+interface IEDIT_EMPLOYEE_SUCCESS {
+    type: 'EDIT_EMPLOYEE_SUCCESS';
+    payload: {
+        apiSubmissionData: IApiEmployeeSubmission;
+        storeData: IApiEmployee;
+    };
+}
+
+interface IEDIT_EMPLOYEE_FAILURE {
+    type: 'EDIT_EMPLOYEE_FAILURE';
+    payload: AxiosError;
+}
+
 interface IEMPLOYEE_NAME_FILTER_CHANGE {
     type: 'EMPLOYEE_NAME_FILTER_CHANGE';
     payload: string;
@@ -60,6 +99,12 @@ export type ActionType =
     | IDELETE_EMPLOYEE_REQUEST
     | IDELETE_EMPLOYEE_SUCCESS
     | IDELETE_EMPLOYEE_FAILURE
+    | IADD_EMPLOYEE_REQUEST
+    | IADD_EMPLOYEE_SUCCESS
+    | IADD_EMPLOYEE_FAILURE
+    | IEDIT_EMPLOYEE_REQUEST
+    | IEDIT_EMPLOYEE_SUCCESS
+    | IEDIT_EMPLOYEE_FAILURE
     | IEMPLOYEE_NAME_FILTER_CHANGE
     | IEMPLOYEE_SKILLS_FILTER_CHANGE
     | IEMPLOYEE_LIST_FILTER_CLEAR;
@@ -67,18 +112,18 @@ export type ActionType =
 //Action Creators
 
 //EMPLOYEES LIST FETCH
-export const fetchEmployeesRequest = (): IFETCH_EMPLOYEES_REQUEST => ({
+const fetchEmployeesRequest = (): IFETCH_EMPLOYEES_REQUEST => ({
     type: 'FETCH_EMPLOYEES_REQUEST',
 });
 
-export const fetchEmployeesSuccess = (
+const fetchEmployeesSuccess = (
     employeesData: IApiEmployeesData
 ): IFETCH_EMPLOYEES_SUCCESS => ({
     type: 'FETCH_EMPLOYEES_SUCCESS',
     payload: employeesData,
 });
 
-export const fetchEmployeesFailure = (
+const fetchEmployeesFailure = (
     error: AxiosError
 ): IFETCH_EMPLOYEES_FAILURE => ({
     type: 'FETCH_EMPLOYEES_FAILURE',
@@ -96,10 +141,13 @@ export const fetchEmployees = (
     ): Promise<void> => {
         dispatch(fetchEmployeesRequest());
         try {
-            const response: AxiosResponse = await API.get(
-                `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`
+            const { data } = await getEmployeesList(
+                limit,
+                offset,
+                sortBy,
+                sortDir
             );
-            dispatch(fetchEmployeesSuccess(response.data.data));
+            dispatch(fetchEmployeesSuccess(data.data));
         } catch (error) {
             dispatch(fetchEmployeesFailure(error as AxiosError));
             toast.error(
@@ -110,18 +158,18 @@ export const fetchEmployees = (
 };
 
 //EMPLOYEE DELETE
-export const deleteEmployeeRequest = (): IDELETE_EMPLOYEE_REQUEST => ({
+const deleteEmployeeRequest = (): IDELETE_EMPLOYEE_REQUEST => ({
     type: 'DELETE_EMPLOYEE_REQUEST',
 });
 
-export const deleteEmployeeSuccess = (
+const deleteEmployeeSuccess = (
     deletedEmpId: number
 ): IDELETE_EMPLOYEE_SUCCESS => ({
     type: 'DELETE_EMPLOYEE_SUCCESS',
     payload: deletedEmpId,
 });
 
-export const deleteEmployeeFailure = (
+const deleteEmployeeFailure = (
     error: AxiosError
 ): IDELETE_EMPLOYEE_FAILURE => ({
     type: 'DELETE_EMPLOYEE_FAILURE',
@@ -137,15 +185,90 @@ export const deleteEmployeeAction = (
     ): Promise<void> => {
         dispatch(deleteEmployeeRequest());
         try {
-            await API({
-                method: 'DELETE',
-                url: `/employee/${empIdToDelete}`,
-            });
+            await deleteEmployee(empIdToDelete);
             dispatch(deleteEmployeeSuccess(empIdToDelete));
             toast.success('Employee deleted Successfully');
         } catch (error) {
             dispatch(deleteEmployeeFailure(error as AxiosError));
             toast.error('Employee deletion failed');
+        }
+    };
+};
+
+const addEmployeeRequest = (): IADD_EMPLOYEE_REQUEST => ({
+    type: 'ADD_EMPLOYEE_REQUEST',
+});
+
+const addEmployeeSuccess = (
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
+): IADD_EMPLOYEE_SUCCESS => ({
+    type: 'ADD_EMPLOYEE_SUCCESS',
+    payload: { apiSubmissionData, storeData },
+});
+
+const addEmployeeError = (error: AxiosError): IADD_EMPLOYEE_FAILURE => ({
+    type: 'ADD_EMPLOYEE_FAILURE',
+    payload: error,
+});
+
+//thunk function
+export const addEmployeeAction = (
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (
+        dispatch: ThunkDispatch<{}, {}, AnyAction>
+    ): Promise<void> => {
+        dispatch(addEmployeeRequest());
+        try {
+            const { data } = await addEmployee(apiSubmissionData);
+            storeData.id = data.data.id;
+            dispatch(addEmployeeSuccess(apiSubmissionData, storeData));
+            toast.success('Employee details added successfully.');
+        } catch (error) {
+            console.log(error);
+            dispatch(addEmployeeError(error as AxiosError));
+            toast.error('Could not add employee details. Please try again.');
+        }
+    };
+};
+
+const editEmployeeRequest = (): IEDIT_EMPLOYEE_REQUEST => ({
+    type: 'EDIT_EMPLOYEE_REQUEST',
+});
+
+const editEmployeeSuccess = (
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
+): IEDIT_EMPLOYEE_SUCCESS => ({
+    type: 'EDIT_EMPLOYEE_SUCCESS',
+    payload: { apiSubmissionData, storeData },
+});
+
+const editEmployeeError = (error: AxiosError): IEDIT_EMPLOYEE_FAILURE => ({
+    type: 'EDIT_EMPLOYEE_FAILURE',
+    payload: error,
+});
+
+//thunk function
+export const editEmployeeAction = (
+    apiSubmissionData: IApiEmployeeSubmission,
+    storeData: IApiEmployee
+): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+    return async (
+        dispatch: ThunkDispatch<{}, {}, AnyAction>
+    ): Promise<void> => {
+        dispatch(editEmployeeRequest());
+        try {
+            console.log(storeData);
+            await addEmployee(apiSubmissionData);
+            dispatch(editEmployeeSuccess(apiSubmissionData, storeData));
+            toast.success('Employee details edited successfully.');
+        } catch (error) {
+            console.log(error);
+            dispatch(editEmployeeError(error as AxiosError));
+            toast.error('Could not edit employee details. Please try again.');
         }
     };
 };
