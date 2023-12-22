@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../core/store';
 import { empTableHeaders, initQueryParams } from './constants';
 import {
     StyledManageEmployeesWrap,
     StyledEmployeesTable,
 } from './ManageEmployees.style';
-import { useSearchParams } from 'react-router-dom';
 import {
     Modal,
     Pagination,
@@ -15,42 +16,35 @@ import {
 } from '../../components';
 import { IEmployeeListing, IQueryParams } from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
-
-import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchEmployees,
     deleteEmployeeAction,
 } from '../../core/store/employeesList/actions';
-import { IState } from '../../core/store';
 
 const ManageEmployees: React.FC = () => {
     const [searchParams] = useSearchParams();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
     const [isModalopen, setIsModalOpen] = useState(false);
     const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
         undefined
     );
 
-    const employeesList = useSelector(
-        (state: IState) => state.employees.employeesList
+    const employeesList = useAppSelector(
+        (state) => state.employees.employeesList
     );
-    const employeesFetchLoading = useSelector(
-        (state: IState) => state.employees.employeesFetchloading
+    const employeesFetchLoading = useAppSelector(
+        (state) => state.employees.employeesFetchloading
     );
-    const employeesCount = useSelector(
-        (state: IState) => state.employees.count
+    const employeesCount = useAppSelector((state) => state.employees.count);
+    const employeeDeleteLoading = useAppSelector(
+        (state) => state.employees.employeeDeleteLoading
     );
-    const employeeDeleteLoading = useSelector(
-        (state: IState) => state.employees.employeeDeleteLoading
+    const employeeNameFilter = useAppSelector(
+        (state) => state.employees.employeesListFilter.employeeNameFilter
     );
-    const employeeNameFilter = useSelector(
-        (state: IState) =>
-            state.employees.employeesListFilter.employeeNameFilter
-    );
-    const employeeSkillsFilter = useSelector(
-        (state: IState) =>
-            state.employees.employeesListFilter.employeeSkillsFilter
+    const employeeSkillsFilter = useAppSelector(
+        (state) => state.employees.employeesListFilter.employeeSkillsFilter
     );
 
     const getSearchParams = (): IQueryParams => {
@@ -69,7 +63,7 @@ const ManageEmployees: React.FC = () => {
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empIdToDelete) {
-            dispatch<any>(deleteEmployeeAction(empIdToDelete));
+            dispatch(deleteEmployeeAction(empIdToDelete));
         }
     };
 
@@ -105,7 +99,7 @@ const ManageEmployees: React.FC = () => {
     };
 
     useEffect(() => {
-        dispatch<any>(fetchEmployees(getSearchParams()));
+        dispatch(fetchEmployees(getSearchParams()));
     }, [searchParams]);
 
     return (

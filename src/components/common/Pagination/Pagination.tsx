@@ -5,7 +5,7 @@ import PaginationContainer from './Pagination.style';
 import { initQueryParams } from '../../../pages/ManageEmployees/constants';
 
 interface IPagination {
-    totalEntries: number;
+    totalEntries: number | undefined;
 }
 
 const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
@@ -117,10 +117,12 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
                     <span className="material-symbols-rounded">last_page</span>
                 </Button>
             </div>
-            <span>
-                {offset + 1}-{Math.min(offset + limit, totalEntries)} of{' '}
-                {totalEntries} items
-            </span>
+            {totalEntries && (
+                <span>
+                    {offset + 1}-{Math.min(offset + limit, totalEntries)} of{' '}
+                    {totalEntries} items
+                </span>
+            )}
         </PaginationContainer>
     );
 };

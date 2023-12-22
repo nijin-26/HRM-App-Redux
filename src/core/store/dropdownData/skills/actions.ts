@@ -1,9 +1,8 @@
 import { AxiosError } from 'axios';
 import { IApiSkill } from '../../../../interfaces/ApiDataInterface';
-import { AnyAction } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';
 import { getSkills } from '../../../api';
+import { AppDispatch, AppThunk } from '../..';
 
 //Actions definitions
 interface IFETCH_SKILLS_REQUEST {
@@ -47,15 +46,8 @@ export const fetchSkillsFailure = (
 });
 
 //Thunk Action
-export const fetchSkills = (): ThunkAction<
-    Promise<void>,
-    {},
-    {},
-    AnyAction
-> => {
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
+export const fetchSkills = (): AppThunk => {
+    return async (dispatch: AppDispatch): Promise<void> => {
         dispatch(fetchSkillsRequest());
         try {
             const { data: fetchResponse } = await getSkills();

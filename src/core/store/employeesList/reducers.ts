@@ -11,7 +11,7 @@ interface IEmployeesListFilter {
 
 export interface IEmployeesState {
     employeesList: IApiEmployee[];
-    count: number;
+    count: number | undefined;
     employeesFetchloading: boolean;
     employeesFetchError: AxiosError | null;
     employeeDeleteLoading: boolean;
@@ -24,7 +24,7 @@ export interface IEmployeesState {
 }
 
 const initialState: IEmployeesState = {
-    count: 0,
+    count: undefined,
     employeesList: [],
     employeesFetchloading: false,
     employeesFetchError: null,
@@ -55,7 +55,10 @@ const employeesReducer = (
             return {
                 ...state,
                 count: action.payload.count,
-                employeesList: [...action.payload.employees],
+                employeesList: [
+                    ...state.employeesList,
+                    ...action.payload.employees,
+                ],
                 employeesFetchloading: false,
                 employeesFetchError: null,
             };
@@ -74,7 +77,7 @@ const employeesReducer = (
         case 'DELETE_EMPLOYEE_SUCCESS':
             return {
                 ...state,
-                count: state.count - 1,
+                count: state.count ? state.count - 1 : state.count,
                 employeesList: state.employeesList.filter(
                     (emp) => emp.id !== action.payload
                 ),
@@ -98,7 +101,7 @@ const employeesReducer = (
                 ...state,
                 employeeAddLoading: false,
                 employeeAddError: null,
-                count: state.count + 1,
+                count: state.count ? state.count + 1 : 0,
                 employeesList: [
                     ...state.employeesList,
                     action.payload.storeData,

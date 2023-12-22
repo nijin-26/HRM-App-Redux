@@ -1,9 +1,15 @@
-import { legacy_createStore, combineReducers, applyMiddleware } from 'redux';
+import {
+    legacy_createStore,
+    combineReducers,
+    applyMiddleware,
+    UnknownAction,
+} from 'redux';
 import { composeWithDevTools } from '@redux-devtools/extension';
 import employeesReducer, { IEmployeesState } from './employeesList/reducers';
 import employeeReducer, { IEmployeeState } from './employee/reducer';
 import dropdownReducer, { IDropdownsState } from './dropdownData/reducer';
-import { thunk } from 'redux-thunk';
+import { useDispatch, useSelector, TypedUseSelectorHook } from 'react-redux';
+import { ThunkAction, thunk } from 'redux-thunk';
 
 export interface IState {
     employees: IEmployeesState;
@@ -24,5 +30,18 @@ const store = legacy_createStore(
     undefined,
     composeEnhancers(applyMiddleware(thunk))
 );
+
+export type RootState = ReturnType<typeof rootReducer>;
+
+export type AppDispatch = typeof store.dispatch;
+export const useAppDispatch: () => AppDispatch = useDispatch;
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export type AppThunk<ReturnType = Promise<any>> = ThunkAction<
+    ReturnType,
+    RootState,
+    undefined,
+    UnknownAction
+>;
 
 export default store;

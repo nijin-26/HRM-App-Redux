@@ -1,9 +1,7 @@
 import { AxiosError } from 'axios';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
-import { AnyAction } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';
-import { IState } from '..';
+import { AppDispatch, AppThunk, IState } from '..';
 import { getEmployee } from '../../api';
 
 //Action Types
@@ -45,11 +43,9 @@ export const fetchEmployeeFailure = (
     payload: error,
 });
 
-export const fetchEmployee = (
-    employeeId: number
-): ThunkAction<Promise<void>, IState, {}, AnyAction> => {
+export const fetchEmployee = (employeeId: number): AppThunk => {
     return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>,
+        dispatch: AppDispatch,
         getState: () => IState
     ): Promise<void> => {
         dispatch(fetchEmployeeRequest());

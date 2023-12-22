@@ -1,7 +1,6 @@
 import { AxiosError } from 'axios';
 import { IApiDepartment } from '../../../../interfaces/ApiDataInterface';
-import { AnyAction } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
+import { AppDispatch, AppThunk } from '../..';
 import { toast } from 'react-toastify';
 import { getDepartments } from '../../../api';
 
@@ -47,15 +46,8 @@ export const fetchDepartmentsFailure = (
 });
 
 // Thunk Action
-export const fetchDepartments = (): ThunkAction<
-    Promise<void>,
-    {},
-    {},
-    AnyAction
-> => {
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
+export const fetchDepartments = (): AppThunk => {
+    return async (dispatch: AppDispatch): Promise<void> => {
         dispatch(fetchDepartmentsRequest());
         try {
             const { data } = await getDepartments();

@@ -1,3 +1,4 @@
+import { useAppDispatch, useAppSelector } from '../../core/store';
 import { Input, Button } from '..';
 import Select, { MultiValue } from 'react-select';
 import {
@@ -5,9 +6,6 @@ import {
     StyledEmployeesFilterWrap,
 } from './EmployeesTableFilter.style';
 import { IReactSelectOption } from '../../interfaces/common';
-import { IState } from '../../core/store';
-
-import { useSelector, useDispatch } from 'react-redux';
 import {
     employeeNameFilterChange,
     employeeSkillsFilterChange,
@@ -15,24 +13,22 @@ import {
 } from '../../core/store/employeesList/actions';
 
 const EmployeesTableFilter: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const selectSkillsData = useSelector(
-        (state: IState) => state.dropdownData.skills.skillsData
+    const selectSkillsData = useAppSelector(
+        (state) => state.dropdownData.skills.skillsData
     );
-    const selectEmployeeNameFilter = useSelector(
-        (state: IState) =>
-            state.employees.employeesListFilter.employeeNameFilter
+    const selectEmployeeNameFilter = useAppSelector(
+        (state) => state.employees.employeesListFilter.employeeNameFilter
     );
-    const selectEmployeeSkillsFilter = useSelector(
-        (state: IState) =>
-            state.employees.employeesListFilter.employeeSkillsFilter
+    const selectEmployeeSkillsFilter = useAppSelector(
+        (state) => state.employees.employeesListFilter.employeeSkillsFilter
     );
 
     const handleSearchInputChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        dispatch<any>(
+        dispatch(
             employeeNameFilterChange(
                 event.target.value.trimStart().toLowerCase()
             )
@@ -56,12 +52,12 @@ const EmployeesTableFilter: React.FC = () => {
                 styles={CustomSelectStyles}
                 placeholder="Filter by skills"
                 onChange={(options: MultiValue<IReactSelectOption>) => {
-                    dispatch<any>(employeeSkillsFilterChange([...options]));
+                    dispatch(employeeSkillsFilterChange([...options]));
                 }}
             />
             <Button
                 className="outline icon-btn margin-left-auto table-control-field"
-                onClick={() => dispatch<any>(employeeListFilterClear())}
+                onClick={() => dispatch(employeeListFilterClear())}
             >
                 <span>Clear Filters</span>
                 <span className="material-symbols-rounded">filter_alt_off</span>

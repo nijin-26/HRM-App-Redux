@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../core/store';
 import { Formik } from 'formik';
 import {
     Button,
@@ -20,11 +21,6 @@ import { IEmployee } from '../../interfaces/common';
 import handleFormSubmit from './handleFormSubmit';
 import { sortObjByKey } from '../../utils';
 import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
-
-import { useSelector } from 'react-redux';
-import { IState } from '../../core/store';
-
-import { useDispatch } from 'react-redux';
 import {
     addEmployeeAction,
     editEmployeeAction,
@@ -41,16 +37,16 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
 
-    const selectSkills = useSelector(
-        (state: IState) => state.dropdownData.skills.skillsData
+    const selectSkills = useAppSelector(
+        (state) => state.dropdownData.skills.skillsData
     );
-    const selectDepartments = useSelector(
-        (state: IState) => state.dropdownData.departments.departmentsData
+    const selectDepartments = useAppSelector(
+        (state) => state.dropdownData.departments.departmentsData
     );
-    const selectRoles = useSelector(
-        (state: IState) => state.dropdownData.roles.rolesData
+    const selectRoles = useAppSelector(
+        (state) => state.dropdownData.roles.rolesData
     );
 
     const [loading, setLoading] = useState(false);
@@ -92,14 +88,14 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                 );
 
                             empId
-                                ? dispatch<any>(
+                                ? dispatch(
                                       editEmployeeAction(
                                           empId,
                                           apiSubmitData,
                                           storeData
                                       )
                                   )
-                                : dispatch<any>(
+                                : dispatch(
                                       addEmployeeAction(
                                           apiSubmitData,
                                           storeData

@@ -1,15 +1,14 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../core/store';
 import { useEffect } from 'react';
 import StyledEditEmployeeDetails from './EditEmployeeDetails.style';
 import { EmployeeDetailsForm, Loader } from '../../components';
-import { IState } from '../../core/store';
 import { modifyFetchedEmployeeData } from '../../utils';
 import { fetchEmployee } from '../../core/store/employee/actions';
 
 const EditEmployeeDetails: React.FC = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const { employeeId } = useParams();
 
     if (!employeeId) {
@@ -17,22 +16,22 @@ const EditEmployeeDetails: React.FC = () => {
         return;
     }
 
-    const employeeDetails = useSelector((state: IState) => {
+    const employeeDetails = useAppSelector((state) => {
         if (state.employee.employeeData) {
             return modifyFetchedEmployeeData(state.employee.employeeData);
         } else {
             return null;
         }
     });
-    const employeeFetchLoading = useSelector(
-        (state: IState) => state.employee.employeeFetchloading
+    const employeeFetchLoading = useAppSelector(
+        (state) => state.employee.employeeFetchloading
     );
-    const employeeFetchError = useSelector(
-        (state: IState) => state.employee.employeeFetchError
+    const employeeFetchError = useAppSelector(
+        (state) => state.employee.employeeFetchError
     );
 
     useEffect(() => {
-        dispatch<any>(fetchEmployee(Number(employeeId)));
+        dispatch(fetchEmployee(Number(employeeId)));
     }, [employeeId]);
 
     useEffect(() => {

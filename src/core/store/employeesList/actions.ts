@@ -1,6 +1,3 @@
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
-import { AnyAction } from 'redux';
-
 import {
     IApiEmployee,
     IApiEmployeeSubmission,
@@ -18,6 +15,7 @@ import {
     addEmployee,
     editEmployee,
 } from '../../api';
+import { AppDispatch, AppThunk } from '..';
 
 //Action Definitions
 interface IFETCH_EMPLOYEES_REQUEST {
@@ -136,14 +134,10 @@ const fetchEmployeesFailure = (
 });
 
 //Thunk Action creator
-export const fetchEmployees = (
-    searchparams: IQueryParams
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
+export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
     const { offset, limit, sortBy, sortDir } = searchparams;
 
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
+    return async (dispatch: AppDispatch): Promise<void> => {
         dispatch(fetchEmployeesRequest());
         try {
             const { data } = await getEmployeesList(
@@ -182,12 +176,8 @@ const deleteEmployeeFailure = (
 });
 
 //thunk action creator
-export const deleteEmployeeAction = (
-    empIdToDelete: number
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
+export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
+    return async (dispatch: AppDispatch) => {
         dispatch(deleteEmployeeRequest());
         try {
             await deleteEmployee(empIdToDelete);
@@ -221,10 +211,8 @@ const addEmployeeError = (error: AxiosError): IADD_EMPLOYEE_FAILURE => ({
 export const addEmployeeAction = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
+): AppThunk => {
+    return async (dispatch: AppDispatch): Promise<void> => {
         dispatch(addEmployeeRequest());
         try {
             const { data } = await addEmployee(apiSubmissionData);
@@ -261,10 +249,8 @@ export const editEmployeeAction = (
     employeeId: number,
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
-): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
+): AppThunk => {
+    return async (dispatch: AppDispatch): Promise<void> => {
         dispatch(editEmployeeRequest());
         try {
             await editEmployee(employeeId, apiSubmissionData);
