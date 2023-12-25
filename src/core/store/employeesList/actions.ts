@@ -137,7 +137,7 @@ const fetchEmployeesFailure = (
 export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
     const { offset, limit, sortBy, sortDir } = searchparams;
 
-    return async (dispatch: AppDispatch): Promise<void> => {
+    return async (dispatch: AppDispatch) => {
         dispatch(fetchEmployeesRequest());
         try {
             const { data } = await getEmployeesList(
@@ -212,7 +212,7 @@ export const addEmployeeAction = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
 ): AppThunk => {
-    return async (dispatch: AppDispatch): Promise<void> => {
+    return async (dispatch: AppDispatch) => {
         dispatch(addEmployeeRequest());
         try {
             const { data } = await addEmployee(apiSubmissionData);
@@ -250,7 +250,7 @@ export const editEmployeeAction = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
 ): AppThunk => {
-    return async (dispatch: AppDispatch): Promise<void> => {
+    return async (dispatch: AppDispatch) => {
         dispatch(editEmployeeRequest());
         try {
             await editEmployee(employeeId, apiSubmissionData);

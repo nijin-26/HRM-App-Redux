@@ -9,7 +9,7 @@ interface IEmployeesListFilter {
     employeeSkillsFilter: MultiValue<IReactSelectOption>;
 }
 
-export interface IEmployeesState {
+interface IEmployeesState {
     employeesList: IApiEmployee[];
     count: number | undefined;
     employeesFetchloading: boolean;

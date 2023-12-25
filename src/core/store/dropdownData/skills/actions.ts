@@ -47,7 +47,7 @@ export const fetchSkillsFailure = (
 
 //Thunk Action
 export const fetchSkills = (): AppThunk => {
-    return async (dispatch: AppDispatch): Promise<void> => {
+    return async (dispatch: AppDispatch) => {
         dispatch(fetchSkillsRequest());
         try {
             const { data: fetchResponse } = await getSkills();

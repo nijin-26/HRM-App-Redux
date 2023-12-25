@@ -3,7 +3,7 @@ import { ActionType } from './actions';
 import { IReactSelectOption } from '../../../../interfaces/common';
 import { modifySelectOptionsArray } from '../../../../utils';
 
-export interface IDepartmentsState {
+interface IDepartmentsState {
     departmentsData: IReactSelectOption[];
     departmentsFetchLoading: boolean;
     departmentsFetchError: AxiosError | null;

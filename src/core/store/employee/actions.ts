@@ -1,7 +1,7 @@
 import { AxiosError } from 'axios';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { toast } from 'react-toastify';
-import { AppDispatch, AppThunk, IState } from '..';
+import { AppDispatch, AppThunk, RootState } from '..';
 import { getEmployee } from '../../api';
 
 //Action Types
@@ -44,14 +44,10 @@ export const fetchEmployeeFailure = (
 });
 
 export const fetchEmployee = (employeeId: number): AppThunk => {
-    return async (
-        dispatch: AppDispatch,
-        getState: () => IState
-    ): Promise<void> => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
         dispatch(fetchEmployeeRequest());
 
         const employeesList = getState().employees.employeesList;
-
         const employeeInState = employeesList.find(
             (employee) => employee.id === employeeId
         );

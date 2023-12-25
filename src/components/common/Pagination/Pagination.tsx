@@ -117,7 +117,7 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
                     <span className="material-symbols-rounded">last_page</span>
                 </Button>
             </div>
-            {totalEntries && (
+            {totalEntries != 0 && (
                 <span>
                     {offset + 1}-{Math.min(offset + limit, totalEntries)} of{' '}
                     {totalEntries} items

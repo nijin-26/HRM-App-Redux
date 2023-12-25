@@ -1,7 +1,7 @@
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { ActionType } from './actions';
 
-export interface IEmployeeState {
+interface IEmployeeState {
     employeeData: IApiEmployee | null;
     employeeFetchloading: boolean;
     employeeFetchError: Error | null;

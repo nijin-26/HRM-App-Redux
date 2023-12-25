@@ -3,7 +3,7 @@ import { ActionType } from './actions';
 import { IReactSelectOption } from '../../../../interfaces/common';
 import { modifySelectOptionsArray } from '../../../../utils';
 
-export interface IRolesState {
+interface IRolesState {
     rolesData: IReactSelectOption[];
     rolesFetchLoading: boolean;
     rolesFetchError: AxiosError | null;

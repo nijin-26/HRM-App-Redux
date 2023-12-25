@@ -47,7 +47,7 @@ export const fetchDepartmentsFailure = (
 
 // Thunk Action
 export const fetchDepartments = (): AppThunk => {
-    return async (dispatch: AppDispatch): Promise<void> => {
+    return async (dispatch: AppDispatch) => {
         dispatch(fetchDepartmentsRequest());
         try {
             const { data } = await getDepartments();
