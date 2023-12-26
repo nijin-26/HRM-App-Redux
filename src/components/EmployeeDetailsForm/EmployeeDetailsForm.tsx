@@ -21,23 +21,18 @@ import { IEmployee } from '../../interfaces/common';
 import handleFormSubmit from './handleFormSubmit';
 import { sortObjByKey } from '../../utils';
 import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
-import {
-    addEmployeeAction,
-    editEmployeeAction,
-} from '../../core/store/employeesList/actions';
 
 interface IEmployeeDetailsForm {
-    empId?: number;
     prefillData?: IEmployee;
 }
 
 const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
-    empId = null,
     prefillData = {
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
     const selectSkills = useAppSelector(
         (state) => state.dropdownData.skills.skillsData
@@ -50,7 +45,6 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
     );
 
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const [photoId, setPhotoId] = useState(prefillData.photoId);
     const photoRef = useRef<HTMLInputElement>(null);
@@ -81,29 +75,15 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                         validationSchema={validate}
                         onSubmit={async (values, { setSubmitting }) => {
                             setLoading(true);
-                            const { apiSubmitData, storeData } =
-                                await handleFormSubmit(
-                                    values,
-                                    photoRef.current
-                                );
 
-                            empId
-                                ? dispatch(
-                                      editEmployeeAction(
-                                          empId,
-                                          apiSubmitData,
-                                          storeData
-                                      )
-                                  )
-                                : dispatch(
-                                      addEmployeeAction(
-                                          apiSubmitData,
-                                          storeData
-                                      )
-                                  );
-                            // navigate(`/`);
+                            await handleFormSubmit(
+                                values,
+                                photoRef.current,
+                                dispatch
+                            );
                             setSubmitting(false);
                             setLoading(false);
+                            navigate(`/`);
                         }}
                     >
                         {(props) => {

@@ -6,6 +6,7 @@ import { Loader, Chip, LinkButton, Button } from '../../components';
 import profilePictureAvatar from '../../assets/images/employee-avatar.svg';
 import { fetchEmployee } from '../../core/store/employee/actions';
 import { modifyFetchedEmployeeData } from '../../utils';
+import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
 
 const ViewEmployeeDetails = () => {
     const dispatch = useAppDispatch();
@@ -13,17 +14,24 @@ const ViewEmployeeDetails = () => {
     const { employeeId } = useParams();
 
     const employeeDetails = useAppSelector((state) => {
-        if (state.employee.employeeData) {
-            return modifyFetchedEmployeeData(state.employee.employeeData);
+        const employeeData = state.employee.employeeData;
+        if (employeeData && employeeData.id === Number(employeeId)) {
+            return modifyFetchedEmployeeData(employeeData);
         } else {
             return null;
         }
     });
-    const employeeFetchLoading = useAppSelector(
-        (state) => state.employee.employeeFetchloading
+    const employeeFetchInProgress = useAppSelector(
+        (state) =>
+            state.requests.requests.find(
+                (req) => req.name === REQUESTS_ENUM.getEmployee
+            )?.inProgress
     );
     const employeeFetchError = useAppSelector(
-        (state) => state.employee.employeeFetchError
+        (state) =>
+            state.requests.requests.find(
+                (req) => req.name === REQUESTS_ENUM.getEmployee
+            )?.error
     );
 
     const notAvailableString = 'N/A';
@@ -41,7 +49,7 @@ const ViewEmployeeDetails = () => {
 
     return (
         <>
-            {employeeFetchLoading ? (
+            {employeeFetchInProgress ? (
                 <Loader className="full-screen-loader" />
             ) : (
                 employeeDetails && (

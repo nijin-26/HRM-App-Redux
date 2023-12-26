@@ -3,14 +3,10 @@ import { ActionType } from './actions';
 
 interface IEmployeeState {
     employeeData: IApiEmployee | null;
-    employeeFetchloading: boolean;
-    employeeFetchError: Error | null;
 }
 
 const initialState: IEmployeeState = {
     employeeData: null,
-    employeeFetchloading: false,
-    employeeFetchError: null,
 };
 
 const employeeReducer = (
@@ -18,24 +14,15 @@ const employeeReducer = (
     action: ActionType
 ): IEmployeeState => {
     switch (action.type) {
-        case 'FETCH_EMPLOYEE_REQUEST':
-            return {
-                ...state,
-                employeeFetchloading: true,
-                employeeFetchError: null,
-            };
+        // case 'FETCH_EMPLOYEE_REQUEST':
+        //     return {
+        //         ...state,
+        //         employeeData: null,
+        //     };
         case 'FETCH_EMPLOYEE_SUCCESS':
             return {
                 ...state,
                 employeeData: action.payload,
-                employeeFetchloading: false,
-                employeeFetchError: null,
-            };
-        case 'FETCH_EMPLOYEE_FAILURE':
-            return {
-                ...state,
-                employeeFetchloading: false,
-                employeeFetchError: action.payload,
             };
         default:
             return state;
