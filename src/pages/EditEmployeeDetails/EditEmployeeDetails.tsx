@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../core/store';
+import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
 import { useEffect } from 'react';
 import StyledEditEmployeeDetails from './EditEmployeeDetails.style';
 import { EmployeeDetailsForm, Loader } from '../../components';

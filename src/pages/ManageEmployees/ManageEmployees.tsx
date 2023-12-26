@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../core/store';
+import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
 import { empTableHeaders, initQueryParams } from './constants';
 import {
     StyledManageEmployeesWrap,

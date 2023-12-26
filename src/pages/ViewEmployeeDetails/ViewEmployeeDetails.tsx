@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../core/store';
+import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
 import StyledEmpDetailsWrap from './ViewEmployeeDetails.style';
 import { Loader, Chip, LinkButton, Button } from '../../components';
 import profilePictureAvatar from '../../assets/images/employee-avatar.svg';

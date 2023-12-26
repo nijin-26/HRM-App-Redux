@@ -1,4 +1,4 @@
-import { useAppDispatch } from '../core/store';
+import { useAppDispatch } from '../hooks/storeHelpers';
 import { Outlet } from 'react-router-dom';
 import { Header, Footer } from '../components';
 import { fetchSkills } from '../core/store/dropdownData/skills/actions';
