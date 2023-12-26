@@ -1,4 +1,3 @@
-import { AxiosError } from 'axios';
 import { ActionType } from './actions';
 import { IReactSelectOption } from '../../../../interfaces/common';
 import { modifySelectOptionsArray } from '../../../../utils';
@@ -6,7 +5,7 @@ import { modifySelectOptionsArray } from '../../../../utils';
 interface IDepartmentsState {
     departmentsData: IReactSelectOption[];
     departmentsFetchLoading: boolean;
-    departmentsFetchError: AxiosError | null;
+    departmentsFetchError: Error | null;
 }
 
 const initialState: IDepartmentsState = {

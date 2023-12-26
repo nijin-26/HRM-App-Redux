@@ -20,6 +20,7 @@ import {
     fetchEmployees,
     deleteEmployeeAction,
 } from '../../core/store/employeesList/actions';
+import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
 
 const ManageEmployees: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -33,12 +34,18 @@ const ManageEmployees: React.FC = () => {
     const employeesList = useAppSelector(
         (state) => state.employees.employeesList
     );
-    const employeesFetchLoading = useAppSelector(
-        (state) => state.employees.employeesFetchloading
-    );
     const employeesCount = useAppSelector((state) => state.employees.count);
+    const employeesFetchLoading = useAppSelector(
+        (state) =>
+            state.requests.requests.find(
+                (req) => req.name === REQUESTS_ENUM.getEmployeesList
+            )?.inProgress
+    );
     const employeeDeleteLoading = useAppSelector(
-        (state) => state.employees.employeeDeleteLoading
+        (state) =>
+            state.requests.requests.find(
+                (req) => req.name === REQUESTS_ENUM.deleteEmployee
+            )?.inProgress
     );
     const employeeNameFilter = useAppSelector(
         (state) => state.employees.employeesListFilter.employeeNameFilter

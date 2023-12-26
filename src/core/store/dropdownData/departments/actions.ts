@@ -3,6 +3,8 @@ import { IApiDepartment } from '../../../../interfaces/ApiDataInterface';
 import { AppDispatch, AppThunk } from '../..';
 import { toast } from 'react-toastify';
 import { getDepartments } from '../../../api';
+import { requestHelper } from '../../requests/actions';
+import { REQUESTS_ENUM } from '../../requests/requestsEnum';
 
 // Actions definitions
 interface IFETCH_DEPARTMENTS_REQUEST {
@@ -16,7 +18,7 @@ interface IFETCH_DEPARTMENTS_SUCCESS {
 
 interface IFETCH_DEPARTMENTS_FAILURE {
     type: 'FETCH_DEPARTMENTS_FAILURE';
-    payload: AxiosError;
+    payload: Error;
 }
 
 export type ActionType =
@@ -46,15 +48,33 @@ export const fetchDepartmentsFailure = (
 });
 
 // Thunk Action
+// export const fetchDepartments = (): AppThunk => {
+//     return async (dispatch: AppDispatch) => {
+//         dispatch(fetchDepartmentsRequest());
+//         try {
+//             const { data } = await getDepartments();
+//             dispatch(fetchDepartmentsSuccess(data));
+//         } catch (error) {
+//             console.log(error);
+//             dispatch(fetchDepartmentsFailure(error as AxiosError));
+//             toast.error(
+//                 'Could not fetch departments list. Please try reloading the page.'
+//             );
+//         }
+//     };
+// };
+
 export const fetchDepartments = (): AppThunk => {
     return async (dispatch: AppDispatch) => {
-        dispatch(fetchDepartmentsRequest());
         try {
-            const { data } = await getDepartments();
+            const { data } = await requestHelper(
+                dispatch,
+                REQUESTS_ENUM.getDepartments,
+                getDepartments
+            );
             dispatch(fetchDepartmentsSuccess(data));
         } catch (error) {
             console.log(error);
-            dispatch(fetchDepartmentsFailure(error as AxiosError));
             toast.error(
                 'Could not fetch departments list. Please try reloading the page.'
             );

@@ -16,34 +16,18 @@ import {
     editEmployee,
 } from '../../api';
 import { AppDispatch, AppThunk } from '..';
+import { requestHelper } from '../requests/actions';
+import { REQUESTS_ENUM } from '../requests/requestsEnum';
 
 //Action Definitions
-interface IFETCH_EMPLOYEES_REQUEST {
-    type: 'FETCH_EMPLOYEES_REQUEST';
-}
-
 interface IFETCH_EMPLOYEES_SUCCESS {
     type: 'FETCH_EMPLOYEES_SUCCESS';
     payload: IApiEmployeesData;
 }
 
-interface IFETCH_EMPLOYEES_FAILURE {
-    type: 'FETCH_EMPLOYEES_FAILURE';
-    payload: AxiosError;
-}
-
-interface IDELETE_EMPLOYEE_REQUEST {
-    type: 'DELETE_EMPLOYEE_REQUEST';
-}
-
 interface IDELETE_EMPLOYEE_SUCCESS {
     type: 'DELETE_EMPLOYEE_SUCCESS';
     payload: number;
-}
-
-interface IDELETE_EMPLOYEE_FAILURE {
-    type: 'DELETE_EMPLOYEE_FAILURE';
-    payload: AxiosError;
 }
 
 interface IADD_EMPLOYEE_REQUEST {
@@ -96,12 +80,8 @@ interface IEMPLOYEE_LIST_FILTER_CLEAR {
 
 //Union Action Type
 export type ActionType =
-    | IFETCH_EMPLOYEES_REQUEST
     | IFETCH_EMPLOYEES_SUCCESS
-    | IFETCH_EMPLOYEES_FAILURE
-    | IDELETE_EMPLOYEE_REQUEST
     | IDELETE_EMPLOYEE_SUCCESS
-    | IDELETE_EMPLOYEE_FAILURE
     | IADD_EMPLOYEE_REQUEST
     | IADD_EMPLOYEE_SUCCESS
     | IADD_EMPLOYEE_FAILURE
@@ -115,10 +95,6 @@ export type ActionType =
 //Action Creators
 
 //EMPLOYEES LIST FETCH
-const fetchEmployeesRequest = (): IFETCH_EMPLOYEES_REQUEST => ({
-    type: 'FETCH_EMPLOYEES_REQUEST',
-});
-
 const fetchEmployeesSuccess = (
     employeesData: IApiEmployeesData
 ): IFETCH_EMPLOYEES_SUCCESS => ({
@@ -126,29 +102,19 @@ const fetchEmployeesSuccess = (
     payload: employeesData,
 });
 
-const fetchEmployeesFailure = (
-    error: AxiosError
-): IFETCH_EMPLOYEES_FAILURE => ({
-    type: 'FETCH_EMPLOYEES_FAILURE',
-    payload: error,
-});
-
 //Thunk Action creator
 export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
     const { offset, limit, sortBy, sortDir } = searchparams;
 
     return async (dispatch: AppDispatch) => {
-        dispatch(fetchEmployeesRequest());
         try {
-            const { data } = await getEmployeesList(
-                limit,
-                offset,
-                sortBy,
-                sortDir
+            const { data } = await requestHelper(
+                dispatch,
+                REQUESTS_ENUM.getEmployeesList,
+                () => getEmployeesList(limit, offset, sortBy, sortDir)
             );
             dispatch(fetchEmployeesSuccess(data.data));
         } catch (error) {
-            dispatch(fetchEmployeesFailure(error as AxiosError));
             toast.error(
                 'Could not fetch employee details. Please try reloading the page.'
             );
@@ -157,10 +123,6 @@ export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
 };
 
 //EMPLOYEE DELETE
-const deleteEmployeeRequest = (): IDELETE_EMPLOYEE_REQUEST => ({
-    type: 'DELETE_EMPLOYEE_REQUEST',
-});
-
 const deleteEmployeeSuccess = (
     deletedEmpId: number
 ): IDELETE_EMPLOYEE_SUCCESS => ({
@@ -168,23 +130,16 @@ const deleteEmployeeSuccess = (
     payload: deletedEmpId,
 });
 
-const deleteEmployeeFailure = (
-    error: AxiosError
-): IDELETE_EMPLOYEE_FAILURE => ({
-    type: 'DELETE_EMPLOYEE_FAILURE',
-    payload: error,
-});
-
 //thunk action creator
 export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
     return async (dispatch: AppDispatch) => {
-        dispatch(deleteEmployeeRequest());
         try {
-            await deleteEmployee(empIdToDelete);
+            await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
+                deleteEmployee(empIdToDelete)
+            );
             dispatch(deleteEmployeeSuccess(empIdToDelete));
             toast.success('Employee deleted Successfully');
         } catch (error) {
-            dispatch(deleteEmployeeFailure(error as AxiosError));
             toast.error('Employee deletion failed');
         }
     };

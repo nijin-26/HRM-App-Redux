@@ -12,10 +12,6 @@ interface IEmployeesListFilter {
 interface IEmployeesState {
     employeesList: IApiEmployee[];
     count: number | undefined;
-    employeesFetchloading: boolean;
-    employeesFetchError: AxiosError | null;
-    employeeDeleteLoading: boolean;
-    employeeDeleteError: AxiosError | null;
     employeeAddLoading: boolean;
     employeeAddError: AxiosError | null;
     employeeEditLoading: boolean;
@@ -26,10 +22,6 @@ interface IEmployeesState {
 const initialState: IEmployeesState = {
     count: undefined,
     employeesList: [],
-    employeesFetchloading: false,
-    employeesFetchError: null,
-    employeeDeleteLoading: false,
-    employeeDeleteError: null,
     employeeAddLoading: false,
     employeeAddError: null,
     employeeEditLoading: false,
@@ -45,12 +37,6 @@ const employeesReducer = (
     action: ActionType
 ): IEmployeesState => {
     switch (action.type) {
-        case 'FETCH_EMPLOYEES_REQUEST':
-            return {
-                ...state,
-                employeesFetchloading: true,
-                employeesFetchError: null,
-            };
         case 'FETCH_EMPLOYEES_SUCCESS':
             return {
                 ...state,
@@ -59,20 +45,6 @@ const employeesReducer = (
                     ...state.employeesList,
                     ...action.payload.employees,
                 ],
-                employeesFetchloading: false,
-                employeesFetchError: null,
-            };
-        case 'FETCH_EMPLOYEES_FAILURE':
-            return {
-                ...state,
-                employeesFetchloading: false,
-                employeesFetchError: action.payload,
-            };
-        case 'DELETE_EMPLOYEE_REQUEST':
-            return {
-                ...state,
-                employeeDeleteLoading: true,
-                employeeDeleteError: null,
             };
         case 'DELETE_EMPLOYEE_SUCCESS':
             return {
@@ -81,14 +53,6 @@ const employeesReducer = (
                 employeesList: state.employeesList.filter(
                     (emp) => emp.id !== action.payload
                 ),
-                employeeDeleteLoading: false,
-                employeeDeleteError: null,
-            };
-        case 'DELETE_EMPLOYEE_FAILURE':
-            return {
-                ...state,
-                employeeDeleteLoading: false,
-                employeeDeleteError: action.payload,
             };
         case 'ADD_EMPLOYEE_REQUEST':
             return {
