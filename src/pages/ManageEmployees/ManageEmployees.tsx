@@ -24,6 +24,7 @@ import {
 } from "../../core/store/employeesList/actions";
 import { IState } from "../../core/store";
 import EmployeeCard from "../../components/EmployeeCard/EmployeeCard";
+import ToggleView from "../../components/ToggleView/ToggleView";
 
 const ManageEmployees = () => {
   const [searchParams] = useSearchParams();
@@ -35,6 +36,7 @@ const ManageEmployees = () => {
     undefined
   );
   const [offset, setOffset] = useState(0);
+  const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
 
   const employeesList = useSelector(
     (state: IState) => state.employees.employeesList
@@ -55,19 +57,26 @@ const ManageEmployees = () => {
   );
 
   const observerTarget = useRef(null);
-  const limit = 10;
+  let limit = 10;
+  let dynamicOffset = 0;
 
   const getSearchParams = (): IQueryParams => {
-    const limit = searchParams.get("limit")
-      ? Number(searchParams.get("limit"))
-      : initQueryParams.limit;
-    const offset = searchParams.get("offset")
-      ? Number(searchParams.get("offset"))
-      : initQueryParams.offset;
+    if (!toggleGridView) {
+      limit = searchParams.get("limit")
+        ? Number(searchParams.get("limit"))
+        : initQueryParams.limit;
+      dynamicOffset = searchParams.get("offset")
+        ? Number(searchParams.get("offset"))
+        : initQueryParams.offset;
+    }
     const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
     const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
-    // console.log("get search params is called", limit, offset);
-    return { limit, offset, sortBy, sortDir };
+    return {
+      limit,
+      offset: toggleGridView ? offset : dynamicOffset,
+      sortBy,
+      sortDir,
+    };
   };
 
   const deleteConfirmHandler = () => {
@@ -173,46 +182,62 @@ const ManageEmployees = () => {
                 <span className="material-symbols-rounded">person_add</span>
               </LinkButton>
             </div>
-            <GridContainer>
-              {filterEmployeesList(
-                getEmployeesListingData(
-                  employeesList,
-                  setIsModalOpen,
-                  setEmpIdToDelete
-                )
-              )?.map((employee) => (
-                <EmployeeCard
-                  key={employee.id}
-                  employeeData={employee}
-                  setIsModalOpen={setIsModalOpen}
-                  setDeleteEmployee={setEmpIdToDelete}
-                />
-              ))}
-            </GridContainer>
-            {employeesFetchLoading && <Loader />}
-            <div ref={observerTarget}></div>
-
-            {/* <StyledEmployeesTable
-              tableHeaders={empTableHeaders}
-              tableData={
-                employeesList.length
-                  ? filterEmployeesList(
-                      getEmployeesListingData(
-                        employeesList,
-                        setIsModalOpen,
-                        setEmpIdToDelete
-                      )
-                    )
-                  : []
-              }
-              loading={employeesFetchLoading}
-            />
-            {employeesList && !isSearchFilters() ? (
-              <Pagination
-                totalEntries={employeesCount}
-                key={searchParams.get("offset")}
+            <div className="employees-view">
+              <ToggleView
+                gridView={toggleGridView}
+                handleToggleGridView={() => {
+                  setToggleGridView((prev) => !prev);
+                  setOffset(0);
+                }}
               />
-            ) : null} */}
+            </div>
+
+            {toggleGridView ? (
+              <>
+                <GridContainer>
+                  {filterEmployeesList(
+                    getEmployeesListingData(
+                      employeesList,
+                      setIsModalOpen,
+                      setEmpIdToDelete
+                    )
+                  )?.map((employee) => (
+                    <EmployeeCard
+                      key={employee.id}
+                      employeeData={employee}
+                      setIsModalOpen={setIsModalOpen}
+                      setDeleteEmployee={setEmpIdToDelete}
+                    />
+                  ))}
+                </GridContainer>
+                {employeesFetchLoading && <Loader />}
+                <div ref={observerTarget}></div>
+              </>
+            ) : (
+              <>
+                <StyledEmployeesTable
+                  tableHeaders={empTableHeaders}
+                  tableData={
+                    employeesList.length
+                      ? filterEmployeesList(
+                          getEmployeesListingData(
+                            employeesList,
+                            setIsModalOpen,
+                            setEmpIdToDelete
+                          )
+                        )
+                      : []
+                  }
+                  loading={employeesFetchLoading}
+                />
+                {employeesList && !isSearchFilters() ? (
+                  <Pagination
+                    totalEntries={employeesCount!}
+                    key={searchParams.get("offset")}
+                  />
+                ) : null}
+              </>
+            )}
           </StyledManageEmployeesWrap>
 
           <Modal
