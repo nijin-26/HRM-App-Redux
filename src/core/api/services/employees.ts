@@ -10,10 +10,13 @@ export const getEmployeesList = (
     limit: number,
     offset: number,
     sortBy: string,
-    sortDir: string
+    sortDir: string,
+    skillIds: string | null
 ) => {
+    const skillsParam = skillIds ? `&skillIds=${skillIds}` : '';
     return API.get<IApiFetchEmployeesArray>(
-        `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`
+        `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}` +
+            skillsParam
     );
 };
 

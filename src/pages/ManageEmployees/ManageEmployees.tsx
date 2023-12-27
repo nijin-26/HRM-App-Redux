@@ -58,8 +58,9 @@ const ManageEmployees: React.FC = () => {
             : initQueryParams.offset;
         const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
         const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
+        const skillIds = searchParams.get('skillIds');
 
-        return { limit, offset, sortBy, sortDir };
+        return { limit, offset, sortBy, sortDir, skillIds };
     };
 
     const deleteConfirmHandler = () => {
@@ -127,12 +128,10 @@ const ManageEmployees: React.FC = () => {
                             tableHeaders={empTableHeaders}
                             tableData={
                                 employeesList.length
-                                    ? filterEmployeesList(
-                                          getEmployeesListingData(
-                                              employeesList,
-                                              setIsModalOpen,
-                                              setEmpIdToDelete
-                                          )
+                                    ? getEmployeesListingData(
+                                          employeesList,
+                                          setIsModalOpen,
+                                          setEmpIdToDelete
                                       )
                                     : []
                             }

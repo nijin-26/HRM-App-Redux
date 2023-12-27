@@ -59,12 +59,17 @@ interface IEMPLOYEE_LIST_FILTER_CLEAR {
     type: 'EMPLOYEE_LIST_FILTER_CLEAR';
 }
 
+interface IEMPLOYEE_LIST_CLEAR {
+    type: 'EMPLOYEE_LIST_CLEAR';
+}
+
 //Union Action Type
 export type ActionType =
     | IFETCH_EMPLOYEES_SUCCESS
     | IDELETE_EMPLOYEE_SUCCESS
     | IADD_EMPLOYEE_SUCCESS
     | IEDIT_EMPLOYEE_SUCCESS
+    | IEMPLOYEE_LIST_CLEAR
     | IEMPLOYEE_NAME_FILTER_CHANGE
     | IEMPLOYEE_SKILLS_FILTER_CHANGE
     | IEMPLOYEE_LIST_FILTER_CLEAR;
@@ -81,14 +86,14 @@ const fetchEmployeesSuccess = (
 
 //Thunk Action creator
 export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
-    const { offset, limit, sortBy, sortDir } = searchparams;
+    const { offset, limit, sortBy, sortDir, skillIds } = searchparams;
 
     return async (dispatch: AppDispatch) => {
         try {
             const { data } = await requestHelper(
                 dispatch,
                 REQUESTS_ENUM.getEmployeesList,
-                () => getEmployeesList(limit, offset, sortBy, sortDir)
+                () => getEmployeesList(limit, offset, sortBy, sortDir, skillIds)
             );
             dispatch(fetchEmployeesSuccess(data.data));
         } catch (error) {
@@ -181,6 +186,11 @@ export const editEmployeeAction = (
         }
     };
 };
+
+//EMPLOYEE LIST CLEAR
+export const employeeListClear = (): IEMPLOYEE_LIST_CLEAR => ({
+    type: 'EMPLOYEE_LIST_CLEAR',
+});
 
 //EMPLOYEE_FILTER_CHANGE
 export const employeeNameFilterChange = (

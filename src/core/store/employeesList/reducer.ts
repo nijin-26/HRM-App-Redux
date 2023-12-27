@@ -69,6 +69,12 @@ const employeesReducer = (
                         : employee
                 ),
             };
+        case 'EMPLOYEE_LIST_CLEAR':
+            return {
+                ...state,
+                count: 0,
+                employeesList: [],
+            };
         case 'EMPLOYEE_NAME_FILTER_CHANGE':
             return {
                 ...state,

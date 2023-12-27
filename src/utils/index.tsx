@@ -55,6 +55,14 @@ export const getObjectFromLabel = (
     return targetObj ?? null;
 };
 
+export const getObjectFromValue = (
+    searchValue: string,
+    refArray: IReactSelectOption[]
+) => {
+    const targetObj = refArray.find((obj) => obj.value === searchValue);
+    return targetObj ?? null;
+};
+
 // modify fetched employee details to format required for employee form
 export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
     const moreDetails = employeeObj.moreDetails

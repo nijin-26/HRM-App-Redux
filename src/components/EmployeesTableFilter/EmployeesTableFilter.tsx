@@ -1,4 +1,6 @@
 import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
+import { useSearchParams } from 'react-router-dom';
+import { useState } from 'react';
 import { Input, Button } from '..';
 import Select, { MultiValue } from 'react-select';
 import {
@@ -10,10 +12,12 @@ import {
     employeeNameFilterChange,
     employeeSkillsFilterChange,
     employeeListFilterClear,
+    employeeListClear,
 } from '../../core/store/employeesList/actions';
 
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useAppDispatch();
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const selectSkillsData = useAppSelector(
         (state) => state.dropdownData.skills.skillsData
@@ -23,6 +27,24 @@ const EmployeesTableFilter: React.FC = () => {
     );
     const selectEmployeeSkillsFilter = useAppSelector(
         (state) => state.employees.employeesListFilter.employeeSkillsFilter
+    );
+
+    const getSkillFilterInitialValue = (): MultiValue<IReactSelectOption> => {
+        const skillsSearchParam = searchParams.get('skillIds');
+        if (!skillsSearchParam) {
+            return [];
+        }
+        const selectedSkillsForFilter = skillsSearchParam.split(',');
+
+        const initialSkillsFilter = selectSkillsData.filter((skillObj) =>
+            selectedSkillsForFilter.includes(skillObj.value)
+        );
+        console.log('inside funciton', initialSkillsFilter);
+        return initialSkillsFilter;
+    };
+
+    const [skillFilter, setSkillFilter] = useState(
+        getSkillFilterInitialValue()
     );
 
     const handleSearchInputChange = (
@@ -35,6 +57,8 @@ const EmployeesTableFilter: React.FC = () => {
         );
     };
 
+    console.log('skill filter', skillFilter);
+
     return (
         <StyledEmployeesFilterWrap>
             <Input
@@ -45,14 +69,24 @@ const EmployeesTableFilter: React.FC = () => {
             />
             <Select
                 options={selectSkillsData}
-                value={selectEmployeeSkillsFilter}
+                value={(() => {
+                    console.log(skillFilter);
+                    return skillFilter;
+                })()}
                 name="searchSkills"
                 isMulti
                 closeMenuOnSelect={false}
                 styles={CustomSelectStyles}
                 placeholder="Filter by skills"
                 onChange={(options: MultiValue<IReactSelectOption>) => {
-                    dispatch(employeeSkillsFilterChange([...options]));
+                    // dispatch(employeeSkillsFilterChange([...options]));
+                    setSkillFilter([...options]);
+                    searchParams.set(
+                        'skillIds',
+                        options.map((option) => option.value).toString()
+                    );
+                    setSearchParams(searchParams);
+                    dispatch(employeeListClear());
                 }}
             />
             <Button
