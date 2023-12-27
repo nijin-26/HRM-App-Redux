@@ -76,13 +76,11 @@ export const requestsRecuder = (
     }
 };
 
-export const selectRequestInProgress = (
-    state: RootState,
-    requestName: string
-) =>
-    state.requests.requests.find((req) => req.name === requestName)
-        ?.inProgress || false;
+export const selectRequestInProgress =
+    (requestName: string) => (state: RootState) =>
+        state.requests.requests.find((req) => req.name === requestName)
+            ?.inProgress || false;
 
-export const selectRequestError = (state: RootState, requestName: string) =>
+export const selectRequestError = (requestName: string) => (state: RootState) =>
     state.requests.requests.find((req) => req.name === requestName)?.error ||
     null;

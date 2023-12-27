@@ -36,11 +36,11 @@ const ManageEmployees: React.FC = () => {
         (state) => state.employees.employeesList
     );
     const employeesCount = useAppSelector((state) => state.employees.count);
-    const employeesFetchLoading = useAppSelector((state) =>
-        selectRequestInProgress(state, REQUESTS_ENUM.getEmployeesList)
+    const employeesFetchLoading = useAppSelector(
+        selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
     );
-    const employeeDeleteLoading = useAppSelector((state) =>
-        selectRequestInProgress(state, REQUESTS_ENUM.deleteEmployee)
+    const employeeDeleteLoading = useAppSelector(
+        selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
     const employeeNameFilter = useAppSelector(
         (state) => state.employees.employeesListFilter.employeeNameFilter

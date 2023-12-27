@@ -72,6 +72,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                 <StyledFormWrap>
                     <Formik
                         initialValues={prefillData}
+                        enableReinitialize
                         validationSchema={validate}
                         onSubmit={async (values, { setSubmitting }) => {
                             setLoading(true);

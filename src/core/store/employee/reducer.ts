@@ -17,11 +17,6 @@ const employeeReducer = (
     action: ActionType
 ): IEmployeeState => {
     switch (action.type) {
-        // case 'FETCH_EMPLOYEE_REQUEST':
-        //     return {
-        //         ...state,
-        //         employeeData: null,
-        //     };
         case 'FETCH_EMPLOYEE_SUCCESS':
             return {
                 ...state,
@@ -32,16 +27,15 @@ const employeeReducer = (
     }
 };
 
-export const selectEmployeeDetails = (employeeId: string) =>
-    createSelector(
-        (state: RootState) => state.employee.employeeData,
-        (employeeData) => {
-            if (employeeData && employeeData.id === Number(employeeId)) {
-                return modifyFetchedEmployeeData(employeeData);
-            } else {
-                return null;
-            }
+export const selectEmployeeDetails = createSelector(
+    (state: RootState) => state.employee.employeeData,
+    (employeeData) => {
+        if (employeeData) {
+            return modifyFetchedEmployeeData(employeeData);
+        } else {
+            return null;
         }
-    );
+    }
+);
 
 export default employeeReducer;

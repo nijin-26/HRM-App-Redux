@@ -21,12 +21,12 @@ const EditEmployeeDetails: React.FC = () => {
         return;
     }
 
-    const employeeDetails = useAppSelector(selectEmployeeDetails(employeeId));
-    const employeeFetchLoading = useAppSelector((state) =>
-        selectRequestInProgress(state, REQUESTS_ENUM.getEmployee)
+    const employeeDetails = useAppSelector(selectEmployeeDetails);
+    const employeeFetchLoading = useAppSelector(
+        selectRequestInProgress(REQUESTS_ENUM.getEmployee)
     );
-    const employeeFetchError = useAppSelector((state) =>
-        selectRequestError(state, REQUESTS_ENUM.getEmployee)
+    const employeeFetchError = useAppSelector(
+        selectRequestError(REQUESTS_ENUM.getEmployee)
     );
 
     useEffect(() => {
@@ -44,7 +44,8 @@ const EditEmployeeDetails: React.FC = () => {
             {employeeFetchLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (
-                employeeDetails && (
+                employeeDetails &&
+                employeeDetails.id === Number(employeeId) && (
                     <StyledEditEmployeeDetails>
                         <h2 className="text-center">Edit Employee Details</h2>
 

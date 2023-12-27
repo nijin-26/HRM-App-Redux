@@ -3,7 +3,7 @@ import { AxiosError, AxiosRequestConfig } from 'axios';
 
 export const onRequest = (config: AxiosRequestConfig) => {
     const token =
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoiYWJoaWIiLCJpYXQiOjE3MDM2MzQ2MjQsImV4cCI6MTcwMzYzODIyNH0.vz_viSeqTf9wZDvsp6qq4iEKE4hGxoAQmQGl7SAfr5c';
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOjIsInVzZXJuYW1lIjoiYWJoaWIiLCJpYXQiOjE3MDM2NjczMDgsImV4cCI6MTcwMzY3MDkwOH0.ex45aV9rybMEt4gKFeB5PdKbOCdUSqIp5RcA75a6JUI';
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     config.headers = {
         'Content-type': 'application/json',

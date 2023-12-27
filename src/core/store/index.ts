@@ -18,12 +18,10 @@ const rootReducer = combineReducers({
     requests: requestsRecuder,
 });
 
-const composeEnhancers = composeWithDevTools({ trace: true, traceLimit: 10 });
-
 const store = createStore(
     rootReducer,
     undefined,
-    composeEnhancers(applyMiddleware(thunk))
+    composeWithDevTools(applyMiddleware(thunk))
 );
 
 export type RootState = ReturnType<typeof rootReducer>;
