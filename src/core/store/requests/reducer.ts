@@ -1,3 +1,4 @@
+import { RootState } from '..';
 import { ActionType } from './actions';
 
 interface IRequest {
@@ -74,3 +75,14 @@ export const requestsRecuder = (
             return state;
     }
 };
+
+export const selectRequestInProgress = (
+    state: RootState,
+    requestName: string
+) =>
+    state.requests.requests.find((req) => req.name === requestName)
+        ?.inProgress || false;
+
+export const selectRequestError = (state: RootState, requestName: string) =>
+    state.requests.requests.find((req) => req.name === requestName)?.error ||
+    null;

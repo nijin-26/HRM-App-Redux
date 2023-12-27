@@ -3,8 +3,12 @@ import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
 import { useEffect } from 'react';
 import StyledEditEmployeeDetails from './EditEmployeeDetails.style';
 import { EmployeeDetailsForm, Loader } from '../../components';
-import { modifyFetchedEmployeeData } from '../../utils';
 import { fetchEmployee } from '../../core/store/employee/actions';
+import { selectEmployeeDetails } from '../../core/store/employee/reducer';
+import {
+    selectRequestError,
+    selectRequestInProgress,
+} from '../../core/store/requests/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
 
 const EditEmployeeDetails: React.FC = () => {
@@ -17,25 +21,12 @@ const EditEmployeeDetails: React.FC = () => {
         return;
     }
 
-    const employeeDetails = useAppSelector((state) => {
-        const employeeData = state.employee.employeeData;
-        if (employeeData && employeeData.id === Number(employeeId)) {
-            return modifyFetchedEmployeeData(employeeData);
-        } else {
-            return null;
-        }
-    });
-    const employeeFetchInProgress = useAppSelector(
-        (state) =>
-            state.requests.requests.find(
-                (req) => req.name === REQUESTS_ENUM.getEmployee
-            )?.inProgress
+    const employeeDetails = useAppSelector(selectEmployeeDetails(employeeId));
+    const employeeFetchLoading = useAppSelector((state) =>
+        selectRequestInProgress(state, REQUESTS_ENUM.getEmployee)
     );
-    const employeeFetchError = useAppSelector(
-        (state) =>
-            state.requests.requests.find(
-                (req) => req.name === REQUESTS_ENUM.getEmployee
-            )?.error
+    const employeeFetchError = useAppSelector((state) =>
+        selectRequestError(state, REQUESTS_ENUM.getEmployee)
     );
 
     useEffect(() => {
@@ -50,7 +41,7 @@ const EditEmployeeDetails: React.FC = () => {
 
     return (
         <>
-            {employeeFetchInProgress ? (
+            {employeeFetchLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (
                 employeeDetails && (

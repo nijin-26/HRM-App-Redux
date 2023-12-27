@@ -20,6 +20,7 @@ import {
     fetchEmployees,
     deleteEmployeeAction,
 } from '../../core/store/employeesList/actions';
+import { selectRequestInProgress } from '../../core/store/requests/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
 
 const ManageEmployees: React.FC = () => {
@@ -35,17 +36,11 @@ const ManageEmployees: React.FC = () => {
         (state) => state.employees.employeesList
     );
     const employeesCount = useAppSelector((state) => state.employees.count);
-    const employeesFetchLoading = useAppSelector(
-        (state) =>
-            state.requests.requests.find(
-                (req) => req.name === REQUESTS_ENUM.getEmployeesList
-            )?.inProgress
+    const employeesFetchLoading = useAppSelector((state) =>
+        selectRequestInProgress(state, REQUESTS_ENUM.getEmployeesList)
     );
-    const employeeDeleteLoading = useAppSelector(
-        (state) =>
-            state.requests.requests.find(
-                (req) => req.name === REQUESTS_ENUM.deleteEmployee
-            )?.inProgress
+    const employeeDeleteLoading = useAppSelector((state) =>
+        selectRequestInProgress(state, REQUESTS_ENUM.deleteEmployee)
     );
     const employeeNameFilter = useAppSelector(
         (state) => state.employees.employeesListFilter.employeeNameFilter

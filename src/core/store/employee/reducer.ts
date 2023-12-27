@@ -1,5 +1,8 @@
+import { RootState } from '..';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
+import { modifyFetchedEmployeeData } from '../../../utils';
 import { ActionType } from './actions';
+import { createSelector } from 'reselect';
 
 interface IEmployeeState {
     employeeData: IApiEmployee | null;
@@ -28,5 +31,17 @@ const employeeReducer = (
             return state;
     }
 };
+
+export const selectEmployeeDetails = (employeeId: string) =>
+    createSelector(
+        (state: RootState) => state.employee.employeeData,
+        (employeeData) => {
+            if (employeeData && employeeData.id === Number(employeeId)) {
+                return modifyFetchedEmployeeData(employeeData);
+            } else {
+                return null;
+            }
+        }
+    );
 
 export default employeeReducer;

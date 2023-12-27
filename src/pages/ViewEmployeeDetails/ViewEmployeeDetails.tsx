@@ -5,33 +5,29 @@ import StyledEmpDetailsWrap from './ViewEmployeeDetails.style';
 import { Loader, Chip, LinkButton, Button } from '../../components';
 import profilePictureAvatar from '../../assets/images/employee-avatar.svg';
 import { fetchEmployee } from '../../core/store/employee/actions';
-import { modifyFetchedEmployeeData } from '../../utils';
+import {
+    selectRequestError,
+    selectRequestInProgress,
+} from '../../core/store/requests/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
+import { selectEmployeeDetails } from '../../core/store/employee/reducer';
 
 const ViewEmployeeDetails = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const { employeeId } = useParams();
 
-    const employeeDetails = useAppSelector((state) => {
-        const employeeData = state.employee.employeeData;
-        if (employeeData && employeeData.id === Number(employeeId)) {
-            return modifyFetchedEmployeeData(employeeData);
-        } else {
-            return null;
-        }
-    });
-    const employeeFetchInProgress = useAppSelector(
-        (state) =>
-            state.requests.requests.find(
-                (req) => req.name === REQUESTS_ENUM.getEmployee
-            )?.inProgress
+    if (!employeeId) {
+        navigate('/view-employee', { replace: true });
+        return;
+    }
+
+    const employeeDetails = useAppSelector(selectEmployeeDetails(employeeId));
+    const employeeFetchLoading = useAppSelector((state) =>
+        selectRequestInProgress(state, REQUESTS_ENUM.getEmployee)
     );
-    const employeeFetchError = useAppSelector(
-        (state) =>
-            state.requests.requests.find(
-                (req) => req.name === REQUESTS_ENUM.getEmployee
-            )?.error
+    const employeeFetchError = useAppSelector((state) =>
+        selectRequestError(state, REQUESTS_ENUM.getEmployee)
     );
 
     const notAvailableString = 'N/A';
@@ -49,7 +45,7 @@ const ViewEmployeeDetails = () => {
 
     return (
         <>
-            {employeeFetchInProgress ? (
+            {employeeFetchLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (
                 employeeDetails && (
