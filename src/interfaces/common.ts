@@ -51,4 +51,5 @@ export interface IQueryParams {
     sortBy: string;
     sortDir: string;
     skillIds: string | null;
+    search: string | null;
 }

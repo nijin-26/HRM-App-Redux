@@ -75,22 +75,6 @@ const employeesReducer = (
                 count: 0,
                 employeesList: [],
             };
-        case 'EMPLOYEE_NAME_FILTER_CHANGE':
-            return {
-                ...state,
-                employeesListFilter: {
-                    ...state.employeesListFilter,
-                    employeeNameFilter: action.payload,
-                },
-            };
-        case 'EMPLOYEE_SKILLS_FILTER_CHANGE':
-            return {
-                ...state,
-                employeesListFilter: {
-                    ...state.employeesListFilter,
-                    employeeSkillsFilter: action.payload,
-                },
-            };
         case 'EMPLOYEE_LIST_FILTER_CLEAR':
             return {
                 ...state,

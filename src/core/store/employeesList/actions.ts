@@ -45,16 +45,6 @@ interface IEDIT_EMPLOYEE_SUCCESS {
     };
 }
 
-interface IEMPLOYEE_NAME_FILTER_CHANGE {
-    type: 'EMPLOYEE_NAME_FILTER_CHANGE';
-    payload: string;
-}
-
-interface IEMPLOYEE_SKILLS_FILTER_CHANGE {
-    type: 'EMPLOYEE_SKILLS_FILTER_CHANGE';
-    payload: MultiValue<IReactSelectOption>;
-}
-
 interface IEMPLOYEE_LIST_FILTER_CLEAR {
     type: 'EMPLOYEE_LIST_FILTER_CLEAR';
 }
@@ -70,8 +60,6 @@ export type ActionType =
     | IADD_EMPLOYEE_SUCCESS
     | IEDIT_EMPLOYEE_SUCCESS
     | IEMPLOYEE_LIST_CLEAR
-    | IEMPLOYEE_NAME_FILTER_CHANGE
-    | IEMPLOYEE_SKILLS_FILTER_CHANGE
     | IEMPLOYEE_LIST_FILTER_CLEAR;
 
 //Action Creators
@@ -86,14 +74,22 @@ const fetchEmployeesSuccess = (
 
 //Thunk Action creator
 export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
-    const { offset, limit, sortBy, sortDir, skillIds } = searchparams;
+    const { offset, limit, sortBy, sortDir, skillIds, search } = searchparams;
 
     return async (dispatch: AppDispatch) => {
         try {
             const { data } = await requestHelper(
                 dispatch,
                 REQUESTS_ENUM.getEmployeesList,
-                () => getEmployeesList(limit, offset, sortBy, sortDir, skillIds)
+                () =>
+                    getEmployeesList(
+                        limit,
+                        offset,
+                        sortBy,
+                        sortDir,
+                        skillIds,
+                        search
+                    )
             );
             dispatch(fetchEmployeesSuccess(data.data));
         } catch (error) {
@@ -193,20 +189,6 @@ export const employeeListClear = (): IEMPLOYEE_LIST_CLEAR => ({
 });
 
 //EMPLOYEE_FILTER_CHANGE
-export const employeeNameFilterChange = (
-    employeeNameFilterValue: string
-): IEMPLOYEE_NAME_FILTER_CHANGE => ({
-    type: 'EMPLOYEE_NAME_FILTER_CHANGE',
-    payload: employeeNameFilterValue,
-});
-
-export const employeeSkillsFilterChange = (
-    selectedSkills: MultiValue<IReactSelectOption>
-): IEMPLOYEE_SKILLS_FILTER_CHANGE => ({
-    type: 'EMPLOYEE_SKILLS_FILTER_CHANGE',
-    payload: selectedSkills,
-});
-
 export const employeeListFilterClear = (): IEMPLOYEE_LIST_FILTER_CLEAR => ({
     type: 'EMPLOYEE_LIST_FILTER_CLEAR',
 });

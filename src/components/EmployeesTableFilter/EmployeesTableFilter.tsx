@@ -9,7 +9,6 @@ import {
 } from './EmployeesTableFilter.style';
 import { IReactSelectOption } from '../../interfaces/common';
 import {
-    employeeNameFilterChange,
     employeeListFilterClear,
     employeeListClear,
 } from '../../core/store/employeesList/actions';
@@ -17,25 +16,31 @@ import {
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useAppDispatch();
     const [searchParams, setSearchParams] = useSearchParams();
+
     const [skillFilter, setSkillFilter] = useState<
         MultiValue<IReactSelectOption>
     >([]);
+    const [empNameFilter, setEmpNameFilter] = useState<string>(
+        searchParams.get('search') || ''
+    );
 
     const selectSkillsData = useAppSelector(
         (state) => state.dropdownData.skills.skillsData
-    );
-    const selectEmployeeNameFilter = useAppSelector(
-        (state) => state.employees.employeesListFilter.employeeNameFilter
     );
 
     const handleSearchInputChange = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        dispatch(
-            employeeNameFilterChange(
-                event.target.value.trimStart().toLowerCase()
-            )
-        );
+        const filterValue = event.target.value.trimStart().toLowerCase();
+        setEmpNameFilter(filterValue);
+
+        if (!filterValue) {
+            searchParams.delete('search');
+        } else {
+            searchParams.set('search', filterValue);
+        }
+        dispatch(employeeListClear());
+        setSearchParams(searchParams);
     };
 
     const handleSkillSelectChange = (
@@ -75,7 +80,7 @@ const EmployeesTableFilter: React.FC = () => {
         <StyledEmployeesFilterWrap>
             <Input
                 placeholder="Filter by Employee Name"
-                value={selectEmployeeNameFilter}
+                value={empNameFilter}
                 onChange={handleSearchInputChange}
                 className="table-control-field"
             />

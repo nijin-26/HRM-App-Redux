@@ -14,7 +14,7 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from '../../components';
-import { IEmployeeListing, IQueryParams } from '../../interfaces/common';
+import { IQueryParams } from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
 import {
     fetchEmployees,
@@ -59,8 +59,9 @@ const ManageEmployees: React.FC = () => {
         const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
         const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
         const skillIds = searchParams.get('skillIds');
+        const search = searchParams.get('search');
 
-        return { limit, offset, sortBy, sortDir, skillIds };
+        return { limit, offset, sortBy, sortDir, skillIds, search };
     };
 
     const deleteConfirmHandler = () => {
@@ -68,30 +69,6 @@ const ManageEmployees: React.FC = () => {
         if (empIdToDelete) {
             dispatch(deleteEmployeeAction(empIdToDelete));
         }
-    };
-
-    const filterEmployeesList = (employeesList: IEmployeeListing[]) => {
-        return employeesList.filter((employee) => {
-            let shouldInclude = true;
-
-            const employeeName = employee.fullName.trim().toLowerCase();
-            const selectedSkillsForFilter = employeeSkillsFilter.map((skill) =>
-                Number(skill.value)
-            );
-            if (!(employeeName.indexOf(employeeNameFilter) > -1)) {
-                shouldInclude = false;
-            }
-
-            if (
-                !selectedSkillsForFilter.every((skill) =>
-                    employee['skills'].includes(skill)
-                )
-            ) {
-                shouldInclude = false;
-            }
-
-            return shouldInclude;
-        });
     };
 
     const isSearchFilters = () => {

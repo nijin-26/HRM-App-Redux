@@ -135,4 +135,5 @@ export const initQueryParams: IQueryParams = {
     sortBy: 'id',
     sortDir: 'desc',
     skillIds: null,
+    search: '',
 };
