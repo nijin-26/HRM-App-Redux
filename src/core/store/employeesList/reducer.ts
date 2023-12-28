@@ -1,26 +1,14 @@
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { ActionType } from './actions';
-import { MultiValue } from 'react-select';
-import { IReactSelectOption } from '../../../interfaces/common';
-
-interface IEmployeesListFilter {
-    employeeNameFilter: string;
-    employeeSkillsFilter: MultiValue<IReactSelectOption>;
-}
 
 interface IEmployeesState {
     employeesList: IApiEmployee[];
     count: number | undefined;
-    employeesListFilter: IEmployeesListFilter;
 }
 
 const initialState: IEmployeesState = {
     count: undefined,
     employeesList: [],
-    employeesListFilter: {
-        employeeNameFilter: '',
-        employeeSkillsFilter: [],
-    },
 };
 
 const employeesReducer = (
@@ -74,14 +62,6 @@ const employeesReducer = (
                 ...state,
                 count: 0,
                 employeesList: [],
-            };
-        case 'EMPLOYEE_LIST_FILTER_CLEAR':
-            return {
-                ...state,
-                employeesListFilter: {
-                    employeeNameFilter: '',
-                    employeeSkillsFilter: [],
-                },
             };
         default:
             return state;

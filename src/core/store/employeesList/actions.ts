@@ -3,11 +3,8 @@ import {
     IApiEmployeeSubmission,
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
-import { IQueryParams, IReactSelectOption } from '../../../interfaces/common';
-
+import { IQueryParams } from '../../../interfaces/common';
 import { toast } from 'react-toastify';
-import { MultiValue } from 'react-select';
-
 import {
     getEmployeesList,
     deleteEmployee,
@@ -45,10 +42,6 @@ interface IEDIT_EMPLOYEE_SUCCESS {
     };
 }
 
-interface IEMPLOYEE_LIST_FILTER_CLEAR {
-    type: 'EMPLOYEE_LIST_FILTER_CLEAR';
-}
-
 interface IEMPLOYEE_LIST_CLEAR {
     type: 'EMPLOYEE_LIST_CLEAR';
 }
@@ -59,8 +52,7 @@ export type ActionType =
     | IDELETE_EMPLOYEE_SUCCESS
     | IADD_EMPLOYEE_SUCCESS
     | IEDIT_EMPLOYEE_SUCCESS
-    | IEMPLOYEE_LIST_CLEAR
-    | IEMPLOYEE_LIST_FILTER_CLEAR;
+    | IEMPLOYEE_LIST_CLEAR;
 
 //Action Creators
 
@@ -186,9 +178,4 @@ export const editEmployeeAction = (
 //EMPLOYEE LIST CLEAR
 export const employeeListClear = (): IEMPLOYEE_LIST_CLEAR => ({
     type: 'EMPLOYEE_LIST_CLEAR',
-});
-
-//EMPLOYEE_FILTER_CHANGE
-export const employeeListFilterClear = (): IEMPLOYEE_LIST_FILTER_CLEAR => ({
-    type: 'EMPLOYEE_LIST_FILTER_CLEAR',
 });

@@ -8,10 +8,7 @@ import {
     StyledEmployeesFilterWrap,
 } from './EmployeesTableFilter.style';
 import { IReactSelectOption } from '../../interfaces/common';
-import {
-    employeeListFilterClear,
-    employeeListClear,
-} from '../../core/store/employeesList/actions';
+import { employeeListClear } from '../../core/store/employeesList/actions';
 
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -60,6 +57,15 @@ const EmployeesTableFilter: React.FC = () => {
         setSearchParams(searchParams);
     };
 
+    const handleClearBtnClick = () => {
+        setSkillFilter([]);
+        searchParams.delete('skillIds');
+        setEmpNameFilter('');
+        searchParams.delete('search');
+        dispatch(employeeListClear());
+        setSearchParams(searchParams);
+    };
+
     // Update selectedOptions state based on URL parameters
     useEffect(() => {
         if (selectSkillsData) {
@@ -96,7 +102,7 @@ const EmployeesTableFilter: React.FC = () => {
             />
             <Button
                 className="outline icon-btn margin-left-auto table-control-field"
-                onClick={() => dispatch(employeeListFilterClear())}
+                onClick={handleClearBtnClick}
             >
                 <span>Clear Filters</span>
                 <span className="material-symbols-rounded">filter_alt_off</span>
