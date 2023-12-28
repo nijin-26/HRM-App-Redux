@@ -42,12 +42,6 @@ const ManageEmployees: React.FC = () => {
     const employeeDeleteLoading = useAppSelector(
         selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
-    const employeeNameFilter = useAppSelector(
-        (state) => state.employees.employeesListFilter.employeeNameFilter
-    );
-    const employeeSkillsFilter = useAppSelector(
-        (state) => state.employees.employeesListFilter.employeeSkillsFilter
-    );
 
     const getSearchParams = (): IQueryParams => {
         const limit = searchParams.get('limit')
@@ -69,13 +63,6 @@ const ManageEmployees: React.FC = () => {
         if (empIdToDelete) {
             dispatch(deleteEmployeeAction(empIdToDelete));
         }
-    };
-
-    const isSearchFilters = () => {
-        if (employeeNameFilter === '' && employeeSkillsFilter.length === 0) {
-            return false;
-        }
-        return true;
     };
 
     useEffect(() => {
@@ -114,7 +101,7 @@ const ManageEmployees: React.FC = () => {
                             }
                             loading={employeesFetchLoading}
                         />
-                        {employeesList && !isSearchFilters() ? (
+                        {employeesList ? (
                             <Pagination
                                 totalEntries={employeesCount}
                                 key={searchParams.get('offset')}
