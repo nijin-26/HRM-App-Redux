@@ -21,6 +21,7 @@ import {
     deleteEmployeeAction,
 } from '../../core/store/employeesList/actions';
 import { selectRequestInProgress } from '../../core/store/requests/reducer';
+import { selectEmployeesListSlice } from '../../core/store/employeesList/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
 
 const ManageEmployees: React.FC = () => {
@@ -32,8 +33,11 @@ const ManageEmployees: React.FC = () => {
         undefined
     );
 
-    const employeesList = useAppSelector(
-        (state) => state.employees.employeesList
+    const offset = Number(searchParams.get('offset')) || initQueryParams.offset;
+    const limit = Number(searchParams.get('limit')) || initQueryParams.limit;
+
+    const employeesListSlice = useAppSelector(
+        selectEmployeesListSlice(offset, limit)
     );
     const employeesCount = useAppSelector((state) => state.employees.count);
     const employeesFetchLoading = useAppSelector(
@@ -91,9 +95,9 @@ const ManageEmployees: React.FC = () => {
                         <StyledEmployeesTable
                             tableHeaders={empTableHeaders}
                             tableData={
-                                employeesList.length
+                                employeesListSlice.length
                                     ? getEmployeesListingData(
-                                          employeesList,
+                                          employeesListSlice,
                                           setIsModalOpen,
                                           setEmpIdToDelete
                                       )
@@ -101,7 +105,7 @@ const ManageEmployees: React.FC = () => {
                             }
                             loading={employeesFetchLoading}
                         />
-                        {employeesList ? (
+                        {employeesCount && employeesCount > limit ? (
                             <Pagination
                                 totalEntries={employeesCount}
                                 key={searchParams.get('offset')}
