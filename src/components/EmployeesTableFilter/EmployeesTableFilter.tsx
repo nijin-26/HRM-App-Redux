@@ -25,35 +25,30 @@ const EmployeesTableFilter: React.FC = () => {
         (state) => state.dropdownData.skills.skillsData
     );
 
-    const handleSearchInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const filterValue = event.target.value.trimStart().toLowerCase();
-        setEmpNameFilter(filterValue);
+    const handleSearchInputChange = () => {
+        dispatch(employeeListClear());
+        searchParams.set('offset', '0');
 
-        if (!filterValue) {
+        if (!empNameFilter) {
             searchParams.delete('search');
         } else {
-            searchParams.set('search', filterValue);
+            searchParams.set('search', empNameFilter);
         }
-        dispatch(employeeListClear());
         setSearchParams(searchParams);
     };
 
-    const handleSkillSelectChange = (
-        selectedOptions: MultiValue<IReactSelectOption>
-    ) => {
-        setSkillFilter(selectedOptions);
+    const handleSkillSelectChange = () => {
+        dispatch(employeeListClear());
+        searchParams.set('offset', '0');
 
-        if (!selectedOptions.length) {
+        if (!skillFilter.length) {
             searchParams.delete('skillIds');
         } else {
-            const selectedOptionsValue = selectedOptions.map(
+            const selectedOptionsValue = skillFilter.map(
                 (option) => option.value
             );
             searchParams.set('skillIds', selectedOptionsValue.toString());
         }
-        dispatch(employeeListClear());
         setSearchParams(searchParams);
     };
 
@@ -66,7 +61,7 @@ const EmployeesTableFilter: React.FC = () => {
         setSearchParams(searchParams);
     };
 
-    // Update selectedOptions state based on URL parameters
+    // Update skill filter select dropdown state based on URL parameters
     useEffect(() => {
         if (selectSkillsData) {
             const urlSelectedSkillValues = searchParams
@@ -82,12 +77,27 @@ const EmployeesTableFilter: React.FC = () => {
         }
     }, [selectSkillsData]);
 
+    //debounce employees list fetch on employee name and skills filter change
+    useEffect(() => {
+        const timeout = setTimeout(handleSearchInputChange, 500);
+        return () => clearTimeout(timeout);
+    }, [empNameFilter]);
+
+    useEffect(() => {
+        const timeout = setTimeout(handleSkillSelectChange, 500);
+        return () => clearTimeout(timeout);
+    }, [skillFilter]);
+
     return (
         <StyledEmployeesFilterWrap>
             <Input
                 placeholder="Filter by Employee Name"
                 value={empNameFilter}
-                onChange={handleSearchInputChange}
+                onChange={(event) =>
+                    setEmpNameFilter(
+                        event.target.value.trimStart().toLowerCase()
+                    )
+                }
                 className="table-control-field"
             />
             <Select
@@ -98,7 +108,7 @@ const EmployeesTableFilter: React.FC = () => {
                 closeMenuOnSelect={false}
                 styles={CustomSelectStyles}
                 placeholder="Filter by skills"
-                onChange={handleSkillSelectChange}
+                onChange={(selectedOptions) => setSkillFilter(selectedOptions)}
             />
             <Button
                 className="outline icon-btn margin-left-auto table-control-field"
