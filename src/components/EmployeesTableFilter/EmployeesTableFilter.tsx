@@ -26,7 +26,7 @@ const EmployeesTableFilter: React.FC = () => {
     );
 
     const handleSearchInputChange = () => {
-        dispatch(employeeListClear());
+        // dispatch(employeeListClear());
         searchParams.set('offset', '0');
 
         if (!empNameFilter) {
@@ -38,7 +38,7 @@ const EmployeesTableFilter: React.FC = () => {
     };
 
     const handleSkillSelectChange = () => {
-        dispatch(employeeListClear());
+        // dispatch(employeeListClear());
         searchParams.set('offset', '0');
 
         if (!skillFilter.length) {
@@ -93,11 +93,12 @@ const EmployeesTableFilter: React.FC = () => {
             <Input
                 placeholder="Filter by Employee Name"
                 value={empNameFilter}
-                onChange={(event) =>
+                onChange={(event) => {
                     setEmpNameFilter(
                         event.target.value.trimStart().toLowerCase()
-                    )
-                }
+                    );
+                    dispatch(employeeListClear());
+                }}
                 className="table-control-field"
             />
             <Select
@@ -108,7 +109,10 @@ const EmployeesTableFilter: React.FC = () => {
                 closeMenuOnSelect={false}
                 styles={CustomSelectStyles}
                 placeholder="Filter by skills"
-                onChange={(selectedOptions) => setSkillFilter(selectedOptions)}
+                onChange={(selectedOptions) => {
+                    setSkillFilter(selectedOptions);
+                    dispatch(employeeListClear());
+                }}
             />
             <Button
                 className="outline icon-btn margin-left-auto table-control-field"
