@@ -1,14 +1,20 @@
+import { toast } from 'react-toastify';
 import { IEmployee } from '../../interfaces/common';
 import {
     IApiEmployee,
     IApiEmployeeSubmission,
 } from '../../interfaces/ApiDataInterface';
-import { toast } from 'react-toastify';
+import { AppDispatch } from '../../core/store';
 import { getPhotoUrl } from '../../core/api/config/firebase';
+import {
+    addEmployeeAction,
+    editEmployeeAction,
+} from '../../core/store/employeesList/actions';
 
 const handleFormSubmit = async (
     formSubmitData: IEmployee,
-    photoRef: HTMLInputElement | null
+    photoRef: HTMLInputElement | null,
+    dispatch: AppDispatch
 ) => {
     let photoUrl = '';
     try {
@@ -55,21 +61,11 @@ const handleFormSubmit = async (
         moreDetails: JSON.stringify(moreDetails),
     };
 
-    // try {
-    //     await API({
-    //         method: empId ? 'PATCH' : 'POST',
-    //         url: empId ? `/employee/${empId}` : '/employee',
-    //         data: apiSubmitData,
-    //     });
-    //     toast.success(
-    //         `Employee details ${empId ? 'edited' : 'added'} successfully.`
-    //     );
-    // } catch (error) {
-    //     toast.error(`${empId ? 'Edit' : 'Add'} employee details failed.`);
-    //     console.log(`${empId ? 'Edit' : 'Add'} failed`, error);
-    // }
-
-    return { apiSubmitData, storeData };
+    formSubmitData.id
+        ? await dispatch(
+              editEmployeeAction(formSubmitData.id, apiSubmitData, storeData)
+          )
+        : await dispatch(addEmployeeAction(apiSubmitData, storeData));
 };
 
 export default handleFormSubmit;

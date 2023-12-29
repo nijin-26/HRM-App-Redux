@@ -1,37 +1,19 @@
-import { AxiosError } from 'axios';
 import { IApiRole } from '../../../../interfaces/ApiDataInterface';
-import { AnyAction } from 'redux';
-import { ThunkAction, ThunkDispatch } from 'redux-thunk';
 import { toast } from 'react-toastify';
 import { getRoles } from '../../../api';
+import { AppDispatch, AppThunk } from '../..';
+import { requestHelper } from '../../requests/actions';
+import { REQUESTS_ENUM } from '../../requests/requestsEnum';
 
 // Actions definitions
-interface IFETCH_ROLES_REQUEST {
-    type: 'FETCH_ROLES_REQUEST';
-}
-
 interface IFETCH_ROLES_SUCCESS {
     type: 'FETCH_ROLES_SUCCESS';
     payload: IApiRole[];
 }
 
-interface IFETCH_ROLES_FAILURE {
-    type: 'FETCH_ROLES_FAILURE';
-    payload: AxiosError;
-}
-
-export type ActionType =
-    | IFETCH_ROLES_REQUEST
-    | IFETCH_ROLES_SUCCESS
-    | IFETCH_ROLES_FAILURE;
+export type ActionType = IFETCH_ROLES_SUCCESS;
 
 // Action Creators
-
-// ROLES FETCH
-export const fetchRolesRequest = (): IFETCH_ROLES_REQUEST => ({
-    type: 'FETCH_ROLES_REQUEST',
-});
-
 export const fetchRolesSuccess = (
     rolesData: IApiRole[]
 ): IFETCH_ROLES_SUCCESS => ({
@@ -39,23 +21,18 @@ export const fetchRolesSuccess = (
     payload: rolesData,
 });
 
-export const fetchRolesFailure = (error: AxiosError): IFETCH_ROLES_FAILURE => ({
-    type: 'FETCH_ROLES_FAILURE',
-    payload: error,
-});
-
 // Thunk Action
-export const fetchRoles = (): ThunkAction<Promise<void>, {}, {}, AnyAction> => {
-    return async (
-        dispatch: ThunkDispatch<{}, {}, AnyAction>
-    ): Promise<void> => {
-        dispatch(fetchRolesRequest());
+export const fetchRoles = (): AppThunk => {
+    return async (dispatch: AppDispatch) => {
         try {
-            const { data } = await getRoles();
+            const { data } = await requestHelper(
+                dispatch,
+                REQUESTS_ENUM.getRoles,
+                getRoles
+            );
             dispatch(fetchRolesSuccess(data));
         } catch (error) {
             console.log(error);
-            dispatch(fetchRolesFailure(error as AxiosError));
             toast.error(
                 'Could not fetch roles list. Please try reloading the page.'
             );

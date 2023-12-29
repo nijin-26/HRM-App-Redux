@@ -1,5 +1,6 @@
 import { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
 import { Formik } from 'formik';
 import {
     Button,
@@ -21,40 +22,29 @@ import handleFormSubmit from './handleFormSubmit';
 import { sortObjByKey } from '../../utils';
 import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
 
-import { useSelector } from 'react-redux';
-import { IState } from '../../core/store';
-
-import { useDispatch } from 'react-redux';
-import {
-    addEmployeeAction,
-    editEmployeeAction,
-} from '../../core/store/employeesList/actions';
-
 interface IEmployeeDetailsForm {
-    empId?: Number;
     prefillData?: IEmployee;
 }
 
 const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
-    empId = null,
     prefillData = {
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const navigate = useNavigate();
 
-    const selectSkills = useSelector(
-        (state: IState) => state.dropdownData.skills.skillsData
+    const selectSkills = useAppSelector(
+        (state) => state.dropdownData.skills.skillsData
     );
-    const selectDepartments = useSelector(
-        (state: IState) => state.dropdownData.departments.departmentsData
+    const selectDepartments = useAppSelector(
+        (state) => state.dropdownData.departments.departmentsData
     );
-    const selectRoles = useSelector(
-        (state: IState) => state.dropdownData.roles.rolesData
+    const selectRoles = useAppSelector(
+        (state) => state.dropdownData.roles.rolesData
     );
 
     const [loading, setLoading] = useState(false);
-    const navigate = useNavigate();
 
     const [photoId, setPhotoId] = useState(prefillData.photoId);
     const photoRef = useRef<HTMLInputElement>(null);
@@ -82,31 +72,19 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                 <StyledFormWrap>
                     <Formik
                         initialValues={prefillData}
+                        enableReinitialize
                         validationSchema={validate}
                         onSubmit={async (values, { setSubmitting }) => {
                             setLoading(true);
-                            const { apiSubmitData, storeData } =
-                                await handleFormSubmit(
-                                    values,
-                                    photoRef.current
-                                );
 
-                            empId
-                                ? dispatch<any>(
-                                      editEmployeeAction(
-                                          apiSubmitData,
-                                          storeData
-                                      )
-                                  )
-                                : dispatch<any>(
-                                      addEmployeeAction(
-                                          apiSubmitData,
-                                          storeData
-                                      )
-                                  );
-                            // navigate(`/`);
+                            await handleFormSubmit(
+                                values,
+                                photoRef.current,
+                                dispatch
+                            );
                             setSubmitting(false);
                             setLoading(false);
+                            navigate(`/`);
                         }}
                     >
                         {(props) => {

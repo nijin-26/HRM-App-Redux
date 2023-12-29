@@ -1,6 +1,6 @@
-import { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
-import { useEffect, useState } from "react";
-import { API } from ".";
+import { AxiosError, AxiosRequestConfig, AxiosResponse } from 'axios';
+import { useEffect, useState } from 'react';
+import { API } from '.';
 
 const useApi = <T,>(
   method: string,

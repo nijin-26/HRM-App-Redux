@@ -1,13 +1,7 @@
 import { combineReducers } from 'redux';
-import skillsReducer, { ISkillsState } from './skills/reducer';
-import rolesReducer, { IRolesState } from './roles/reducer';
-import departmentsReducer, { IDepartmentsState } from './departments/reducer';
-
-export interface IDropdownsState {
-    skills: ISkillsState;
-    departments: IDepartmentsState;
-    roles: IRolesState;
-}
+import skillsReducer from './skills/reducer';
+import rolesReducer from './roles/reducer';
+import departmentsReducer from './departments/reducer';
 
 const dropdownReducer = combineReducers({
     skills: skillsReducer,
