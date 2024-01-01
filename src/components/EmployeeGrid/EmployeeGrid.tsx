@@ -51,13 +51,6 @@ const EmployeeGrid = ({
   const handleLoadData = () => {
     let hasMore = true;
 
-    console.log(
-      employeeList,
-      employeeList.length,
-      employeesCount,
-      "handle load dat   a"
-    );
-
     if (employeesCount === undefined) hasMore = true;
     else if (
       (employeeList && employeeList.length >= employeesCount) ||
@@ -66,7 +59,6 @@ const EmployeeGrid = ({
       hasMore = false;
     }
     if (employeesFetchLoading || !hasMore) return;
-    console.log("after return");
     dispatch(fetchEmployees(getSearchParams()));
     setOffset((prev) => prev + limit);
   };
