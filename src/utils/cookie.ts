@@ -1,6 +1,8 @@
 import { jwtDecode } from 'jwt-decode';
 
-export const getCookie = (name: string) => {
+type cookieName = 'accessToken' | 'refreshToken';
+
+export const getCookie = (name: cookieName) => {
     const value = `; ${document.cookie}`;
     const parts: string[] = value?.split(`; ${name}=`);
     if (parts.length === 2) {
@@ -9,12 +11,12 @@ export const getCookie = (name: string) => {
     return null;
 };
 
-export const removeCookie = (name: string) => {
+export const removeCookie = (name: cookieName) => {
     const expiredDate = new Date(0).toUTCString();
     document.cookie = `${name}=; expires=${expiredDate}; path=/`;
 };
 
-export const setCookie = (name: string, value: string) => {
+export const setCookie = (name: cookieName, value: string) => {
     const decodedToken = jwtDecode(value);
     const expiration = new Date(0);
 
