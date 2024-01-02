@@ -68,9 +68,7 @@ const EmployeeGrid = ({
 
     const handleIntersection: IntersectionObserverCallback = (entries) => {
       if (entries[0].isIntersecting) {
-        if (entries[0].isIntersecting) {
-          handleLoadData();
-        }
+        handleLoadData();
       }
     };
 
