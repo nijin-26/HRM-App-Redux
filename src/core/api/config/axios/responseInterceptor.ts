@@ -13,11 +13,9 @@ enum HTTP_STATUS {
 
 export async function onResponseError(error: AxiosError): Promise<AxiosError> {
     if (error.response?.status === HTTP_STATUS.UNAUTHORIZED) {
-        try {
-            await refreshTokens();
-            axios.request(error.config!);
-        } catch (error) {
-            Promise.reject(error);
+        const response = await refreshTokens();
+        if (response) {
+            return axios.request(error.config!);
         }
     }
     return Promise.reject(error.response);

@@ -11,7 +11,7 @@ const useAuth = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const [loading, setLoading] = useState(false);
+    const [loginLoading, setLoginLoading] = useState(false);
 
     useEffect(() => {
         const accessToken = getCookie('accessToken');
@@ -20,7 +20,7 @@ const useAuth = () => {
             const currentTime = Math.floor(Date.now() / 1000);
 
             //check if token expired
-            if (decodedToken.exp! <= currentTime) {
+            if (decodedToken.exp && decodedToken.exp <= currentTime) {
                 logout();
             } else {
                 dispatch(loginUser());
@@ -29,7 +29,7 @@ const useAuth = () => {
     }, []);
 
     const login = async (username: string, password: string) => {
-        setLoading(true);
+        setLoginLoading(true);
         try {
             const authResponse = await signIn({
                 username,
@@ -43,12 +43,16 @@ const useAuth = () => {
                 dispatch(loginUser());
                 toast.success('Welcome. You are succesfully logged in.');
                 navigate('/');
-                setLoading(false);
+                setLoginLoading(false);
             }
         } catch (error: any) {
-            toast.error('Error Login. Try Again');
-            console.log(error, 'Login Error');
-            setLoading(false);
+            if (error.status === 401) {
+                toast.error('Invalid Username or Password');
+            } else {
+                toast.error('Could not login. Please try again');
+            }
+            console.log(error);
+            setLoginLoading(false);
         }
     };
 
@@ -58,7 +62,7 @@ const useAuth = () => {
         dispatch(logoutUser());
     };
 
-    return { login, logout, loading };
+    return { login, logout, loginLoading };
 };
 
 export default useAuth;

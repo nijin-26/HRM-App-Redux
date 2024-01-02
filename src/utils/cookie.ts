@@ -1,5 +1,6 @@
 import { jwtDecode } from 'jwt-decode';
 import { renewAccessToken } from '../core/api/services/auth';
+import { toast } from 'react-toastify';
 
 type cookieName = 'accessToken' | 'refreshToken';
 
@@ -42,11 +43,14 @@ export const refreshTokens = async () => {
             setCookie('refreshToken', newTokens.refresh_token);
             return newTokens;
         } catch (error) {
+            toast.error(
+                'Unable to refresh your session. Please log in again to continue.'
+            );
             console.log(error);
             removeCookie('accessToken');
             removeCookie('refreshToken');
         }
     } else {
-        return Promise.reject('Unauthorized');
+        return null;
     }
 };
