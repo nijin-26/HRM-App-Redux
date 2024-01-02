@@ -26,7 +26,6 @@ const EmployeesTableFilter: React.FC = () => {
     );
 
     const handleSearchInputChange = () => {
-        // dispatch(employeeListClear());
         searchParams.set('offset', '0');
 
         if (!empNameFilter) {
@@ -38,7 +37,6 @@ const EmployeesTableFilter: React.FC = () => {
     };
 
     const handleSkillSelectChange = () => {
-        // dispatch(employeeListClear());
         searchParams.set('offset', '0');
 
         if (!skillFilter.length) {

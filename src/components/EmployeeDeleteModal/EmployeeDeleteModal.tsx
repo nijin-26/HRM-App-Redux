@@ -5,7 +5,7 @@ import { useState } from 'react';
 interface IEmployeeDeleteModal {
     confirmClickHandler: () => void;
     cancelClickHandler: () => void;
-    employeeIdToDelete: number | undefined;
+    employeeIdToDelete?: number;
 }
 
 const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
@@ -19,7 +19,7 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
 
     return (
         <StyledEmployeeDeleteModal>
-            <h3 className="confirm-dialog-heading">Delete Employee</h3>
+            <h2 className="confirm-dialog-heading">Delete Employee</h2>
             <p className="confirm-dialog-msg">
                 To confirm the deletion of this employee, please enter their ID
                 in the field below.
