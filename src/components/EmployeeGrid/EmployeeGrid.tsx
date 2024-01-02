@@ -67,27 +67,21 @@ const EmployeeGrid = ({
     const { current } = observerTarget;
 
     const handleIntersection: IntersectionObserverCallback = (entries) => {
-      if (entries[0].isIntersecting) {
-        handleLoadData();
-      }
+      if (entries[0].isIntersecting) handleLoadData();
     };
 
     const observer = new IntersectionObserver(handleIntersection, {
       root: null, // Use the viewport as the root
       rootMargin: "0px", // No margin around the root
-      threshold: 0.5, // Trigger when 50% of the element is visible
+      threshold: 1, // Trigger when 50% of the element is visible
     });
 
-    if (current) {
-      observer.observe(current);
-    }
+    if (current) observer.observe(current);
 
     return () => {
-      if (current) {
-        observer.unobserve(current);
-      }
+      if (current) observer.unobserve(current);
     };
-  }, [employeesFetchLoading]);
+  }, [handleLoadData]);
 
   return (
     <>
