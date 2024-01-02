@@ -1,4 +1,5 @@
 import { jwtDecode } from 'jwt-decode';
+import { renewAccessToken } from '../core/api/services/auth';
 
 type cookieName = 'accessToken' | 'refreshToken';
 
@@ -28,4 +29,24 @@ export const setCookie = (name: cookieName, value: string) => {
         (decodedToken.exp ? `; expires=${expiration.toUTCString()}` : '');
 
     document.cookie = `${name}=${cookieValue}; path=/`;
+};
+
+export const refreshTokens = async () => {
+    const currentRefreshToken = getCookie('refreshToken');
+    if (currentRefreshToken) {
+        try {
+            const { data: newTokens } = await renewAccessToken(
+                currentRefreshToken
+            );
+            setCookie('accessToken', newTokens.access_token);
+            setCookie('refreshToken', newTokens.refresh_token);
+            return newTokens;
+        } catch (error) {
+            console.log(error);
+            removeCookie('accessToken');
+            removeCookie('refreshToken');
+        }
+    } else {
+        return Promise.reject('Unauthorized');
+    }
 };

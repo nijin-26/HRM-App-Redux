@@ -23,7 +23,6 @@ const useAuth = () => {
             if (decodedToken.exp! <= currentTime) {
                 logout();
             } else {
-                console.log('here');
                 dispatch(loginUser());
             }
         }
