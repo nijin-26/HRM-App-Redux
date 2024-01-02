@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '../..';
 import PaginationContainer from './Pagination.style';
-import { initQueryParams } from '../../../pages/ManageEmployees/constants';
+import { defaultQueryParams } from '../../../pages/ManageEmployees/constants';
 
 interface IPagination {
     totalEntries: number | undefined;
@@ -10,8 +10,9 @@ interface IPagination {
 
 const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const offset = Number(searchParams.get('offset')) || initQueryParams.offset;
-    const limit = Number(searchParams.get('limit')) || initQueryParams.limit;
+    const offset =
+        Number(searchParams.get('offset')) || defaultQueryParams.offset;
+    const limit = Number(searchParams.get('limit')) || defaultQueryParams.limit;
 
     const [currentPage, setCurrentPage] = useState<number>(
         Math.ceil(offset / limit) + 1

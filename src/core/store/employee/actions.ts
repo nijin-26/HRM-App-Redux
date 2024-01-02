@@ -33,12 +33,12 @@ export const fetchEmployeeSuccess = (
 export const fetchEmployee = (employeeId: number): AppThunk => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         const employeesList = getState().employees.employeesList;
-        const employeeInState = employeesList.find(
+        const employeeInStore = employeesList.find(
             (employee) => employee.id === employeeId
         );
 
         try {
-            if (!employeeInState) {
+            if (!employeeInStore) {
                 const { data: response } = await requestHelper(
                     dispatch,
                     REQUESTS_ENUM.getEmployee,
@@ -54,7 +54,7 @@ export const fetchEmployee = (employeeId: number): AppThunk => {
                 );
                 dispatch(fetchEmployeeSuccess(response.data));
             } else {
-                dispatch(fetchEmployeeSuccess(employeeInState));
+                dispatch(fetchEmployeeSuccess(employeeInStore));
             }
         } catch (error) {
             console.log(error);

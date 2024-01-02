@@ -75,14 +75,16 @@ const EmployeesTableFilter: React.FC = () => {
         }
     }, [selectSkillsData]);
 
+    const debounceTimeout = 500;
+
     //debounce employees list fetch on employee name and skills filter change
     useEffect(() => {
-        const timeout = setTimeout(handleSearchInputChange, 500);
+        const timeout = setTimeout(handleSearchInputChange, debounceTimeout);
         return () => clearTimeout(timeout);
     }, [empNameFilter]);
 
     useEffect(() => {
-        const timeout = setTimeout(handleSkillSelectChange, 500);
+        const timeout = setTimeout(handleSkillSelectChange, debounceTimeout);
         return () => clearTimeout(timeout);
     }, [skillFilter]);
 

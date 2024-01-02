@@ -52,7 +52,7 @@ const ViewEmployeeDetails = () => {
                 employeeDetails.id === Number(employeeId) && (
                     <StyledEmpDetailsWrap>
                         <div className="view-emp-card">
-                            <div className="main-details">
+                            <div className="primary-employee-details">
                                 <img
                                     src={
                                         employeeDetails.photoId ||
@@ -79,7 +79,7 @@ const ViewEmployeeDetails = () => {
                                         `Location : ${notAvailableString}`}
                                 </p>
                             </div>
-                            <dl className="extended-details">
+                            <dl className="secondary-employee-details">
                                 <div className="data-entry">
                                     <dt>Employee ID</dt>
                                     <dd className="emp-id">

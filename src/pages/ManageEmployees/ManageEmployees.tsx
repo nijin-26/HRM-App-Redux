@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { empTableHeaders, initQueryParams } from './constants';
+import { empTableHeaders, defaultQueryParams } from './constants';
 import {
     StyledManageEmployeesWrap,
     StyledEmployeesTable,
@@ -33,8 +33,9 @@ const ManageEmployees: React.FC = () => {
         undefined
     );
 
-    const offset = Number(searchParams.get('offset')) || initQueryParams.offset;
-    const limit = Number(searchParams.get('limit')) || initQueryParams.limit;
+    const offset =
+        Number(searchParams.get('offset')) || defaultQueryParams.offset;
+    const limit = Number(searchParams.get('limit')) || defaultQueryParams.limit;
 
     const employeesListSlice = useAppSelector(
         selectEmployeesListSlice(offset, limit)
@@ -50,12 +51,13 @@ const ManageEmployees: React.FC = () => {
     const getSearchParams = (): IQueryParams => {
         const limit = searchParams.get('limit')
             ? Number(searchParams.get('limit'))
-            : initQueryParams.limit;
+            : defaultQueryParams.limit;
         const offset = searchParams.get('offset')
             ? Number(searchParams.get('offset'))
-            : initQueryParams.offset;
-        const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
-        const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
+            : defaultQueryParams.offset;
+        const sortBy = searchParams.get('sortBy') ?? defaultQueryParams.sortBy;
+        const sortDir =
+            searchParams.get('sortDir') ?? defaultQueryParams.sortDir;
         const skillIds = searchParams.get('skillIds');
         const search = searchParams.get('search');
 
