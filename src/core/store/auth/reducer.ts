@@ -10,7 +10,7 @@ const initialState: IAuth = {
 
 const AuthReducer = (state = initialState, action: ActionType): IAuth => {
     switch (action.type) {
-        case 'LOGIN_USER_SUCCESS':
+        case 'LOGIN_USER':
             return { ...state, isLoggedIn: true };
         case 'LOGOUT_USER':
             return { ...state, isLoggedIn: false };
