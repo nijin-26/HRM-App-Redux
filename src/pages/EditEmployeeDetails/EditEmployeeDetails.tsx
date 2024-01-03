@@ -10,6 +10,7 @@ import {
     selectRequestInProgress,
 } from '../../core/store/requests/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
+import { clearRequest } from '../../core/store/requests/actions';
 
 const EditEmployeeDetails: React.FC = () => {
     const navigate = useNavigate();
@@ -35,6 +36,7 @@ const EditEmployeeDetails: React.FC = () => {
 
     useEffect(() => {
         if (employeeFetchError) {
+            dispatch(clearRequest('GET_EMPLOYEE'));
             navigate('/view-employee', { replace: true });
         }
     }, [employeeFetchError]);

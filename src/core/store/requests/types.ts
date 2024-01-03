@@ -21,4 +21,15 @@ export interface IREQUEST_FAILED {
     };
 }
 
-export type ActionType = IREQUEST_STARTED | IREQUEST_FINISHED | IREQUEST_FAILED;
+export interface ICLEAR_REQUEST {
+    type: 'CLEAR_REQUEST';
+    payload: {
+        name: string;
+    };
+}
+
+export type ActionType =
+    | IREQUEST_STARTED
+    | IREQUEST_FINISHED
+    | IREQUEST_FAILED
+    | ICLEAR_REQUEST;

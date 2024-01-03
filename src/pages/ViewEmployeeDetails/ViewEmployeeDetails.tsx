@@ -11,6 +11,7 @@ import {
 } from '../../core/store/requests/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
 import { selectEmployeeDetails } from '../../core/store/employee/reducer';
+import { clearRequest } from '../../core/store/requests/actions';
 
 const ViewEmployeeDetails = () => {
     const dispatch = useAppDispatch();
@@ -39,6 +40,7 @@ const ViewEmployeeDetails = () => {
 
     useEffect(() => {
         if (employeeFetchError) {
+            dispatch(clearRequest('GET_EMPLOYEE'));
             navigate('/view-employee', { replace: true });
         }
     }, [employeeFetchError]);

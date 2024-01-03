@@ -35,6 +35,15 @@ export const requestFailed = (
     };
 };
 
+export const clearRequest = (requestName: string): types.ICLEAR_REQUEST => {
+    return {
+        type: 'CLEAR_REQUEST',
+        payload: {
+            name: requestName,
+        },
+    };
+};
+
 export const requestHelper = async <T>(
     dispatch: AppDispatch,
     requestName: string,
