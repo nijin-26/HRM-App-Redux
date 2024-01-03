@@ -1,7 +1,7 @@
 import { RootState } from '..';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { modifyFetchedEmployeeData } from '../../../utils';
-import { ActionType } from './actions';
+import { ActionType } from './types';
 import { createSelector } from 'reselect';
 
 interface IEmployeeState {

@@ -3,6 +3,7 @@ import {
     IApiEmployeeSubmission,
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
+import * as types from './types';
 import { IQueryParams } from '../../../interfaces/common';
 import { toast } from 'react-toastify';
 import {
@@ -15,51 +16,11 @@ import { AppDispatch, AppThunk } from '..';
 import { requestHelper } from '../requests/actions';
 import { REQUESTS_ENUM } from '../requests/requestsEnum';
 
-//Action Definitions
-interface IFETCH_EMPLOYEES_SUCCESS {
-    type: 'FETCH_EMPLOYEES_SUCCESS';
-    payload: IApiEmployeesData;
-}
-
-interface IDELETE_EMPLOYEE_SUCCESS {
-    type: 'DELETE_EMPLOYEE_SUCCESS';
-    payload: number;
-}
-
-interface IADD_EMPLOYEE_SUCCESS {
-    type: 'ADD_EMPLOYEE_SUCCESS';
-    payload: {
-        apiSubmissionData: IApiEmployeeSubmission;
-        storeData: IApiEmployee;
-    };
-}
-
-interface IEDIT_EMPLOYEE_SUCCESS {
-    type: 'EDIT_EMPLOYEE_SUCCESS';
-    payload: {
-        apiSubmissionData: IApiEmployeeSubmission;
-        storeData: IApiEmployee;
-    };
-}
-
-interface IEMPLOYEE_LIST_CLEAR {
-    type: 'EMPLOYEE_LIST_CLEAR';
-}
-
-//Union Action Type
-export type ActionType =
-    | IFETCH_EMPLOYEES_SUCCESS
-    | IDELETE_EMPLOYEE_SUCCESS
-    | IADD_EMPLOYEE_SUCCESS
-    | IEDIT_EMPLOYEE_SUCCESS
-    | IEMPLOYEE_LIST_CLEAR;
-
 //Action Creators
-
 //EMPLOYEES LIST FETCH
 const fetchEmployeesSuccess = (
     employeesData: IApiEmployeesData
-): IFETCH_EMPLOYEES_SUCCESS => ({
+): types.IFETCH_EMPLOYEES_SUCCESS => ({
     type: 'FETCH_EMPLOYEES_SUCCESS',
     payload: employeesData,
 });
@@ -95,7 +56,7 @@ export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
 //EMPLOYEE DELETE
 const deleteEmployeeSuccess = (
     deletedEmpId: number
-): IDELETE_EMPLOYEE_SUCCESS => ({
+): types.IDELETE_EMPLOYEE_SUCCESS => ({
     type: 'DELETE_EMPLOYEE_SUCCESS',
     payload: deletedEmpId,
 });
@@ -119,7 +80,7 @@ export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
 const addEmployeeSuccess = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
-): IADD_EMPLOYEE_SUCCESS => ({
+): types.IADD_EMPLOYEE_SUCCESS => ({
     type: 'ADD_EMPLOYEE_SUCCESS',
     payload: { apiSubmissionData, storeData },
 });
@@ -150,7 +111,7 @@ export const addEmployeeAction = (
 const editEmployeeSuccess = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
-): IEDIT_EMPLOYEE_SUCCESS => ({
+): types.IEDIT_EMPLOYEE_SUCCESS => ({
     type: 'EDIT_EMPLOYEE_SUCCESS',
     payload: { apiSubmissionData, storeData },
 });
@@ -176,6 +137,6 @@ export const editEmployeeAction = (
 };
 
 //EMPLOYEE LIST CLEAR
-export const employeeListClear = (): IEMPLOYEE_LIST_CLEAR => ({
+export const employeeListClear = (): types.IEMPLOYEE_LIST_CLEAR => ({
     type: 'EMPLOYEE_LIST_CLEAR',
 });

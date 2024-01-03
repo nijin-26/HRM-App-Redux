@@ -1,5 +1,5 @@
 import { RootState } from '..';
-import { ActionType } from './actions';
+import { ActionType } from './types';
 
 interface IRequest {
     name: string;

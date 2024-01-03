@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
-import { ActionType } from './actions';
+import { ActionType } from './types';
 import { RootState } from '..';
 
 interface IEmployeesState {
