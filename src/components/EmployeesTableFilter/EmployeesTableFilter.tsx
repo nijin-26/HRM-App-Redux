@@ -51,6 +51,9 @@ const EmployeesTableFilter: React.FC = () => {
     };
 
     const handleClearBtnClick = () => {
+        if (!empNameFilter && !skillFilter.length) {
+            return;
+        }
         setSkillFilter([]);
         searchParams.delete('skillIds');
         setEmpNameFilter('');

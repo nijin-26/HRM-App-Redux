@@ -1,32 +1,8 @@
 import { AppDispatch } from '..';
-
-//Action Definitions
-export interface IREQUEST_STARTED {
-    type: 'REQUEST_STARTED';
-    payload: {
-        name: string;
-    };
-}
-
-export interface IREQUEST_FINISHED {
-    type: 'REQUEST_FINISHED';
-    payload: {
-        name: string;
-    };
-}
-
-export interface IREQUEST_FAILED {
-    type: 'REQUEST_FAILED';
-    payload: {
-        name: string;
-        error: Error;
-    };
-}
-
-export type ActionType = IREQUEST_STARTED | IREQUEST_FINISHED | IREQUEST_FAILED;
+import * as types from './types';
 
 //Action creators
-export const requestStarted = (requestName: string): IREQUEST_STARTED => {
+export const requestStarted = (requestName: string): types.IREQUEST_STARTED => {
     return {
         type: 'REQUEST_STARTED',
         payload: {
@@ -35,7 +11,9 @@ export const requestStarted = (requestName: string): IREQUEST_STARTED => {
     };
 };
 
-export const requestFinished = (requestName: string): IREQUEST_FINISHED => {
+export const requestFinished = (
+    requestName: string
+): types.IREQUEST_FINISHED => {
     return {
         type: 'REQUEST_FINISHED',
         payload: {
@@ -47,7 +25,7 @@ export const requestFinished = (requestName: string): IREQUEST_FINISHED => {
 export const requestFailed = (
     requestName: string,
     requestError: Error
-): IREQUEST_FAILED => {
+): types.IREQUEST_FAILED => {
     return {
         type: 'REQUEST_FAILED',
         payload: {

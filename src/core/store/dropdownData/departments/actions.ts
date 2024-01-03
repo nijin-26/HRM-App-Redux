@@ -1,22 +1,15 @@
 import { IApiDepartment } from "../../../../interfaces/ApiDataInterface";
+import * as types from "./types";
 import { AppDispatch, AppThunk } from "../..";
 import { toast } from "react-toastify";
 import { getDepartments } from "../../../api";
 import { requestHelper } from "../../requests/actions";
 import { REQUESTS_ENUM } from "../../requests/requestsEnum";
 
-// Actions definitions
-interface IFETCH_DEPARTMENTS_SUCCESS {
-  type: "FETCH_DEPARTMENTS_SUCCESS";
-  payload: IApiDepartment[];
-}
-
-export type ActionType = IFETCH_DEPARTMENTS_SUCCESS;
-
 // Action Creators
 export const fetchDepartmentsSuccess = (
   departmentsData: IApiDepartment[]
-): IFETCH_DEPARTMENTS_SUCCESS => ({
+): types.IFETCH_DEPARTMENTS_SUCCESS => ({
   type: "FETCH_DEPARTMENTS_SUCCESS",
   payload: departmentsData,
 });

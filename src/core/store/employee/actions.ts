@@ -1,4 +1,5 @@
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
+import * as types from './types';
 import { toast } from 'react-toastify';
 import { AppDispatch, AppThunk, RootState } from '..';
 import { getEmployee } from '../../api';
@@ -6,26 +7,14 @@ import { requestHelper } from '../requests/actions';
 import { REQUESTS_ENUM } from '../requests/requestsEnum';
 import { EmptyResponseDataError } from '../../../utils/errors';
 
-//Action Types
-interface IFETCH_EMPLOYEE_REQUEST {
-    type: 'FETCH_EMPLOYEE_REQUEST';
-}
-
-interface IFETCH_EMPLOYEE_SUCCESS {
-    type: 'FETCH_EMPLOYEE_SUCCESS';
-    payload: IApiEmployee;
-}
-
-export type ActionType = IFETCH_EMPLOYEE_REQUEST | IFETCH_EMPLOYEE_SUCCESS;
-
 //Action Creators
-export const fetchEmployeeRequest = (): IFETCH_EMPLOYEE_REQUEST => ({
+export const fetchEmployeeRequest = (): types.IFETCH_EMPLOYEE_REQUEST => ({
     type: 'FETCH_EMPLOYEE_REQUEST',
 });
 
 export const fetchEmployeeSuccess = (
     employeeData: IApiEmployee
-): IFETCH_EMPLOYEE_SUCCESS => ({
+): types.IFETCH_EMPLOYEE_SUCCESS => ({
     type: 'FETCH_EMPLOYEE_SUCCESS',
     payload: employeeData,
 });

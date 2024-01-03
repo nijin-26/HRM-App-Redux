@@ -1,4 +1,4 @@
-import { ActionType } from './actions';
+import { ActionType } from './types';
 import { IReactSelectOption } from '../../../../interfaces/common';
 import { modifySelectOptionsArray } from '../../../../utils';
 

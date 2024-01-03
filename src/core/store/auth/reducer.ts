@@ -1,22 +1,22 @@
-import { ActionType } from './actions';
+import { ActionType } from "./types";
 
 interface IAuth {
-    isLoggedIn: boolean;
+  isLoggedIn: boolean;
 }
 
 const initialState: IAuth = {
-    isLoggedIn: false,
+  isLoggedIn: false,
 };
 
 const AuthReducer = (state = initialState, action: ActionType): IAuth => {
-    switch (action.type) {
-        case 'LOGIN_USER':
-            return { ...state, isLoggedIn: true };
-        case 'LOGOUT_USER':
-            return { ...state, isLoggedIn: false };
-        default:
-            return state;
-    }
+  switch (action.type) {
+    case "LOGIN_USER":
+      return { ...state, isLoggedIn: true };
+    case "LOGOUT_USER":
+      return { ...state, isLoggedIn: false };
+    default:
+      return state;
+  }
 };
 
 export default AuthReducer;
