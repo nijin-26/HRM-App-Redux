@@ -4,7 +4,6 @@ import {
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
 import * as types from './types';
-import { ISearchParams } from '../../../interfaces/common';
 import { toast } from 'react-toastify';
 import {
     getEmployeesList,
@@ -15,6 +14,7 @@ import {
 import { AppDispatch, AppThunk } from '..';
 import { requestHelper } from '../requests/actions';
 import { REQUESTS_ENUM } from '../requests/requestsEnum';
+import { getEmployeesListFetchSearchParams } from '../../../utils';
 
 //Action Creators
 //EMPLOYEES LIST FETCH
@@ -26,9 +26,7 @@ const fetchEmployeesSuccess = (
 });
 
 //Thunk Action creator
-export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
-    const { offset, limit, sortBy, sortDir, skillIds, search } = searchParams;
-
+export const fetchEmployees = (searchParams: URLSearchParams): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             const { data } = await requestHelper(
@@ -36,16 +34,12 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
                 REQUESTS_ENUM.getEmployeesList,
                 () =>
                     getEmployeesList(
-                        offset,
-                        limit,
-                        sortBy,
-                        sortDir,
-                        skillIds,
-                        search
+                        getEmployeesListFetchSearchParams(searchParams)
                     )
             );
             dispatch(fetchEmployeesSuccess(data.data));
         } catch (error) {
+            console.log(error);
             toast.error(
                 'Could not fetch employee details. Please try reloading the page.'
             );

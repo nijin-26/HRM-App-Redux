@@ -50,6 +50,6 @@ export interface ISearchParams {
     limit: number;
     sortBy: string;
     sortDir: string;
-    skillIds: string | null;
-    search: string | null;
+    skillIds: string;
+    search: string;
 }

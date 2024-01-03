@@ -14,7 +14,6 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from '../../components';
-import { ISearchParams } from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
 import {
     fetchEmployees,
@@ -49,22 +48,6 @@ const ManageEmployees: React.FC = () => {
         selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
 
-    const getSearchParams = (): ISearchParams => {
-        const limit = searchParams.get('limit')
-            ? Number(searchParams.get('limit'))
-            : defaultSearchParams.limit;
-        const offset = searchParams.get('offset')
-            ? Number(searchParams.get('offset'))
-            : defaultSearchParams.offset;
-        const sortBy = searchParams.get('sortBy') ?? defaultSearchParams.sortBy;
-        const sortDir =
-            searchParams.get('sortDir') ?? defaultSearchParams.sortDir;
-        const skillIds = searchParams.get('skillIds');
-        const search = searchParams.get('search');
-
-        return { limit, offset, sortBy, sortDir, skillIds, search };
-    };
-
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empIdToDelete) {
@@ -73,7 +56,7 @@ const ManageEmployees: React.FC = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchEmployees(getSearchParams()));
+        dispatch(fetchEmployees(searchParams));
     }, [searchParams]);
 
     return (

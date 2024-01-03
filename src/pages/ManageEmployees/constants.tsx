@@ -95,6 +95,6 @@ export const defaultSearchParams: ISearchParams = {
     limit: 10,
     sortBy: 'id',
     sortDir: 'desc',
-    skillIds: null,
+    skillIds: '',
     search: '',
 };
