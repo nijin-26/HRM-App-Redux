@@ -1,3 +1,13 @@
+export interface IAPISignInRequest {
+    username: string;
+    password: string;
+}
+
+export interface IAPISignInResponse {
+    access_token: string;
+    refresh_token: string;
+}
+
 export interface IApiEmployee {
     id: number;
     firstName: string;
