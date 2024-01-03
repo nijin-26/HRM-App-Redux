@@ -31,6 +31,7 @@ const Navbar = styled.nav`
         align-items: center;
         height: 100%;
         margin: 0 0 0 auto;
+        gap: 20px;
 
         & li {
             height: 100%;

@@ -1,4 +1,6 @@
-import { useAppContext } from '../../core/contexts/AppContext';
+import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
+import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { Input, Button } from '..';
 import Select, { MultiValue } from 'react-select';
 import {
@@ -6,51 +8,115 @@ import {
     StyledEmployeesFilterWrap,
 } from './EmployeesTableFilter.style';
 import { IReactSelectOption } from '../../interfaces/common';
+import { employeeListClear } from '../../core/store/employeesList/actions';
 
 const EmployeesTableFilter: React.FC = () => {
-    const { appState, handleAppState } = useAppContext();
+    const dispatch = useAppDispatch();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-    const handleSearchInputChange = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        handleAppState({
-            ...appState,
-            employeeNameFilter: event.target.value.trimStart().toLowerCase(),
-        });
+    const [skillFilter, setSkillFilter] = useState<
+        MultiValue<IReactSelectOption>
+    >([]);
+    const [empNameFilter, setEmpNameFilter] = useState<string>(
+        searchParams.get('search') || ''
+    );
+
+    const selectSkillsData = useAppSelector(
+        (state) => state.dropdownData.skills.skillsData
+    );
+
+    const handleSearchInputChange = () => {
+        // dispatch(employeeListClear());
+        searchParams.set('offset', '0');
+
+        if (!empNameFilter) {
+            searchParams.delete('search');
+        } else {
+            searchParams.set('search', empNameFilter);
+        }
+        setSearchParams(searchParams);
     };
+
+    const handleSkillSelectChange = () => {
+        // dispatch(employeeListClear());
+        searchParams.set('offset', '0');
+
+        if (!skillFilter.length) {
+            searchParams.delete('skillIds');
+        } else {
+            const selectedOptionsValue = skillFilter.map(
+                (option) => option.value
+            );
+            searchParams.set('skillIds', selectedOptionsValue.toString());
+        }
+        setSearchParams(searchParams);
+    };
+
+    const handleClearBtnClick = () => {
+        setSkillFilter([]);
+        searchParams.delete('skillIds');
+        setEmpNameFilter('');
+        searchParams.delete('search');
+        dispatch(employeeListClear());
+        setSearchParams(searchParams);
+    };
+
+    // Update skill filter select dropdown state based on URL parameters
+    useEffect(() => {
+        if (selectSkillsData) {
+            const urlSelectedSkillValues = searchParams
+                .get('skillIds')
+                ?.split(',');
+
+            if (urlSelectedSkillValues) {
+                const selectedSkillsFromUrl = selectSkillsData.filter(
+                    (option) => urlSelectedSkillValues.includes(option.value)
+                );
+                setSkillFilter(selectedSkillsFromUrl);
+            }
+        }
+    }, [selectSkillsData]);
+
+    //debounce employees list fetch on employee name and skills filter change
+    useEffect(() => {
+        const timeout = setTimeout(handleSearchInputChange, 500);
+        return () => clearTimeout(timeout);
+    }, [empNameFilter]);
+
+    useEffect(() => {
+        const timeout = setTimeout(handleSkillSelectChange, 500);
+        return () => clearTimeout(timeout);
+    }, [skillFilter]);
 
     return (
         <StyledEmployeesFilterWrap>
             <Input
                 placeholder="Filter by Employee Name"
-                value={appState.employeeNameFilter}
-                onChange={handleSearchInputChange}
+                value={empNameFilter}
+                onChange={(event) => {
+                    setEmpNameFilter(
+                        event.target.value.trimStart().toLowerCase()
+                    );
+                    dispatch(employeeListClear());
+                }}
                 className="table-control-field"
             />
             <Select
-                options={appState.skills}
-                value={appState.skillsFilter}
+                options={selectSkillsData}
+                value={skillFilter}
                 name="searchSkills"
                 isMulti
                 closeMenuOnSelect={false}
                 styles={CustomSelectStyles}
                 placeholder="Filter by skills"
-                onChange={(options: MultiValue<IReactSelectOption>) => {
-                    handleAppState({
-                        ...appState,
-                        skillsFilter: [...options],
-                    });
+                onChange={(selectedOptions) => {
+                    setSkillFilter(selectedOptions);
+                    dispatch(employeeListClear());
                 }}
             />
             <Button
                 className="outline icon-btn margin-left-auto table-control-field"
-                onClick={() =>
-                    handleAppState({
-                        ...appState,
-                        employeeNameFilter: '',
-                        skillsFilter: [],
-                    })
-                }
+                onClick={handleClearBtnClick}
             >
                 <span>Clear Filters</span>
                 <span className="material-symbols-rounded">filter_alt_off</span>

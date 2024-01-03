@@ -1,7 +1,11 @@
+import { Button } from '..';
+import useAuth from '../../hooks/useAuth';
 import { StyledHeader, Navbar } from './Header.style';
 import { Link, NavLink } from 'react-router-dom';
 
 const Header: React.FC = () => {
+    const { logout } = useAuth();
+
     return (
         <StyledHeader>
             <Navbar>
@@ -13,6 +17,11 @@ const Header: React.FC = () => {
                         <NavLink to="/view-employee" end>
                             Search Employee
                         </NavLink>
+                    </li>
+                    <li>
+                        <Button onClick={logout} className="outline">
+                            Logout
+                        </Button>
                     </li>
                 </ul>
             </Navbar>
