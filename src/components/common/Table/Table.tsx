@@ -1,7 +1,7 @@
 import StyledTable from './Table.style';
 import { Loader, Button } from '../..';
 import { useSearchParams } from 'react-router-dom';
-import { defaultQueryParams } from '../../../pages/ManageEmployees/constants';
+import { defaultSearchParams } from '../../../pages/ManageEmployees/constants';
 import upArrow from '../../../assets/images/up-arrow.svg';
 import doubleArrow from '../../../assets/images/multi-arrow.svg';
 import { useAppDispatch } from '../../../hooks/storeHelpers';
@@ -54,13 +54,13 @@ const Table: React.FC<ITable> = ({
         if (currentSortBy === headerValue) {
             return searchParams.get('sortDir') || 'desc';
         }
-        return defaultQueryParams.sortDir;
+        return defaultSearchParams.sortDir;
     };
 
     const isSortActiveColumn = (headerValue: string) => {
         const currentSortBy = searchParams.get('sortBy');
 
-        if (!currentSortBy && headerValue === defaultQueryParams.sortBy) {
+        if (!currentSortBy && headerValue === defaultSearchParams.sortBy) {
             return 'true';
         }
         if (currentSortBy === headerValue) {

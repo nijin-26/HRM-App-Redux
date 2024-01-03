@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Button } from '../..';
 import PaginationContainer from './Pagination.style';
-import { defaultQueryParams } from '../../../pages/ManageEmployees/constants';
+import { defaultSearchParams } from '../../../pages/ManageEmployees/constants';
 
 interface IPagination {
     totalEntries: number | undefined;
@@ -11,8 +11,9 @@ interface IPagination {
 const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const offset =
-        Number(searchParams.get('offset')) || defaultQueryParams.offset;
-    const limit = Number(searchParams.get('limit')) || defaultQueryParams.limit;
+        Number(searchParams.get('offset')) || defaultSearchParams.offset;
+    const limit =
+        Number(searchParams.get('limit')) || defaultSearchParams.limit;
 
     const [currentPage, setCurrentPage] = useState<number>(
         Math.ceil(offset / limit) + 1
@@ -21,7 +22,7 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
     const isFirstPage = offset === 0;
     const isLastPage = offset + limit >= totalEntries;
 
-    const updateQueryParams = (newOffset: number) => {
+    const updateSearchParams = (newOffset: number) => {
         const newPageNumber = Math.floor(newOffset / limit) + 1;
         setCurrentPage(newPageNumber);
 
@@ -32,7 +33,7 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
 
     const handlePageChange = (newPage: number) => {
         const newOffset = (newPage - 1) * limit;
-        updateQueryParams(newOffset);
+        updateSearchParams(newOffset);
     };
 
     const handleInputPageChange = () => {

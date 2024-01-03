@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { empTableHeaders, defaultQueryParams } from './constants';
+import { empTableHeaders, defaultSearchParams } from './constants';
 import {
     StyledManageEmployeesWrap,
     StyledEmployeesTable,
@@ -14,7 +14,7 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from '../../components';
-import { IQueryParams } from '../../interfaces/common';
+import { ISearchParams } from '../../interfaces/common';
 import { getEmployeesListingData } from '../../utils';
 import {
     fetchEmployees,
@@ -34,8 +34,9 @@ const ManageEmployees: React.FC = () => {
     );
 
     const offset =
-        Number(searchParams.get('offset')) || defaultQueryParams.offset;
-    const limit = Number(searchParams.get('limit')) || defaultQueryParams.limit;
+        Number(searchParams.get('offset')) || defaultSearchParams.offset;
+    const limit =
+        Number(searchParams.get('limit')) || defaultSearchParams.limit;
 
     const employeesListSlice = useAppSelector(
         selectEmployeesListSlice(offset, limit)
@@ -48,16 +49,16 @@ const ManageEmployees: React.FC = () => {
         selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
 
-    const getSearchParams = (): IQueryParams => {
+    const getSearchParams = (): ISearchParams => {
         const limit = searchParams.get('limit')
             ? Number(searchParams.get('limit'))
-            : defaultQueryParams.limit;
+            : defaultSearchParams.limit;
         const offset = searchParams.get('offset')
             ? Number(searchParams.get('offset'))
-            : defaultQueryParams.offset;
-        const sortBy = searchParams.get('sortBy') ?? defaultQueryParams.sortBy;
+            : defaultSearchParams.offset;
+        const sortBy = searchParams.get('sortBy') ?? defaultSearchParams.sortBy;
         const sortDir =
-            searchParams.get('sortDir') ?? defaultQueryParams.sortDir;
+            searchParams.get('sortDir') ?? defaultSearchParams.sortDir;
         const skillIds = searchParams.get('skillIds');
         const search = searchParams.get('search');
 

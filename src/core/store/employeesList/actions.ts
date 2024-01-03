@@ -4,7 +4,7 @@ import {
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
 import * as types from './types';
-import { IQueryParams } from '../../../interfaces/common';
+import { ISearchParams } from '../../../interfaces/common';
 import { toast } from 'react-toastify';
 import {
     getEmployeesList,
@@ -26,8 +26,8 @@ const fetchEmployeesSuccess = (
 });
 
 //Thunk Action creator
-export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
-    const { offset, limit, sortBy, sortDir, skillIds, search } = searchparams;
+export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
+    const { offset, limit, sortBy, sortDir, skillIds, search } = searchParams;
 
     return async (dispatch: AppDispatch) => {
         try {
@@ -36,8 +36,8 @@ export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
                 REQUESTS_ENUM.getEmployeesList,
                 () =>
                     getEmployeesList(
-                        limit,
                         offset,
+                        limit,
                         sortBy,
                         sortDir,
                         skillIds,
