@@ -21,13 +21,10 @@ export const fetchEmployeeSuccess = (
 
 export const fetchEmployee = (employeeId: number): AppThunk => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
-        const employeesList = getState().employees.employeesList;
-        const employeeInStore = employeesList.find(
-            (employee) => employee.id === employeeId
-        );
+        const employeeInStore = getState().employee.employeeData;
 
         try {
-            if (!employeeInStore) {
+            if (!employeeInStore || employeeInStore.id !== employeeId) {
                 const { data: response } = await requestHelper(
                     dispatch,
                     REQUESTS_ENUM.getEmployee,
