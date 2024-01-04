@@ -1,5 +1,5 @@
-import { StyledHeader, Navbar } from './Header.style';
-import { Link, NavLink } from 'react-router-dom';
+import { StyledHeader, Navbar } from "./Header.style";
+import { Link, NavLink } from "react-router-dom";
 
 const Header: React.FC = () => {
     return (

@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { keyframes } from 'styled-components';
+import styled from "styled-components";
+import { keyframes } from "styled-components";
 
 const Rotation = keyframes`
     0% {rotate: 0deg;}

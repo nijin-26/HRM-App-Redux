@@ -1,5 +1,5 @@
-import styled from 'styled-components';
-import { Table } from '../../components';
+import styled from "styled-components";
+import { Table } from "../../components";
 
 export const StyledManageEmployeesWrap = styled.section`
     display: flex;
@@ -36,7 +36,7 @@ export const StyledEmployeesTable = styled(Table)`
 
             &:hover {
                 scale: 1.2;
-                font-variation-settings: 'FILL' 1;
+                font-variation-settings: "FILL" 1;
             }
         }
 

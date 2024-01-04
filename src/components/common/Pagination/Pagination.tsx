@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { Button } from '../..';
-import PaginationContainer from './Pagination.style';
-import { defaultSearchParams } from '../../../pages/ManageEmployees/constants';
+import React, { useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import { Button } from "../..";
+import PaginationContainer from "./Pagination.style";
+import { defaultSearchParams } from "../../../pages/ManageEmployees/constants";
 
 interface IPagination {
     totalEntries: number | undefined;
@@ -11,9 +11,9 @@ interface IPagination {
 const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
     const [searchParams, setSearchParams] = useSearchParams();
     const offset =
-        Number(searchParams.get('offset')) || defaultSearchParams.offset;
+        Number(searchParams.get("offset")) || defaultSearchParams.offset;
     const limit =
-        Number(searchParams.get('limit')) || defaultSearchParams.limit;
+        Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
     const [currentPage, setCurrentPage] = useState<number>(
         Math.ceil(offset / limit) + 1
@@ -26,8 +26,8 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
         const newPageNumber = Math.floor(newOffset / limit) + 1;
         setCurrentPage(newPageNumber);
 
-        searchParams.set('offset', String(newOffset));
-        searchParams.set('limit', String(limit));
+        searchParams.set("offset", String(newOffset));
+        searchParams.set("limit", String(limit));
         setSearchParams(searchParams);
     };
 
@@ -78,13 +78,13 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
                             const inputText = e.target.value;
                             if (
                                 /^[0-9]\d*$/.test(inputText) ||
-                                inputText === ''
+                                inputText === ""
                             ) {
                                 setCurrentPage(Number(inputText));
                             }
                         }}
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter') {
+                            if (e.key === "Enter") {
                                 handleInputPageChange();
                             }
                         }}
@@ -121,7 +121,7 @@ const Pagination: React.FC<IPagination> = ({ totalEntries = 0 }) => {
             </div>
             {totalEntries > 0 && (
                 <span>
-                    {offset + 1}-{Math.min(offset + limit, totalEntries)} of{' '}
+                    {offset + 1}-{Math.min(offset + limit, totalEntries)} of{" "}
                     {totalEntries} items
                 </span>
             )}

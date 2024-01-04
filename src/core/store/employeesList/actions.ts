@@ -2,26 +2,26 @@ import {
     IApiEmployee,
     IApiEmployeeSubmission,
     IApiEmployeesData,
-} from '../../../interfaces/ApiDataInterface';
-import * as types from './types';
-import { toast } from 'react-toastify';
+} from "../../../interfaces/ApiDataInterface";
+import * as types from "./types";
+import { toast } from "react-toastify";
 import {
     getEmployeesList,
     deleteEmployee,
     addEmployee,
     editEmployee,
-} from '../../api';
-import { AppDispatch, AppThunk } from '..';
-import { requestHelper } from '../requests/actions';
-import { REQUESTS_ENUM } from '../requests/requestsEnum';
-import { ISearchParams } from '../../../interfaces/common';
+} from "../../api";
+import { AppDispatch, AppThunk } from "..";
+import { requestHelper } from "../requests/actions";
+import { REQUESTS_ENUM } from "../requests/requestsEnum";
+import { ISearchParams } from "../../../interfaces/common";
 
 //Action Creators
 //EMPLOYEES LIST FETCH
 const fetchEmployeesSuccess = (
     employeesData: IApiEmployeesData
 ): types.IFETCH_EMPLOYEES_SUCCESS => ({
-    type: 'FETCH_EMPLOYEES_SUCCESS',
+    type: "FETCH_EMPLOYEES_SUCCESS",
     payload: employeesData,
 });
 
@@ -38,7 +38,7 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
         } catch (error) {
             console.log(error);
             toast.error(
-                'Could not fetch employee details. Please try reloading the page.'
+                "Could not fetch employee details. Please try reloading the page."
             );
         }
     };
@@ -48,7 +48,7 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
 const deleteEmployeeSuccess = (
     deletedEmpId: number
 ): types.IDELETE_EMPLOYEE_SUCCESS => ({
-    type: 'DELETE_EMPLOYEE_SUCCESS',
+    type: "DELETE_EMPLOYEE_SUCCESS",
     payload: deletedEmpId,
 });
 
@@ -60,9 +60,9 @@ export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
                 deleteEmployee(empIdToDelete)
             );
             dispatch(deleteEmployeeSuccess(empIdToDelete));
-            toast.success('Employee deleted Successfully');
+            toast.success("Employee deleted Successfully");
         } catch (error) {
-            toast.error('Employee deletion failed');
+            toast.error("Employee deletion failed");
         }
     };
 };
@@ -72,7 +72,7 @@ const addEmployeeSuccess = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
 ): types.IADD_EMPLOYEE_SUCCESS => ({
-    type: 'ADD_EMPLOYEE_SUCCESS',
+    type: "ADD_EMPLOYEE_SUCCESS",
     payload: { apiSubmissionData, storeData },
 });
 
@@ -90,10 +90,10 @@ export const addEmployeeAction = (
             );
             storeData.id = data.data.id;
             dispatch(addEmployeeSuccess(apiSubmissionData, storeData));
-            toast.success('Employee details added successfully.');
+            toast.success("Employee details added successfully.");
         } catch (error) {
             console.log(error);
-            toast.error('Could not add employee details. Please try again.');
+            toast.error("Could not add employee details. Please try again.");
         }
     };
 };
@@ -103,7 +103,7 @@ const editEmployeeSuccess = (
     apiSubmissionData: IApiEmployeeSubmission,
     storeData: IApiEmployee
 ): types.IEDIT_EMPLOYEE_SUCCESS => ({
-    type: 'EDIT_EMPLOYEE_SUCCESS',
+    type: "EDIT_EMPLOYEE_SUCCESS",
     payload: { apiSubmissionData, storeData },
 });
 
@@ -119,15 +119,15 @@ export const editEmployeeAction = (
                 editEmployee(employeeId, apiSubmissionData)
             );
             dispatch(editEmployeeSuccess(apiSubmissionData, storeData));
-            toast.success('Employee details edited successfully.');
+            toast.success("Employee details edited successfully.");
         } catch (error) {
             console.log(error);
-            toast.error('Could not edit employee details. Please try again.');
+            toast.error("Could not edit employee details. Please try again.");
         }
     };
 };
 
 //EMPLOYEE LIST CLEAR
 export const employeeListClear = (): types.IEMPLOYEE_LIST_CLEAR => ({
-    type: 'EMPLOYEE_LIST_CLEAR',
+    type: "EMPLOYEE_LIST_CLEAR",
 });

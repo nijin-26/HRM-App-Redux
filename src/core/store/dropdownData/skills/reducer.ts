@@ -1,6 +1,6 @@
-import { ActionType } from './types';
-import { IReactSelectOption } from '../../../../interfaces/common';
-import { modifySelectOptionsArray } from '../../../../utils';
+import { ActionType } from "./types";
+import { IReactSelectOption } from "../../../../interfaces/common";
+import { modifySelectOptionsArray } from "../../../../utils";
 
 interface ISkillsState {
     skillsData: IReactSelectOption[];
@@ -15,10 +15,10 @@ const skillsReducer = (
     action: ActionType
 ): ISkillsState => {
     switch (action.type) {
-        case 'FETCH_SKILLS_SUCCESS':
+        case "FETCH_SKILLS_SUCCESS":
             return {
                 ...state,
-                skillsData: modifySelectOptionsArray(action.payload, 'skill'),
+                skillsData: modifySelectOptionsArray(action.payload, "skill"),
             };
 
         default:

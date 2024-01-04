@@ -1,21 +1,21 @@
-import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
-import * as types from './types';
-import { toast } from 'react-toastify';
-import { AppDispatch, AppThunk, RootState } from '..';
-import { getEmployee } from '../../api';
-import { requestHelper } from '../requests/actions';
-import { REQUESTS_ENUM } from '../requests/requestsEnum';
-import { EmptyResponseDataError } from '../../../utils/errors';
+import { IApiEmployee } from "../../../interfaces/ApiDataInterface";
+import * as types from "./types";
+import { toast } from "react-toastify";
+import { AppDispatch, AppThunk, RootState } from "..";
+import { getEmployee } from "../../api";
+import { requestHelper } from "../requests/actions";
+import { REQUESTS_ENUM } from "../requests/requestsEnum";
+import { EmptyResponseDataError } from "../../../utils/errors";
 
 //Action Creators
 export const fetchEmployeeRequest = (): types.IFETCH_EMPLOYEE_REQUEST => ({
-    type: 'FETCH_EMPLOYEE_REQUEST',
+    type: "FETCH_EMPLOYEE_REQUEST",
 });
 
 export const fetchEmployeeSuccess = (
     employeeData: IApiEmployee
 ): types.IFETCH_EMPLOYEE_SUCCESS => ({
-    type: 'FETCH_EMPLOYEE_SUCCESS',
+    type: "FETCH_EMPLOYEE_SUCCESS",
     payload: employeeData,
 });
 
@@ -32,7 +32,7 @@ export const fetchEmployee = (employeeId: number): AppThunk => {
                         const response = await getEmployee(employeeId);
                         if (!response.data.data) {
                             throw new EmptyResponseDataError(
-                                'No data in response'
+                                "No data in response"
                             );
                         }
                         return response;
@@ -45,10 +45,10 @@ export const fetchEmployee = (employeeId: number): AppThunk => {
         } catch (error) {
             console.log(error);
             if (error instanceof EmptyResponseDataError) {
-                toast.error('Could not find the requested employee.');
+                toast.error("Could not find the requested employee.");
             } else {
                 toast.error(
-                    'Could not fetch employee details. Please try reloading the page.'
+                    "Could not fetch employee details. Please try reloading the page."
                 );
             }
         }

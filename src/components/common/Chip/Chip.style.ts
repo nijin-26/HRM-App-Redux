@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledChip = styled.div`
     min-height: 25px;
@@ -21,7 +21,7 @@ const StyledChip = styled.div`
         color: var(--primary-clr);
 
         &:hover {
-            font-variation-settings: 'FILL' 1;
+            font-variation-settings: "FILL" 1;
         }
     }
 `;

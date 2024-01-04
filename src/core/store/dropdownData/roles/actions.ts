@@ -1,16 +1,16 @@
-import { IApiRole } from '../../../../interfaces/ApiDataInterface';
-import * as types from './types';
-import { toast } from 'react-toastify';
-import { getRoles } from '../../../api';
-import { AppDispatch, AppThunk } from '../..';
-import { requestHelper } from '../../requests/actions';
-import { REQUESTS_ENUM } from '../../requests/requestsEnum';
+import { IApiRole } from "../../../../interfaces/ApiDataInterface";
+import * as types from "./types";
+import { toast } from "react-toastify";
+import { getRoles } from "../../../api";
+import { AppDispatch, AppThunk } from "../..";
+import { requestHelper } from "../../requests/actions";
+import { REQUESTS_ENUM } from "../../requests/requestsEnum";
 
 // Action Creators
 export const fetchRolesSuccess = (
     rolesData: IApiRole[]
 ): types.IFETCH_ROLES_SUCCESS => ({
-    type: 'FETCH_ROLES_SUCCESS',
+    type: "FETCH_ROLES_SUCCESS",
     payload: rolesData,
 });
 
@@ -27,7 +27,7 @@ export const fetchRoles = (): AppThunk => {
         } catch (error) {
             console.log(error);
             toast.error(
-                'Could not fetch roles list. Please try reloading the page.'
+                "Could not fetch roles list. Please try reloading the page."
             );
         }
     };

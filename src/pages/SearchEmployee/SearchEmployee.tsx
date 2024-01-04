@@ -1,21 +1,21 @@
-import FormContainer from './SearchEmployee.style';
-import { Formik, Field, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-import { useNavigate } from 'react-router-dom';
-import { Button, LinkButton } from '../../components';
+import FormContainer from "./SearchEmployee.style";
+import { Formik, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import { useNavigate } from "react-router-dom";
+import { Button, LinkButton } from "../../components";
 
 const SearchEmployee = () => {
     const navigate = useNavigate();
     return (
         <FormContainer>
             <Formik
-                initialValues={{ employeeId: '' }}
+                initialValues={{ employeeId: "" }}
                 validateOnBlur={false}
                 validationSchema={Yup.object().shape({
                     employeeId: Yup.number()
-                        .typeError('Employee Id must be a number')
-                        .positive('Employee Id must be greater than zero')
-                        .required('Please enter an employee Id'),
+                        .typeError("Employee Id must be a number")
+                        .positive("Employee Id must be greater than zero")
+                        .required("Please enter an employee Id"),
                 })}
                 onSubmit={(values) => {
                     navigate(`/view-employee/${values.employeeId}`);

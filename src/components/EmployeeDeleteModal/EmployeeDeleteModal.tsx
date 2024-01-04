@@ -1,6 +1,6 @@
-import StyledEmployeeDeleteModal from './EmployeeDeleteModal.style';
-import { Button } from '..';
-import { useState } from 'react';
+import StyledEmployeeDeleteModal from "./EmployeeDeleteModal.style";
+import { Button } from "..";
+import { useState } from "react";
 
 interface IEmployeeDeleteModal {
     confirmClickHandler: () => void;
@@ -13,7 +13,7 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
     cancelClickHandler,
     employeeIdToDelete,
 }) => {
-    const [inputEmpId, setInputEmpId] = useState('');
+    const [inputEmpId, setInputEmpId] = useState("");
 
     const isEmpIdEqual = employeeIdToDelete === Number(inputEmpId);
 
@@ -49,7 +49,7 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
                     <Button
                         className="outline"
                         onClick={() => {
-                            setInputEmpId('');
+                            setInputEmpId("");
                             cancelClickHandler();
                         }}
                     >

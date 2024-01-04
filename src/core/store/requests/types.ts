@@ -1,20 +1,20 @@
 //Action Definitions
 export interface IREQUEST_STARTED {
-    type: 'REQUEST_STARTED';
+    type: "REQUEST_STARTED";
     payload: {
         name: string;
     };
 }
 
 export interface IREQUEST_FINISHED {
-    type: 'REQUEST_FINISHED';
+    type: "REQUEST_FINISHED";
     payload: {
         name: string;
     };
 }
 
 export interface IREQUEST_FAILED {
-    type: 'REQUEST_FAILED';
+    type: "REQUEST_FAILED";
     payload: {
         name: string;
         error: Error;
@@ -22,7 +22,7 @@ export interface IREQUEST_FAILED {
 }
 
 export interface ICLEAR_REQUEST {
-    type: 'CLEAR_REQUEST';
+    type: "CLEAR_REQUEST";
     payload: {
         name: string;
     };

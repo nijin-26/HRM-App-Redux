@@ -1,4 +1,4 @@
-import { Field, useField } from 'formik';
+import { Field, useField } from "formik";
 
 interface ITextarea {
     label: string;
@@ -16,7 +16,7 @@ const CustomTextarea: React.FC<ITextarea> = ({ label, required, ...props }) => {
         <>
             <label
                 htmlFor={props.id || props.name}
-                className={required ? 'required-field' : ''}
+                className={required ? "required-field" : ""}
             >
                 {label}
             </label>
@@ -24,7 +24,7 @@ const CustomTextarea: React.FC<ITextarea> = ({ label, required, ...props }) => {
                 as="textarea"
                 {...field}
                 {...props}
-                className={meta.touched && meta.error ? 'invalid' : ''}
+                className={meta.touched && meta.error ? "invalid" : ""}
             />
             {meta.touched && meta.error ? (
                 <div className="error-msg">{meta.error}</div>

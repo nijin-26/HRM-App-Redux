@@ -9,40 +9,40 @@ import EditEmployeeDetails from "../../pages/EditEmployeeDetails/EditEmployeeDet
 import ErrorPage from "../../pages/ErrorPage/ErrorPage";
 
 const router = createBrowserRouter([
-  {
-    element: <Layout></Layout>,
-    children: [
-      {
-        path: "/",
-        element: <Navigate to="employees" replace={true} />,
-      },
-      {
-        path: "employees",
-        element: <ManageEmployees />,
-      },
-      {
-        path: "add-employee",
-        element: <AddEmployeeDetails />,
-      },
-      {
-        path: "edit-employee",
-        element: <Navigate to="/view-employee" replace={true} />,
-      },
-      {
-        path: "edit-employee/:employeeId",
-        element: <EditEmployeeDetails />,
-      },
-      {
-        path: "view-employee",
-        element: <SearchEmployee />,
-      },
-      {
-        path: "view-employee/:employeeId",
-        element: <ViewEmployeeDetails />,
-      },
-    ],
-    errorElement: <ErrorPage />,
-  },
+    {
+        element: <Layout></Layout>,
+        children: [
+            {
+                path: "/",
+                element: <Navigate to="employees" replace={true} />,
+            },
+            {
+                path: "employees",
+                element: <ManageEmployees />,
+            },
+            {
+                path: "add-employee",
+                element: <AddEmployeeDetails />,
+            },
+            {
+                path: "edit-employee",
+                element: <Navigate to="/view-employee" replace={true} />,
+            },
+            {
+                path: "edit-employee/:employeeId",
+                element: <EditEmployeeDetails />,
+            },
+            {
+                path: "view-employee",
+                element: <SearchEmployee />,
+            },
+            {
+                path: "view-employee/:employeeId",
+                element: <ViewEmployeeDetails />,
+            },
+        ],
+        errorElement: <ErrorPage />,
+    },
 ]);
 
 export default router;

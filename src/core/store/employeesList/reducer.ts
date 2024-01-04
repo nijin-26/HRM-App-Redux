@@ -1,7 +1,7 @@
-import { createSelector } from 'reselect';
-import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
-import { ActionType } from './types';
-import { RootState } from '..';
+import { createSelector } from "reselect";
+import { IApiEmployee } from "../../../interfaces/ApiDataInterface";
+import { ActionType } from "./types";
+import { RootState } from "..";
 
 interface IEmployeesState {
     employeesList: IApiEmployee[];
@@ -18,7 +18,7 @@ const employeesReducer = (
     action: ActionType
 ): IEmployeesState => {
     switch (action.type) {
-        case 'FETCH_EMPLOYEES_SUCCESS':
+        case "FETCH_EMPLOYEES_SUCCESS":
             const employeeListIds = new Set(
                 state.employeesList.map((employee) => employee.id)
             );
@@ -33,7 +33,7 @@ const employeesReducer = (
                     ),
                 ],
             };
-        case 'DELETE_EMPLOYEE_SUCCESS':
+        case "DELETE_EMPLOYEE_SUCCESS":
             return {
                 ...state,
                 count: state.count ? state.count - 1 : state.count,
@@ -41,7 +41,7 @@ const employeesReducer = (
                     (emp) => emp.id !== action.payload
                 ),
             };
-        case 'ADD_EMPLOYEE_SUCCESS':
+        case "ADD_EMPLOYEE_SUCCESS":
             return {
                 ...state,
                 count: state.count ? state.count + 1 : 0,
@@ -50,7 +50,7 @@ const employeesReducer = (
                     action.payload.storeData,
                 ],
             };
-        case 'EDIT_EMPLOYEE_SUCCESS':
+        case "EDIT_EMPLOYEE_SUCCESS":
             return {
                 ...state,
                 employeesList: state.employeesList.map((employee) =>
@@ -59,7 +59,7 @@ const employeesReducer = (
                         : employee
                 ),
             };
-        case 'EMPLOYEE_LIST_CLEAR':
+        case "EMPLOYEE_LIST_CLEAR":
             return {
                 ...state,
                 count: 0,

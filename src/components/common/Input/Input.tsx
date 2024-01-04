@@ -1,4 +1,4 @@
-import StyledInput from './Input.style';
+import StyledInput from "./Input.style";
 
 interface IInput {
     placeholder?: string;
@@ -8,7 +8,7 @@ interface IInput {
     onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-const Input: React.FC<IInput> = ({ type = 'text', ...props }) => {
+const Input: React.FC<IInput> = ({ type = "text", ...props }) => {
     return <StyledInput type={type} {...props} />;
 };
 

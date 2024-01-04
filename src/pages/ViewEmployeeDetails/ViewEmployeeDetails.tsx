@@ -1,17 +1,17 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import StyledEmpDetailsWrap from './ViewEmployeeDetails.style';
-import { Loader, Chip, LinkButton, Button } from '../../components';
-import profilePictureAvatar from '../../assets/images/employee-avatar.svg';
-import { fetchEmployee } from '../../core/store/employee/actions';
+import { useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import StyledEmpDetailsWrap from "./ViewEmployeeDetails.style";
+import { Loader, Chip, LinkButton, Button } from "../../components";
+import profilePictureAvatar from "../../assets/images/employee-avatar.svg";
+import { fetchEmployee } from "../../core/store/employee/actions";
 import {
     selectRequestError,
     selectRequestInProgress,
-} from '../../core/store/requests/reducer';
-import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
-import { selectEmployeeDetails } from '../../core/store/employee/reducer';
-import { clearRequest } from '../../core/store/requests/actions';
+} from "../../core/store/requests/reducer";
+import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
+import { selectEmployeeDetails } from "../../core/store/employee/reducer";
+import { clearRequest } from "../../core/store/requests/actions";
 
 const ViewEmployeeDetails = () => {
     const dispatch = useAppDispatch();
@@ -19,7 +19,7 @@ const ViewEmployeeDetails = () => {
     const { employeeId } = useParams();
 
     if (!employeeId) {
-        navigate('/view-employee', { replace: true });
+        navigate("/view-employee", { replace: true });
         return;
     }
 
@@ -31,8 +31,8 @@ const ViewEmployeeDetails = () => {
         selectRequestError(REQUESTS_ENUM.getEmployee)
     );
 
-    const notAvailableString = 'N/A';
-    const noSkillsString = 'No Skills Entered';
+    const notAvailableString = "N/A";
+    const noSkillsString = "No Skills Entered";
 
     useEffect(() => {
         dispatch(fetchEmployee(Number(employeeId)));
@@ -40,8 +40,8 @@ const ViewEmployeeDetails = () => {
 
     useEffect(() => {
         if (employeeFetchError) {
-            dispatch(clearRequest('GET_EMPLOYEE'));
-            navigate('/view-employee', { replace: true });
+            dispatch(clearRequest("GET_EMPLOYEE"));
+            navigate("/view-employee", { replace: true });
         }
     }, [employeeFetchError]);
 

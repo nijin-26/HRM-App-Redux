@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { empTableHeaders, defaultSearchParams } from './constants';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import { empTableHeaders, defaultSearchParams } from "./constants";
 import {
     StyledManageEmployeesWrap,
     StyledEmployeesTable,
-} from './ManageEmployees.style';
+} from "./ManageEmployees.style";
 import {
     Modal,
     Pagination,
@@ -13,16 +13,16 @@ import {
     LinkButton,
     Loader,
     EmployeeDeleteModal,
-} from '../../components';
-import { getEmployeesListingData } from '../../utils';
+} from "../../components";
+import { getEmployeesListingData } from "../../utils";
 import {
     fetchEmployees,
     deleteEmployeeAction,
-} from '../../core/store/employeesList/actions';
-import { selectRequestInProgress } from '../../core/store/requests/reducer';
-import { selectEmployeesListSlice } from '../../core/store/employeesList/reducer';
-import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
-import { ISearchParams } from '../../interfaces/common';
+} from "../../core/store/employeesList/actions";
+import { selectRequestInProgress } from "../../core/store/requests/reducer";
+import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
+import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
+import { ISearchParams } from "../../interfaces/common";
 
 const ManageEmployees: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -34,9 +34,9 @@ const ManageEmployees: React.FC = () => {
     );
 
     const offset =
-        Number(searchParams.get('offset')) || defaultSearchParams.offset;
+        Number(searchParams.get("offset")) || defaultSearchParams.offset;
     const limit =
-        Number(searchParams.get('limit')) || defaultSearchParams.limit;
+        Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
     const employeesListSlice = useAppSelector(
         selectEmployeesListSlice(offset, limit)
@@ -50,12 +50,12 @@ const ManageEmployees: React.FC = () => {
     );
 
     const getSearchParams = (): ISearchParams => {
-        const sortBy = searchParams.get('sortBy') || defaultSearchParams.sortBy;
+        const sortBy = searchParams.get("sortBy") || defaultSearchParams.sortBy;
         const sortDir =
-            searchParams.get('sortDir') || defaultSearchParams.sortDir;
+            searchParams.get("sortDir") || defaultSearchParams.sortDir;
         const skillIds =
-            searchParams.get('skillIds') || defaultSearchParams.skillIds;
-        const search = searchParams.get('search') || defaultSearchParams.search;
+            searchParams.get("skillIds") || defaultSearchParams.skillIds;
+        const search = searchParams.get("search") || defaultSearchParams.search;
 
         return { limit, offset, sortBy, sortDir, skillIds, search };
     };
@@ -106,7 +106,7 @@ const ManageEmployees: React.FC = () => {
                         {employeesCount && employeesCount > limit ? (
                             <Pagination
                                 totalEntries={employeesCount}
-                                key={searchParams.get('offset')}
+                                key={searchParams.get("offset")}
                             />
                         ) : null}
                     </StyledManageEmployeesWrap>
