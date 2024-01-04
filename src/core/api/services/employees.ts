@@ -4,16 +4,34 @@ import {
     IApiFetchEmployee,
     IApiFetchEmployeesArray,
 } from '../../../interfaces/ApiDataInterface';
+import { ISearchParams } from '../../../interfaces/common';
 import { API } from '../config/axios';
 
-export const getEmployeesList = (
-    limit: number,
-    offset: number,
-    sortBy: string,
-    sortDir: string,
-    skillIds: string | null,
-    employeeName: string | null
-) => {
+// export const getEmployeesList = (
+//     offset: number,
+//     limit: number,
+//     sortBy: string,
+//     sortDir: string,
+//     skillIds: string | null,
+//     employeeName: string | null
+// ) => {
+//     const skillsParam = skillIds ? `&skillIds=${skillIds}` : '';
+//     const EmpNameSearchParam = employeeName ? `&search=${employeeName}` : '';
+//     return API.get<IApiFetchEmployeesArray>(
+//         `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}${skillsParam}${EmpNameSearchParam}`
+//     );
+// };
+
+export const getEmployeesList = (searchParams: ISearchParams) => {
+    const {
+        offset,
+        limit,
+        sortBy,
+        sortDir,
+        skillIds,
+        search: employeeName,
+    } = searchParams;
+
     const skillsParam = skillIds ? `&skillIds=${skillIds}` : '';
     const EmpNameSearchParam = employeeName ? `&search=${employeeName}` : '';
     return API.get<IApiFetchEmployeesArray>(

@@ -3,12 +3,7 @@ import {
   IApiEmployeeSubmission,
   IApiEmployeesData,
 } from "../../../interfaces/ApiDataInterface";
-import { AppDispatch, AppThunk } from "..";
-import { requestHelper } from "../requests/actions";
-import { REQUESTS_ENUM } from "../requests/requestsEnum";
-
 import * as types from "./types";
-import { IQueryParams } from "../../../interfaces/common";
 import { toast } from "react-toastify";
 import {
   getEmployeesList,
@@ -16,6 +11,10 @@ import {
   addEmployee,
   editEmployee,
 } from "../../api";
+import { AppDispatch, AppThunk } from "..";
+import { requestHelper } from "../requests/actions";
+import { REQUESTS_ENUM } from "../requests/requestsEnum";
+import { getEmployeesListFetchSearchParams } from "../../../utils";
 
 //Action Creators
 //EMPLOYEES LIST FETCH
@@ -27,18 +26,17 @@ const fetchEmployeesSuccess = (
 });
 
 //Thunk Action creator
-export const fetchEmployees = (searchparams: IQueryParams): AppThunk => {
-  const { offset, limit, sortBy, sortDir, skillIds, search } = searchparams;
-
+export const fetchEmployees = (searchParams: URLSearchParams): AppThunk => {
   return async (dispatch: AppDispatch) => {
     try {
       const { data } = await requestHelper(
         dispatch,
         REQUESTS_ENUM.getEmployeesList,
-        () => getEmployeesList(limit, offset, sortBy, sortDir, skillIds, search)
+        () => getEmployeesList(getEmployeesListFetchSearchParams(searchParams))
       );
       dispatch(fetchEmployeesSuccess(data.data));
     } catch (error) {
+      console.log(error);
       toast.error(
         "Could not fetch employee details. Please try reloading the page."
       );

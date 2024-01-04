@@ -71,6 +71,13 @@ export const requestsRecuder = (
                         : request
                 ),
             };
+        case 'CLEAR_REQUEST':
+            return {
+                ...state,
+                requests: requests.filter(
+                    (request) => request.name !== action.payload.name
+                ),
+            };
         default:
             return state;
     }

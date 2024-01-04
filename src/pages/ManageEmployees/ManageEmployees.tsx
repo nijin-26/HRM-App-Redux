@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
-import { empTableHeaders, defaultQueryParams } from "./constants";
+import { empTableHeaders, defaultSearchParams } from "./constants";
 import {
   StyledManageEmployeesWrap,
   StyledEmployeesTable,
@@ -14,7 +14,6 @@ import {
   Loader,
   EmployeeDeleteModal,
 } from "../../components";
-import { IQueryParams } from "../../interfaces/common";
 import { getEmployeesListingData } from "../../utils";
 import {
   fetchEmployees,
@@ -37,9 +36,9 @@ const ManageEmployees = () => {
 
   // const [offset, setOffset] = useState(0);
   const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
-
-  let offset = Number(searchParams.get("offset")) || defaultQueryParams.offset;
-  let limit = Number(searchParams.get("limit")) || defaultQueryParams.limit;
+  const offset =
+    Number(searchParams.get("offset")) || defaultSearchParams.offset;
+  const limit = Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
   const employeesListSlice = useAppSelector(
     selectEmployeesListSlice(offset, limit)
@@ -52,28 +51,6 @@ const ManageEmployees = () => {
     selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
   );
 
-  const getSearchParams = (): IQueryParams => {
-    const limit = searchParams.get("limit")
-      ? Number(searchParams.get("limit"))
-      : defaultQueryParams.limit;
-    const offset = searchParams.get("offset")
-      ? Number(searchParams.get("offset"))
-      : defaultQueryParams.offset;
-    const sortBy = searchParams.get("sortBy") ?? defaultQueryParams.sortBy;
-    const sortDir = searchParams.get("sortDir") ?? defaultQueryParams.sortDir;
-    const skillIds = searchParams.get("skillIds");
-    const search = searchParams.get("search");
-    return {
-      limit,
-      // offset: toggleGridView ? offset : dynamicOffset,
-      offset,
-      sortBy,
-      sortDir,
-      skillIds,
-      search,
-    };
-  };
-
   const deleteConfirmHandler = () => {
     setIsModalOpen(false);
     if (empIdToDelete) {
@@ -82,7 +59,7 @@ const ManageEmployees = () => {
   };
 
   useEffect(() => {
-    dispatch(fetchEmployees(getSearchParams()));
+    dispatch(fetchEmployees(searchParams));
   }, [searchParams]);
 
   return (

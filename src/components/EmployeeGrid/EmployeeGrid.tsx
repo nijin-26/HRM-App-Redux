@@ -1,6 +1,6 @@
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHelpers";
-import { defaultQueryParams } from "../../pages/ManageEmployees/constants";
+import { defaultSearchParams } from "../../pages/ManageEmployees/constants";
 import { GridContainer } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
@@ -9,7 +9,7 @@ import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { Loader } from "..";
 import { useEffect, useRef, useState } from "react";
 import { fetchEmployees } from "../../core/store/employeesList/actions";
-import { IQueryParams } from "../../interfaces/common";
+import { ISearchParams } from "../../interfaces/common";
 
 const EmployeeGrid = ({
   setIsModalOpen,
@@ -33,20 +33,20 @@ const EmployeeGrid = ({
     selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
   );
 
-  const getSearchParams = (): IQueryParams => {
-    const sortBy = searchParams.get("sortBy") ?? defaultQueryParams.sortBy;
-    const sortDir = searchParams.get("sortDir") ?? defaultQueryParams.sortDir;
-    const skillIds = searchParams.get("skillIds");
-    const search = searchParams.get("search");
-    return {
-      limit,
-      offset,
-      sortBy,
-      sortDir,
-      skillIds,
-      search,
-    };
-  };
+  // const getSearchParams = (): ISearchParams => {
+  //   const sortBy = searchParams.get("sortBy") ?? defaultSearchParams.sortBy;
+  //   const sortDir = searchParams.get("sortDir") ?? defaultSearchParams.sortDir;
+  //   const skillIds = searchParams.get("skillIds");
+  //   const search = searchParams.get("search");
+  //   return {
+  //     limit,
+  //     offset,
+  //     sortBy,
+  //     sortDir,
+  //     skillIds,
+  //     search,
+  //   };
+  // };
 
   const handleLoadData = () => {
     let hasMore = true;
@@ -59,7 +59,7 @@ const EmployeeGrid = ({
       hasMore = false;
     }
     if (employeesFetchLoading || !hasMore) return;
-    dispatch(fetchEmployees(getSearchParams()));
+    dispatch(fetchEmployees(searchParams));
     setOffset((prev) => prev + limit);
   };
 

@@ -45,11 +45,11 @@ export interface IReactSelectOption {
   value: string;
 }
 
-export interface IQueryParams {
+export interface ISearchParams {
   offset: number;
   limit: number;
   sortBy: string;
   sortDir: string;
-  skillIds: string | null;
-  search: string | null;
+  skillIds: string;
+  search: string;
 }
