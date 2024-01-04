@@ -89,6 +89,7 @@ export const addEmployeeAction = (
                 () => addEmployee(apiSubmissionData)
             );
             storeData.id = data.data.id;
+            dispatch(employeeListClear());
             dispatch(addEmployeeSuccess(apiSubmissionData, storeData));
             toast.success('Employee details added successfully.');
         } catch (error) {
