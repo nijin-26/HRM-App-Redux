@@ -1,6 +1,6 @@
-import { Field, useField } from 'formik';
-import StyledRadioGrup from './CustomRadioGroup.style';
-import { IReactSelectOption } from '../../../interfaces/common';
+import { Field, useField } from "formik";
+import StyledRadioGrup from "./CustomRadioGroup.style";
+import { IReactSelectOption } from "../../../interfaces/common";
 
 interface IRadioGroup {
     label: string;
@@ -26,7 +26,7 @@ const CustomRadioGroup: React.FC<IRadioGroup> = ({
             <div
                 id={id}
                 className={`radio-group-label ${
-                    required ? 'required-field' : ''
+                    required ? "required-field" : ""
                 }`}
             >
                 {label}

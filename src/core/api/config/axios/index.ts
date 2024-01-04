@@ -1,9 +1,9 @@
-import axios, { InternalAxiosRequestConfig, AxiosResponse } from 'axios';
-import { onRequest, onRequestError } from './requestInterceptor';
-import { onResponse, onResponseError } from './responseInterceptor';
+import axios, { InternalAxiosRequestConfig, AxiosResponse } from "axios";
+import { onRequest, onRequestError } from "./requestInterceptor";
+import { onResponse, onResponseError } from "./responseInterceptor";
 
 export const API = axios.create({
-    baseURL: 'https://vipinms.cloud/',
+    baseURL: "https://vipinms.cloud/",
     timeout: 5000,
 });
 

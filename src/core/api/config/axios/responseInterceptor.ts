@@ -1,5 +1,5 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { refreshTokens } from '../../../../utils/cookie';
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { refreshTokens } from "../../../../utils/cookie";
 
 enum HTTP_STATUS {
     SUCCESS = 200,

@@ -1,6 +1,6 @@
-import { ActionType } from './types';
-import { IReactSelectOption } from '../../../../interfaces/common';
-import { modifySelectOptionsArray } from '../../../../utils';
+import { ActionType } from "./types";
+import { IReactSelectOption } from "../../../../interfaces/common";
+import { modifySelectOptionsArray } from "../../../../utils";
 
 interface IRolesState {
     rolesData: IReactSelectOption[];
@@ -15,10 +15,10 @@ const rolesReducer = (
     action: ActionType
 ): IRolesState => {
     switch (action.type) {
-        case 'FETCH_ROLES_SUCCESS':
+        case "FETCH_ROLES_SUCCESS":
             return {
                 ...state,
-                rolesData: modifySelectOptionsArray(action.payload, 'role'),
+                rolesData: modifySelectOptionsArray(action.payload, "role"),
             };
         default:
             return state;

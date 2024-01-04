@@ -1,8 +1,8 @@
-import { RootState } from '..';
-import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
-import { modifyFetchedEmployeeData } from '../../../utils';
-import { ActionType } from './types';
-import { createSelector } from 'reselect';
+import { RootState } from "..";
+import { IApiEmployee } from "../../../interfaces/ApiDataInterface";
+import { modifyFetchedEmployeeData } from "../../../utils";
+import { ActionType } from "./types";
+import { createSelector } from "reselect";
 
 interface IEmployeeState {
     employeeData: IApiEmployee | null;
@@ -17,7 +17,7 @@ const employeeReducer = (
     action: ActionType
 ): IEmployeeState => {
     switch (action.type) {
-        case 'FETCH_EMPLOYEE_SUCCESS':
+        case "FETCH_EMPLOYEE_SUCCESS":
             return {
                 ...state,
                 employeeData: action.payload,

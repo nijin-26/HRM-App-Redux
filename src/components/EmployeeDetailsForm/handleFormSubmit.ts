@@ -1,22 +1,22 @@
-import { toast } from 'react-toastify';
-import { IEmployee } from '../../interfaces/common';
+import { toast } from "react-toastify";
+import { IEmployee } from "../../interfaces/common";
 import {
     IApiEmployee,
     IApiEmployeeSubmission,
-} from '../../interfaces/ApiDataInterface';
-import { AppDispatch } from '../../core/store';
-import { getPhotoUrl } from '../../core/api/config/firebase';
+} from "../../interfaces/ApiDataInterface";
+import { AppDispatch } from "../../core/store";
+import { getPhotoUrl } from "../../core/api/config/firebase";
 import {
     addEmployeeAction,
     editEmployeeAction,
-} from '../../core/store/employeesList/actions';
+} from "../../core/store/employeesList/actions";
 
 const handleFormSubmit = async (
     formSubmitData: IEmployee,
     photoRef: HTMLInputElement | null,
     dispatch: AppDispatch
 ) => {
-    let photoUrl = '';
+    let photoUrl = "";
     try {
         if (formSubmitData.photoId) {
             photoUrl = formSubmitData.photoId;
@@ -26,7 +26,7 @@ const handleFormSubmit = async (
             photoUrl = await getPhotoUrl(photoRef.files[0]);
         }
     } catch (error) {
-        toast.error('Profile photo could not be uploaded.');
+        toast.error("Profile photo could not be uploaded.");
         console.log(error);
     }
 

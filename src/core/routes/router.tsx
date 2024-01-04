@@ -10,49 +10,49 @@ import AuthLayout from "../../layout/AuthLayout";
 import Login from "../../pages/Login/Login";
 
 const router = createBrowserRouter([
-  {
-    element: <AuthLayout />,
-    children: [
-      {
-        path: "login",
-        element: <Login />,
-      },
-    ],
-  },
-  {
-    element: <Layout />,
-    children: [
-      {
-        path: "/",
-        element: <Navigate to="employees" replace={true} />,
-      },
-      {
-        path: "employees",
-        element: <ManageEmployees />,
-      },
-      {
-        path: "add-employee",
-        element: <AddEmployeeDetails />,
-      },
-      {
-        path: "edit-employee",
-        element: <Navigate to="/view-employee" replace={true} />,
-      },
-      {
-        path: "edit-employee/:employeeId",
-        element: <EditEmployeeDetails />,
-      },
-      {
-        path: "view-employee",
-        element: <SearchEmployee />,
-      },
-      {
-        path: "view-employee/:employeeId",
-        element: <ViewEmployeeDetails />,
-      },
-    ],
-    errorElement: <ErrorPage />,
-  },
+    {
+        element: <AuthLayout />,
+        children: [
+            {
+                path: "login",
+                element: <Login />,
+            },
+        ],
+    },
+    {
+        element: <Layout />,
+        children: [
+            {
+                path: "/",
+                element: <Navigate to="employees" replace={true} />,
+            },
+            {
+                path: "employees",
+                element: <ManageEmployees />,
+            },
+            {
+                path: "add-employee",
+                element: <AddEmployeeDetails />,
+            },
+            {
+                path: "edit-employee",
+                element: <Navigate to="/view-employee" replace={true} />,
+            },
+            {
+                path: "edit-employee/:employeeId",
+                element: <EditEmployeeDetails />,
+            },
+            {
+                path: "view-employee",
+                element: <SearchEmployee />,
+            },
+            {
+                path: "view-employee/:employeeId",
+                element: <ViewEmployeeDetails />,
+            },
+        ],
+        errorElement: <ErrorPage />,
+    },
 ]);
 
 export default router;

@@ -1,14 +1,14 @@
-import { jwtDecode } from 'jwt-decode';
-import { renewAccessToken } from '../core/api/services/auth';
-import { toast } from 'react-toastify';
+import { jwtDecode } from "jwt-decode";
+import { renewAccessToken } from "../core/api/services/auth";
+import { toast } from "react-toastify";
 
-type cookieName = 'accessToken' | 'refreshToken';
+type cookieName = "accessToken" | "refreshToken";
 
 export const getCookie = (name: cookieName) => {
     const value = `; ${document.cookie}`;
     const parts: string[] = value?.split(`; ${name}=`);
     if (parts.length === 2) {
-        return parts?.pop()?.split(';')?.shift();
+        return parts?.pop()?.split(";")?.shift();
     }
     return null;
 };
@@ -27,28 +27,27 @@ export const setCookie = (name: cookieName, value: string) => {
     }
     const cookieValue =
         encodeURIComponent(value) +
-        (decodedToken.exp ? `; expires=${expiration.toUTCString()}` : '');
+        (decodedToken.exp ? `; expires=${expiration.toUTCString()}` : "");
 
     document.cookie = `${name}=${cookieValue}; path=/`;
 };
 
 export const refreshTokens = async () => {
-    const currentRefreshToken = getCookie('refreshToken');
+    const currentRefreshToken = getCookie("refreshToken");
     if (currentRefreshToken) {
         try {
-            const { data: newTokens } = await renewAccessToken(
-                currentRefreshToken
-            );
-            setCookie('accessToken', newTokens.access_token);
-            setCookie('refreshToken', newTokens.refresh_token);
+            const { data: newTokens } =
+                await renewAccessToken(currentRefreshToken);
+            setCookie("accessToken", newTokens.access_token);
+            setCookie("refreshToken", newTokens.refresh_token);
             return newTokens;
         } catch (error) {
             toast.error(
-                'Unable to refresh your session. Please log in again to continue.'
+                "Unable to refresh your session. Please log in again to continue."
             );
             console.log(error);
-            removeCookie('accessToken');
-            removeCookie('refreshToken');
+            removeCookie("accessToken");
+            removeCookie("refreshToken");
         }
     } else {
         return null;

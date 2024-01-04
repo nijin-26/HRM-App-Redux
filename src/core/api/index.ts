@@ -1,12 +1,12 @@
-import { API } from './config/axios';
-import { getSkills, getDepartments, getRoles } from './services/dropdownData';
+import { API } from "./config/axios";
+import { getSkills, getDepartments, getRoles } from "./services/dropdownData";
 import {
     getEmployeesList,
     getEmployee,
     deleteEmployee,
     addEmployee,
     editEmployee,
-} from './services/employees';
+} from "./services/employees";
 
 export {
     API,

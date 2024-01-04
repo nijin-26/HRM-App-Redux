@@ -1,10 +1,10 @@
-import { AppDispatch } from '..';
-import * as types from './types';
+import { AppDispatch } from "..";
+import * as types from "./types";
 
 //Action creators
 export const requestStarted = (requestName: string): types.IREQUEST_STARTED => {
     return {
-        type: 'REQUEST_STARTED',
+        type: "REQUEST_STARTED",
         payload: {
             name: requestName,
         },
@@ -15,7 +15,7 @@ export const requestFinished = (
     requestName: string
 ): types.IREQUEST_FINISHED => {
     return {
-        type: 'REQUEST_FINISHED',
+        type: "REQUEST_FINISHED",
         payload: {
             name: requestName,
         },
@@ -27,7 +27,7 @@ export const requestFailed = (
     requestError: Error
 ): types.IREQUEST_FAILED => {
     return {
-        type: 'REQUEST_FAILED',
+        type: "REQUEST_FAILED",
         payload: {
             name: requestName,
             error: requestError,
@@ -37,7 +37,7 @@ export const requestFailed = (
 
 export const clearRequest = (requestName: string): types.ICLEAR_REQUEST => {
     return {
-        type: 'CLEAR_REQUEST',
+        type: "CLEAR_REQUEST",
         payload: {
             name: requestName,
         },

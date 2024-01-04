@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const FormContainer = styled.section`
     position: absolute;
@@ -39,14 +39,14 @@ const FormContainer = styled.section`
             gap: 5px;
         }
 
-        input[type='search'] {
+        input[type="search"] {
             font-size: 1.3em;
             padding-inline: 7px;
             outline-offset: 0;
         }
 
         button,
-        input[type='search'] {
+        input[type="search"] {
             height: 40px;
         }
 

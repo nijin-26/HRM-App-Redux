@@ -1,5 +1,5 @@
-import StyledAddEmployeeDetails from './AddEmployeeDetails.style';
-import { EmployeeDetailsForm } from '../../components';
+import StyledAddEmployeeDetails from "./AddEmployeeDetails.style";
+import { EmployeeDetailsForm } from "../../components";
 
 const AddEmployeeDetails: React.FC = () => {
     return (

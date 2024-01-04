@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledFormWrap = styled.div`
     min-width: 1000px;
@@ -55,7 +55,7 @@ const StyledFormWrap = styled.div`
     }
 
     & .required-field::after {
-        content: '*';
+        content: "*";
         color: #b70000;
         position: absolute;
         top: 0;
@@ -79,7 +79,8 @@ const StyledFormWrap = styled.div`
         margin: 0 auto 40px;
         border-radius: 50%;
         overflow: clip;
-        box-shadow: rgba(0, 0, 0, 0.16) 0px 3px 6px,
+        box-shadow:
+            rgba(0, 0, 0, 0.16) 0px 3px 6px,
             rgba(0, 0, 0, 0.23) 0px 3px 6px;
         transition: scale 200ms ease;
 

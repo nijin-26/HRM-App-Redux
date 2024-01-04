@@ -1,14 +1,14 @@
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { useSearchParams } from 'react-router-dom';
-import { useState, useEffect } from 'react';
-import { Input, Button } from '..';
-import Select, { MultiValue } from 'react-select';
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { Input, Button } from "..";
+import Select, { MultiValue } from "react-select";
 import {
     CustomSelectStyles,
     StyledEmployeesFilterWrap,
-} from './EmployeesTableFilter.style';
-import { IReactSelectOption } from '../../interfaces/common';
-import { employeeListClear } from '../../core/store/employeesList/actions';
+} from "./EmployeesTableFilter.style";
+import { IReactSelectOption } from "../../interfaces/common";
+import { employeeListClear } from "../../core/store/employeesList/actions";
 
 const EmployeesTableFilter: React.FC = () => {
     const dispatch = useAppDispatch();
@@ -18,7 +18,7 @@ const EmployeesTableFilter: React.FC = () => {
         MultiValue<IReactSelectOption>
     >([]);
     const [empNameFilter, setEmpNameFilter] = useState<string>(
-        searchParams.get('search') || ''
+        searchParams.get("search") || ""
     );
 
     const selectSkillsData = useAppSelector(
@@ -26,26 +26,26 @@ const EmployeesTableFilter: React.FC = () => {
     );
 
     const handleSearchInputChange = () => {
-        searchParams.set('offset', '0');
+        searchParams.set("offset", "0");
 
         if (!empNameFilter) {
-            searchParams.delete('search');
+            searchParams.delete("search");
         } else {
-            searchParams.set('search', empNameFilter);
+            searchParams.set("search", empNameFilter);
         }
         setSearchParams(searchParams);
     };
 
     const handleSkillSelectChange = () => {
-        searchParams.set('offset', '0');
+        searchParams.set("offset", "0");
 
         if (!skillFilter.length) {
-            searchParams.delete('skillIds');
+            searchParams.delete("skillIds");
         } else {
             const selectedOptionsValue = skillFilter.map(
                 (option) => option.value
             );
-            searchParams.set('skillIds', selectedOptionsValue.toString());
+            searchParams.set("skillIds", selectedOptionsValue.toString());
         }
         setSearchParams(searchParams);
     };
@@ -55,9 +55,9 @@ const EmployeesTableFilter: React.FC = () => {
             return;
         }
         setSkillFilter([]);
-        searchParams.delete('skillIds');
-        setEmpNameFilter('');
-        searchParams.delete('search');
+        searchParams.delete("skillIds");
+        setEmpNameFilter("");
+        searchParams.delete("search");
         dispatch(employeeListClear());
         setSearchParams(searchParams);
     };
@@ -66,8 +66,8 @@ const EmployeesTableFilter: React.FC = () => {
     useEffect(() => {
         if (selectSkillsData) {
             const urlSelectedSkillValues = searchParams
-                .get('skillIds')
-                ?.split(',');
+                .get("skillIds")
+                ?.split(",");
 
             if (urlSelectedSkillValues) {
                 const selectedSkillsFromUrl = selectSkillsData.filter(

@@ -1,4 +1,4 @@
-import StyledLoader from './Loader.style';
+import StyledLoader from "./Loader.style";
 
 interface ILoader {
     className?: string;

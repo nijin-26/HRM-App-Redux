@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { Formik } from 'formik';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import { Formik } from "formik";
 import {
     Button,
     CustomInput,
@@ -9,18 +9,18 @@ import {
     CustomRadioGroup,
     CustomSelect,
     Loader,
-} from '..';
-import StyledFormWrap from './EmployeeDetailsForm.style';
+} from "..";
+import StyledFormWrap from "./EmployeeDetailsForm.style";
 import {
     genders,
     locations,
     prefillDataOnEmployeeAdd,
-} from '../../pages/ManageEmployees/constants';
-import validate from './validation';
-import { IEmployee } from '../../interfaces/common';
-import handleFormSubmit from './handleFormSubmit';
-import { sortObjByKey } from '../../utils';
-import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
+} from "../../pages/ManageEmployees/constants";
+import validate from "./validation";
+import { IEmployee } from "../../interfaces/common";
+import handleFormSubmit from "./handleFormSubmit";
+import { sortObjByKey } from "../../utils";
+import profilePictureAvatar from "../../assets/images/add-profile-photo.svg";
 
 interface IEmployeeDetailsForm {
     prefillData?: IEmployee;
@@ -59,7 +59,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
     const handlePhotoLabelClick = (
         e: React.KeyboardEvent<HTMLLabelElement>
     ) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             photoRef.current?.click();
         }
     };
@@ -208,7 +208,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                                 label="Location"
                                                 options={sortObjByKey(
                                                     locations,
-                                                    'label'
+                                                    "label"
                                                 )}
                                                 placeholder="Select a Location"
                                                 required

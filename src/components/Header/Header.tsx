@@ -1,7 +1,7 @@
-import { Button } from '..';
-import useAuth from '../../hooks/useAuth';
-import { StyledHeader, Navbar } from './Header.style';
-import { Link, NavLink } from 'react-router-dom';
+import { Button } from "..";
+import useAuth from "../../hooks/useAuth";
+import { StyledHeader, Navbar } from "./Header.style";
+import { Link, NavLink } from "react-router-dom";
 
 const Header: React.FC = () => {
     const { logout } = useAuth();

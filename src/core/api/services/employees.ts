@@ -3,9 +3,9 @@ import {
     IApiEmployeeSubmission,
     IApiFetchEmployee,
     IApiFetchEmployeesArray,
-} from '../../../interfaces/ApiDataInterface';
-import { ISearchParams } from '../../../interfaces/common';
-import { API } from '../config/axios';
+} from "../../../interfaces/ApiDataInterface";
+import { ISearchParams } from "../../../interfaces/common";
+import { API } from "../config/axios";
 
 // export const getEmployeesList = (
 //     offset: number,
@@ -32,8 +32,8 @@ export const getEmployeesList = (searchParams: ISearchParams) => {
         search: employeeName,
     } = searchParams;
 
-    const skillsParam = skillIds ? `&skillIds=${skillIds}` : '';
-    const EmpNameSearchParam = employeeName ? `&search=${employeeName}` : '';
+    const skillsParam = skillIds ? `&skillIds=${skillIds}` : "";
+    const EmpNameSearchParam = employeeName ? `&search=${employeeName}` : "";
     return API.get<IApiFetchEmployeesArray>(
         `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}${skillsParam}${EmpNameSearchParam}`
     );
@@ -48,7 +48,7 @@ export const deleteEmployee = (employeeId: number) => {
 };
 
 export const addEmployee = (employeeData: IApiEmployeeSubmission) => {
-    return API.post<IApiEmployeePostRepsonse>('/employee', employeeData);
+    return API.post<IApiEmployeePostRepsonse>("/employee", employeeData);
 };
 
 export const editEmployee = (

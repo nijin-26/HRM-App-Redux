@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const Overlay = styled.div<{ $isOpen: boolean }>`
     position: fixed;
@@ -50,7 +50,7 @@ const StyledModal = styled.div<{ $isOpen: boolean }>`
         }
 
         span:hover {
-            font-variation-settings: 'FILL' 1;
+            font-variation-settings: "FILL" 1;
         }
     }
 

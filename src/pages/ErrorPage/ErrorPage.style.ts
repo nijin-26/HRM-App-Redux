@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledErrorPage = styled.section`
     background-color: #fff;

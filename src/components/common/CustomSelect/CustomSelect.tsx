@@ -1,16 +1,16 @@
-import Select, { GroupBase } from 'react-select';
-import type {} from 'react-select/base';
-import { useField } from 'formik';
-import CustomSelectStyles from './CustomSelect.style';
-import makeAnimated from 'react-select/animated';
-import { IReactSelectOption } from '../../../interfaces/common';
+import Select, { GroupBase } from "react-select";
+import type {} from "react-select/base";
+import { useField } from "formik";
+import CustomSelectStyles from "./CustomSelect.style";
+import makeAnimated from "react-select/animated";
+import { IReactSelectOption } from "../../../interfaces/common";
 
 //extending select to include extra prop isValid
-declare module 'react-select/base' {
+declare module "react-select/base" {
     export interface Props<
         Option,
         IsMulti extends boolean,
-        Group extends GroupBase<Option>
+        Group extends GroupBase<Option>,
     > {
         isValid?: boolean;
     }
@@ -42,7 +42,7 @@ const CustomSelect: React.FC<ICustomSelect> = ({
         <>
             <label
                 htmlFor={props.id || props.name}
-                className={required ? 'required-field' : ''}
+                className={required ? "required-field" : ""}
             >
                 {label}
             </label>

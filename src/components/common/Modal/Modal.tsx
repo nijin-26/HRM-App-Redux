@@ -1,5 +1,5 @@
-import { Overlay, StyledModal } from './Modal.style';
-import { Button } from '../..';
+import { Overlay, StyledModal } from "./Modal.style";
+import { Button } from "../..";
 
 interface IModal {
     children: JSX.Element;

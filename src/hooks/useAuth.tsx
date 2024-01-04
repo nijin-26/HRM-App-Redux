@@ -1,11 +1,11 @@
-import { jwtDecode } from 'jwt-decode';
-import { useEffect, useState } from 'react';
-import { useAppDispatch } from './storeHelpers';
-import { loginUser, logoutUser } from '../core/store/auth/actions';
-import { getCookie, removeCookie, setCookie } from '../utils/cookie';
-import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
-import { signIn } from '../core/api/services/auth';
+import { jwtDecode } from "jwt-decode";
+import { useEffect, useState } from "react";
+import { useAppDispatch } from "./storeHelpers";
+import { loginUser, logoutUser } from "../core/store/auth/actions";
+import { getCookie, removeCookie, setCookie } from "../utils/cookie";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
+import { signIn } from "../core/api/services/auth";
 
 const useAuth = () => {
     const dispatch = useAppDispatch();
@@ -14,7 +14,7 @@ const useAuth = () => {
     const [loginLoading, setLoginLoading] = useState(false);
 
     useEffect(() => {
-        const accessToken = getCookie('accessToken');
+        const accessToken = getCookie("accessToken");
         if (accessToken) {
             const decodedToken = jwtDecode(accessToken);
             const currentTime = Math.floor(Date.now() / 1000);
@@ -38,18 +38,18 @@ const useAuth = () => {
             if (authResponse) {
                 const accessToken = authResponse.data.access_token;
                 const refreshToken = authResponse.data.refresh_token;
-                setCookie('accessToken', accessToken);
-                setCookie('refreshToken', refreshToken);
+                setCookie("accessToken", accessToken);
+                setCookie("refreshToken", refreshToken);
                 dispatch(loginUser());
-                toast.success('Welcome. You are succesfully logged in.');
-                navigate('/');
+                toast.success("Welcome. You are succesfully logged in.");
+                navigate("/");
                 setLoginLoading(false);
             }
         } catch (error: any) {
             if (error.status === 401) {
-                toast.error('Invalid Username or Password');
+                toast.error("Invalid Username or Password");
             } else {
-                toast.error('Could not login. Please try again');
+                toast.error("Could not login. Please try again");
             }
             console.log(error);
             setLoginLoading(false);
@@ -57,8 +57,8 @@ const useAuth = () => {
     };
 
     const logout = () => {
-        removeCookie('accessToken');
-        removeCookie('refreshToken');
+        removeCookie("accessToken");
+        removeCookie("refreshToken");
         dispatch(logoutUser());
     };
 

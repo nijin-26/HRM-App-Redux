@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledHeader = styled.header`
     background-color: #fff;
@@ -57,7 +57,7 @@ const Navbar = styled.nav`
             }
 
             &::after {
-                content: '';
+                content: "";
                 background-color: var(--primary-clr);
                 position: absolute;
                 left: 0;

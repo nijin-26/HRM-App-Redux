@@ -1,5 +1,5 @@
-import { LinkButton } from '../../components';
-import StyledErrorPage from './ErrorPage.style';
+import { LinkButton } from "../../components";
+import StyledErrorPage from "./ErrorPage.style";
 
 const ErrorPage: React.FC = () => {
     return (

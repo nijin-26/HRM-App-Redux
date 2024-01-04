@@ -1,5 +1,5 @@
-import { RootState } from '..';
-import { ActionType } from './types';
+import { RootState } from "..";
+import { ActionType } from "./types";
 
 interface IRequest {
     name: string;
@@ -23,7 +23,7 @@ export const requestsRecuder = (
     const newRequestName = action.payload?.name;
 
     switch (action.type) {
-        case 'REQUEST_STARTED': {
+        case "REQUEST_STARTED": {
             const exisitingCall = requests.find(
                 (request) => request.name === newRequestName
             );
@@ -51,14 +51,14 @@ export const requestsRecuder = (
                 ],
             };
         }
-        case 'REQUEST_FINISHED':
+        case "REQUEST_FINISHED":
             return {
                 ...state,
                 requests: requests.filter(
                     (request) => request.name !== newRequestName
                 ),
             };
-        case 'REQUEST_FAILED':
+        case "REQUEST_FAILED":
             return {
                 ...state,
                 requests: requests.map((request) =>
@@ -71,7 +71,7 @@ export const requestsRecuder = (
                         : request
                 ),
             };
-        case 'CLEAR_REQUEST':
+        case "CLEAR_REQUEST":
             return {
                 ...state,
                 requests: requests.filter(

@@ -1,8 +1,8 @@
-import { IApiDepartment } from '../../../../interfaces/ApiDataInterface';
+import { IApiDepartment } from "../../../../interfaces/ApiDataInterface";
 
 // Actions definitions
 export interface IFETCH_DEPARTMENTS_SUCCESS {
-    type: 'FETCH_DEPARTMENTS_SUCCESS';
+    type: "FETCH_DEPARTMENTS_SUCCESS";
     payload: IApiDepartment[];
 }
 

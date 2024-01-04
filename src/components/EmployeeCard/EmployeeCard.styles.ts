@@ -1,127 +1,127 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-  box-sizing: border-box;
-  height: 320px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0px 0px 10px #ccc;
-  transition: scale 0.5s;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    box-sizing: border-box;
+    height: 320px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px #ccc;
+    transition: scale 0.5s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 
-  /* &:hover {
+    /* &:hover {
     scale: 1.02;
   } */
 `;
 
 export const CardHeader = styled.div`
-  min-height: 80px;
-  background-color: var(--primary-clr);
-  border-radius: 8px 8px 0 0;
-  padding: 16px;
+    min-height: 80px;
+    background-color: var(--primary-clr);
+    border-radius: 8px 8px 0 0;
+    padding: 16px;
 
-  position: relative;
+    position: relative;
 
-  img {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, 0);
-    width: 82px;
-    height: 82px;
-    border-radius: 50%;
-    object-fit: cover;
-    background-color: #fff;
-    /* border: 2px solid var(--primary-clr); */
-    box-shadow: 0px 0px 10px #ccc;
-  }
+    img {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, 0);
+        width: 82px;
+        height: 82px;
+        border-radius: 50%;
+        object-fit: cover;
+        background-color: #fff;
+        /* border: 2px solid var(--primary-clr); */
+        box-shadow: 0px 0px 10px #ccc;
+    }
 `;
 
 export const CardBody = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 35px;
-  text-align: center;
-
-  & * {
-    margin: 0;
-  }
-
-  h3 {
-    text-transform: uppercase;
-  }
-
-  .role {
-    color: gray;
-    margin-bottom: 8px;
-  }
-
-  .card_header {
-    margin-top: 10px;
-  }
-
-  .details_wrapper {
-    padding: 0 16px;
-    margin: 10px 0;
-    width: 230px;
     display: flex;
     flex-direction: column;
-    align-items: start;
-    gap: 12px;
-  }
-
-  .details_wrapper > div {
-    display: flex;
-    gap: 10px;
     align-items: center;
-    justify-content: center;
-    word-wrap: normal;
-    color: #000;
-  }
+    margin-top: 35px;
+    text-align: center;
 
-  a {
-    color: #000;
-    line-break: anywhere;
-  }
+    & * {
+        margin: 0;
+    }
 
-  a:hover {
-    text-decoration: underline;
-  }
+    h3 {
+        text-transform: uppercase;
+    }
 
-  .divider {
-    width: 100%;
-    border: 1px solid #ccc;
-  }
+    .role {
+        color: gray;
+        margin-bottom: 8px;
+    }
 
-  .icons {
-    padding: 12px 0;
-    display: flex;
-    justify-content: right;
-    gap: 10px;
-    color: #000;
-    transition: all 0.3s;
-  }
+    .card_header {
+        margin-top: 10px;
+    }
 
-  .icons a {
-    color: inherit;
-    transition: all 0.3s;
-  }
+    .details_wrapper {
+        padding: 0 16px;
+        margin: 10px 0;
+        width: 230px;
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        gap: 12px;
+    }
 
-  .icons a:hover {
-    color: #000;
-  }
+    .details_wrapper > div {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        justify-content: center;
+        word-wrap: normal;
+        color: #000;
+    }
 
-  .icons > span {
-    cursor: pointer;
-    transition: all 0.3s;
-  }
+    a {
+        color: #000;
+        line-break: anywhere;
+    }
 
-  .icons > span:hover {
-    color: #000;
-  }
+    a:hover {
+        text-decoration: underline;
+    }
+
+    .divider {
+        width: 100%;
+        border: 1px solid #ccc;
+    }
+
+    .icons {
+        padding: 12px 0;
+        display: flex;
+        justify-content: right;
+        gap: 10px;
+        color: #000;
+        transition: all 0.3s;
+    }
+
+    .icons a {
+        color: inherit;
+        transition: all 0.3s;
+    }
+
+    .icons a:hover {
+        color: #000;
+    }
+
+    .icons > span {
+        cursor: pointer;
+        transition: all 0.3s;
+    }
+
+    .icons > span:hover {
+        color: #000;
+    }
 `;
 
 // ! <<<<<<<<<< Horizontal Card >>>>>>>>>>>>>>>

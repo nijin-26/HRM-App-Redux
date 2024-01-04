@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledTable = styled.table`
     width: 100%;
@@ -27,7 +27,7 @@ const StyledTable = styled.table`
             padding: 0;
             color: gray;
 
-            &[data-sort-dir='desc'] {
+            &[data-sort-dir="desc"] {
                 rotate: 180deg;
             }
 
@@ -39,7 +39,7 @@ const StyledTable = styled.table`
 
             &:hover img {
                 scale: 1.2;
-                font-variation-settings: 'wght' 450;
+                font-variation-settings: "wght" 450;
             }
         }
     }

@@ -1,5 +1,5 @@
-import StyledChip from './Chip.style';
-import { Button } from '../..';
+import StyledChip from "./Chip.style";
+import { Button } from "../..";
 
 interface IChip {
     children: React.ReactNode;
