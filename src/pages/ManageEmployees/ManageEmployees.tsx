@@ -50,10 +50,6 @@ const ManageEmployees: React.FC = () => {
     );
 
     const getSearchParams = (): ISearchParams => {
-        const offset =
-            Number(searchParams.get('offset')) || defaultSearchParams.offset;
-        const limit =
-            Number(searchParams.get('limit')) || defaultSearchParams.limit;
         const sortBy = searchParams.get('sortBy') || defaultSearchParams.sortBy;
         const sortDir =
             searchParams.get('sortDir') || defaultSearchParams.sortDir;
