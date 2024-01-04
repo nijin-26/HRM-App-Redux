@@ -22,6 +22,7 @@ import {
 import { selectRequestInProgress } from '../../core/store/requests/reducer';
 import { selectEmployeesListSlice } from '../../core/store/employeesList/reducer';
 import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
+import { ISearchParams } from '../../interfaces/common';
 
 const ManageEmployees: React.FC = () => {
     const [searchParams] = useSearchParams();
@@ -48,6 +49,21 @@ const ManageEmployees: React.FC = () => {
         selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
 
+    const getSearchParams = (): ISearchParams => {
+        const offset =
+            Number(searchParams.get('offset')) || defaultSearchParams.offset;
+        const limit =
+            Number(searchParams.get('limit')) || defaultSearchParams.limit;
+        const sortBy = searchParams.get('sortBy') || defaultSearchParams.sortBy;
+        const sortDir =
+            searchParams.get('sortDir') || defaultSearchParams.sortDir;
+        const skillIds =
+            searchParams.get('skillIds') || defaultSearchParams.skillIds;
+        const search = searchParams.get('search') || defaultSearchParams.search;
+
+        return { limit, offset, sortBy, sortDir, skillIds, search };
+    };
+
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empIdToDelete) {
@@ -56,7 +72,7 @@ const ManageEmployees: React.FC = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchEmployees(searchParams));
+        dispatch(fetchEmployees(getSearchParams()));
     }, [searchParams]);
 
     return (
