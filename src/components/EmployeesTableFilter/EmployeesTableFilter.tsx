@@ -94,7 +94,7 @@ const EmployeesTableFilter: React.FC = () => {
     return (
         <StyledEmployeesFilterWrap>
             <Input
-                placeholder="Filter by Employee Name"
+                placeholder="Filter by Employee First Name"
                 value={empNameFilter}
                 onChange={(event) => {
                     setEmpNameFilter(
