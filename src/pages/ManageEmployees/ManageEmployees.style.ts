@@ -15,6 +15,12 @@ export const StyledManageEmployeesWrap = styled.section`
     display: flex;
     gap: 15px;
   }
+
+  .employees-view {
+    display: flex;
+    gap: 8px;
+    height: 40px;
+  }
 `;
 
 export const StyledEmployeesTable = styled(Table)`

@@ -25,6 +25,7 @@ import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
 import ToggleView from "../../components/ToggleView/ToggleView";
 import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
+import Sort from "../../components/Sort/Sort";
 
 const ManageEmployees = () => {
   const [searchParams] = useSearchParams();
@@ -36,7 +37,7 @@ const ManageEmployees = () => {
   );
 
   // const [offset, setOffset] = useState(0);
-  const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
+  const [toggleGridView, setToggleGridView] = useState(false); // False => Table View :: True => Grid/Card View
 
   let offset = Number(searchParams.get("offset")) || initQueryParams.offset;
   let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
@@ -109,6 +110,7 @@ const ManageEmployees = () => {
                   setToggleGridView((prev) => !prev);
                 }}
               />
+              <Sort />
             </div>
 
             {toggleGridView ? (

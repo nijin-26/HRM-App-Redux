@@ -18,22 +18,25 @@ const EmployeeGrid = ({
   setIsModalOpen: (isOpen: boolean) => void;
   setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
-  const [offset, setOffset] = useState(0);
-
   const observerTarget = useRef(null);
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const employeeList = useAppSelector((state) => state.employees.employeesList);
   const employeesCount = useAppSelector((state) => state.employees.count);
   const dispatch = useAppDispatch();
-
-  let limit = 10;
 
   const employeesFetchLoading = useAppSelector(
     selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
   );
 
   const getSearchParams = (): IQueryParams => {
+    const limit = searchParams.get("limit")
+      ? Number(searchParams.get("limit"))
+      : initQueryParams.limit;
+    const offset = searchParams.get("offset")
+      ? Number(searchParams.get("offset"))
+      : initQueryParams.offset;
+
     const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
     const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
     const skillIds = searchParams.get("skillIds");
@@ -59,8 +62,12 @@ const EmployeeGrid = ({
       hasMore = false;
     }
     if (employeesFetchLoading || !hasMore) return;
+
+    const limit = Number(searchParams.get("limit")) || initQueryParams.limit;
+    const nextOffset = Number(searchParams.get("offset")) ?? 0;
+    searchParams.set("offset", String(nextOffset + limit));
+    setSearchParams(searchParams);
     dispatch(fetchEmployees(getSearchParams()));
-    setOffset((prev) => prev + limit);
   };
 
   useEffect(() => {
