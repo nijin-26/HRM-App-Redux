@@ -24,6 +24,7 @@ import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
 import ToggleView from "../../components/ToggleView/ToggleView";
 import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
+import { ISearchParams } from "../../interfaces/common";
 
 const ManageEmployees = () => {
     const [searchParams] = useSearchParams();
@@ -34,7 +35,6 @@ const ManageEmployees = () => {
         undefined
     );
 
-    // const [offset, setOffset] = useState(0);
     const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
     const offset =
         Number(searchParams.get("offset")) || defaultSearchParams.offset;
@@ -52,6 +52,17 @@ const ManageEmployees = () => {
         selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
 
+    const getSearchParams = (): ISearchParams => {
+        const sortBy = searchParams.get("sortBy") || defaultSearchParams.sortBy;
+        const sortDir =
+            searchParams.get("sortDir") || defaultSearchParams.sortDir;
+        const skillIds =
+            searchParams.get("skillIds") || defaultSearchParams.skillIds;
+        const search = searchParams.get("search") || defaultSearchParams.search;
+
+        return { limit, offset, sortBy, sortDir, skillIds, search };
+    };
+
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empIdToDelete) {
@@ -60,7 +71,7 @@ const ManageEmployees = () => {
     };
 
     useEffect(() => {
-        dispatch(fetchEmployees(searchParams));
+        dispatch(fetchEmployees(getSearchParams()));
     }, [searchParams]);
 
     return (

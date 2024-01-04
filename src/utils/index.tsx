@@ -2,15 +2,10 @@ import {
     IEmployeeListing,
     IEmployee,
     IReactSelectOption,
-    ISearchParams,
 } from "../interfaces/common";
 import { IApiEmployee } from "../interfaces/ApiDataInterface";
 import { Button, LinkButton } from "../components";
-
-import {
-    defaultSearchParams,
-    locations,
-} from "../pages/ManageEmployees/constants";
+import { locations } from "../pages/ManageEmployees/constants";
 
 //sort array object by sortKey (slice() to create a new array)
 export const sortObjByKey = (srcObjArray: any[], sortKey: string) => {
@@ -174,23 +169,4 @@ export const getEmployeesListingData = (
         newEmpList.push(newEmp);
     }
     return newEmpList;
-};
-
-export const getEmployeesListFetchSearchParams = (
-    searchParams: URLSearchParams
-) => {
-    let paramsObj = {} as ISearchParams;
-
-    paramsObj.offset =
-        Number(searchParams.get("offset")) || defaultSearchParams.offset;
-    paramsObj.limit =
-        Number(searchParams.get("limit")) || defaultSearchParams.limit;
-    paramsObj.sortBy = searchParams.get("sortBy") || defaultSearchParams.sortBy;
-    paramsObj.sortDir =
-        searchParams.get("sortDir") || defaultSearchParams.sortDir;
-    paramsObj.skillIds =
-        searchParams.get("skillIds") || defaultSearchParams.skillIds;
-    paramsObj.search = searchParams.get("search") || defaultSearchParams.search;
-
-    return paramsObj;
 };

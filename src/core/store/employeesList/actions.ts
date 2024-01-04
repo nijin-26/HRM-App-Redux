@@ -14,7 +14,7 @@ import {
 import { AppDispatch, AppThunk } from "..";
 import { requestHelper } from "../requests/actions";
 import { REQUESTS_ENUM } from "../requests/requestsEnum";
-import { getEmployeesListFetchSearchParams } from "../../../utils";
+import { ISearchParams } from "../../../interfaces/common";
 
 //Action Creators
 //EMPLOYEES LIST FETCH
@@ -26,16 +26,13 @@ const fetchEmployeesSuccess = (
 });
 
 //Thunk Action creator
-export const fetchEmployees = (searchParams: URLSearchParams): AppThunk => {
+export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             const { data } = await requestHelper(
                 dispatch,
                 REQUESTS_ENUM.getEmployeesList,
-                () =>
-                    getEmployeesList(
-                        getEmployeesListFetchSearchParams(searchParams)
-                    )
+                () => getEmployeesList(searchParams)
             );
             dispatch(fetchEmployeesSuccess(data.data));
         } catch (error) {

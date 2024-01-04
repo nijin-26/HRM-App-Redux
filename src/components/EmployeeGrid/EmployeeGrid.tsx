@@ -35,20 +35,22 @@ const EmployeeGrid = ({
         selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
     );
 
-    // const getSearchParams = (): ISearchParams => {
-    //   const sortBy = searchParams.get("sortBy") ?? defaultSearchParams.sortBy;
-    //   const sortDir = searchParams.get("sortDir") ?? defaultSearchParams.sortDir;
-    //   const skillIds = searchParams.get("skillIds");
-    //   const search = searchParams.get("search");
-    //   return {
-    //     limit,
-    //     offset,
-    //     sortBy,
-    //     sortDir,
-    //     skillIds,
-    //     search,
-    //   };
-    // };
+    const getSearchParams = (): ISearchParams => {
+        const sortBy = searchParams.get("sortBy") ?? defaultSearchParams.sortBy;
+        const sortDir =
+            searchParams.get("sortDir") ?? defaultSearchParams.sortDir;
+        const skillIds =
+            searchParams.get("skillIds") ?? defaultSearchParams.skillIds;
+        const search = searchParams.get("search") ?? defaultSearchParams.search;
+        return {
+            limit,
+            offset,
+            sortBy,
+            sortDir,
+            skillIds,
+            search,
+        };
+    };
 
     const handleLoadData = () => {
         let hasMore = true;
@@ -61,7 +63,7 @@ const EmployeeGrid = ({
             hasMore = false;
         }
         if (employeesFetchLoading || !hasMore) return;
-        dispatch(fetchEmployees(searchParams));
+        dispatch(fetchEmployees(getSearchParams()));
         setOffset((prev) => prev + limit);
     };
 
@@ -84,6 +86,9 @@ const EmployeeGrid = ({
             if (current) observer.unobserve(current);
         };
     }, [handleLoadData]);
+
+    console.log("count: ", employeesCount);
+    console.log("length:", employeeList.length);
 
     return (
         <>
