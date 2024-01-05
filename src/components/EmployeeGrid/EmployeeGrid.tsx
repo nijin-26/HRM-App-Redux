@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../../hooks/storeHelpers";
 import { initQueryParams } from "../../pages/ManageEmployees/constants";
-import { GridContainer } from "./EmployeeGrid.styles";
+import { GridContainer, NotFoundText } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
@@ -92,18 +92,21 @@ const EmployeeGrid = ({
 
   return (
     <>
-      <GridContainer>
-        {employeeList.length
-          ? getEmployeesListingData(employeeList).map((employee) => (
-              <EmployeeCard
-                key={employee.id}
-                employeeData={employee}
-                setIsModalOpen={setIsModalOpen}
-                setDeleteEmployee={setDeleteEmployee}
-              />
-            ))
-          : null}
-      </GridContainer>
+      {employeeList.length ? (
+        <GridContainer>
+          {getEmployeesListingData(employeeList).map((employee) => (
+            <EmployeeCard
+              key={employee.id}
+              employeeData={employee}
+              setIsModalOpen={setIsModalOpen}
+              setDeleteEmployee={setDeleteEmployee}
+            />
+          ))}
+        </GridContainer>
+      ) : (
+        <NotFoundText>Record not Found</NotFoundText>
+      )}
+
       {employeesFetchLoading && <Loader />}
       <div ref={observerTarget}></div>
     </>
