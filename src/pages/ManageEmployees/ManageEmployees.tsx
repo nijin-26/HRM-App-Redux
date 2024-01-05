@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
 import { empTableHeaders, initQueryParams } from "./constants";
@@ -30,25 +30,28 @@ import Sort from "../../components/Sort/Sort";
 const ManageEmployees = () => {
   const [searchParams] = useSearchParams();
   const dispatch = useAppDispatch();
+  const isFirstRendered = useRef(true);
 
   const [isModalopen, setIsModalOpen] = useState(false);
   const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
     undefined
   );
 
-  // const [offset, setOffset] = useState(0);
-  const [toggleGridView, setToggleGridView] = useState(false); // False => Table View :: True => Grid/Card View
+  const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
 
   let offset = Number(searchParams.get("offset")) || initQueryParams.offset;
   let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
 
+  const employeeList = useAppSelector((state) => state.employees.employeesList);
   const employeesListSlice = useAppSelector(
     selectEmployeesListSlice(offset, limit)
   );
+
   const employeesCount = useAppSelector((state) => state.employees.count);
   const employeesFetchLoading = useAppSelector(
     selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
   );
+
   const employeeDeleteLoading = useAppSelector(
     selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
   );
@@ -66,7 +69,6 @@ const ManageEmployees = () => {
     const search = searchParams.get("search");
     return {
       limit,
-      // offset: toggleGridView ? offset : dynamicOffset,
       offset,
       sortBy,
       sortDir,
@@ -82,7 +84,56 @@ const ManageEmployees = () => {
     }
   };
 
+  // const handleLoadData = () => {
+  //   let hasMore = true;
+
+  //   if (employeesCount === undefined) hasMore = true;
+  //   else if (
+  //     (employeeList && employeeList.length >= employeesCount) ||
+  //     employeesCount === 0
+  //   ) {
+  //     hasMore = false;
+  //   }
+  //   if (employeesFetchLoading || !hasMore) return;
+
+  //   const nextOffset = Number(searchParams.get("offset")) ?? 0;
+  //   searchParams.set("offset", String(nextOffset + limit));
+  //   setSearchParams(searchParams);
+  //   dispatch(fetchEmployees(getSearchParams()));
+  // };
+
+  // useEffect(() => {
+  //   const { current } = observerTarget;
+
+  //   const handleIntersection: IntersectionObserverCallback = (entries) => {
+  //     if (entries[0].isIntersecting) handleLoadData();
+  //   };
+
+  //   const observer = new IntersectionObserver(handleIntersection, {
+  //     root: null, // Use the viewport as the root
+  //     rootMargin: "0px", // No margin around the root
+  //     threshold: 1, // Trigger when 50% of the element is visible
+  //   });
+
+  //   if (current) observer.observe(current);
+
+  //   return () => {
+  //     if (current) observer.unobserve(current);
+  //   };
+  // }, [handleLoadData]);
+
   useEffect(() => {
+    if (isFirstRendered.current) {
+      console.log("use effect in manage employee is called");
+      isFirstRendered.current = false;
+    }
+    return () => {
+      isFirstRendered.current = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRendered.current) return;
     dispatch(fetchEmployees(getSearchParams()));
   }, [searchParams]);
 
@@ -114,10 +165,13 @@ const ManageEmployees = () => {
             </div>
 
             {toggleGridView ? (
-              <EmployeeGrid
-                setIsModalOpen={setIsModalOpen}
-                setDeleteEmployee={setEmpIdToDelete}
-              />
+              <>
+                <EmployeeGrid
+                  employeeList={employeeList}
+                  setIsModalOpen={setIsModalOpen}
+                  setDeleteEmployee={setEmpIdToDelete}
+                />
+              </>
             ) : (
               <>
                 <StyledEmployeesTable

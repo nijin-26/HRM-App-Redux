@@ -1,55 +1,33 @@
-import { useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHelpers";
-import { initQueryParams } from "../../pages/ManageEmployees/constants";
+import { useAppSelector } from "../../hooks/storeHelpers";
 import { GridContainer, NotFoundText } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
+import { IApiEmployee } from "../../interfaces/ApiDataInterface";
+import { useEffect, useRef } from "react";
 import { Loader } from "..";
-import { useEffect, useRef, useState } from "react";
-import { fetchEmployees } from "../../core/store/employeesList/actions";
-import { IQueryParams } from "../../interfaces/common";
+import { useSearchParams } from "react-router-dom";
+import { initQueryParams } from "../../pages/ManageEmployees/constants";
 
 const EmployeeGrid = ({
+  employeeList,
   setIsModalOpen,
   setDeleteEmployee,
 }: {
+  employeeList: IApiEmployee[];
   setIsModalOpen: (isOpen: boolean) => void;
   setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
   const observerTarget = useRef(null);
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const employeeList = useAppSelector((state) => state.employees.employeesList);
-  const employeesCount = useAppSelector((state) => state.employees.count);
-  const dispatch = useAppDispatch();
-
   const employeesFetchLoading = useAppSelector(
     selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
   );
+  const employeesCount = useAppSelector((state) => state.employees.count);
 
-  const getSearchParams = (): IQueryParams => {
-    const limit = searchParams.get("limit")
-      ? Number(searchParams.get("limit"))
-      : initQueryParams.limit;
-    const offset = searchParams.get("offset")
-      ? Number(searchParams.get("offset"))
-      : initQueryParams.offset;
-
-    const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
-    const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
-    const skillIds = searchParams.get("skillIds");
-    const search = searchParams.get("search");
-    return {
-      limit,
-      offset,
-      sortBy,
-      sortDir,
-      skillIds,
-      search,
-    };
-  };
+  let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
 
   const handleLoadData = () => {
     let hasMore = true;
@@ -61,13 +39,17 @@ const EmployeeGrid = ({
     ) {
       hasMore = false;
     }
-    if (employeesFetchLoading || !hasMore) return;
 
-    const limit = Number(searchParams.get("limit")) || initQueryParams.limit;
+    console.log(
+      employeesFetchLoading,
+      !hasMore,
+      "Employee GRID loading, has more false"
+    );
+    if (employeesFetchLoading || !hasMore) return;
+    console.log("After condition checkj");
     const nextOffset = Number(searchParams.get("offset")) ?? 0;
     searchParams.set("offset", String(nextOffset + limit));
     setSearchParams(searchParams);
-    dispatch(fetchEmployees(getSearchParams()));
   };
 
   useEffect(() => {
@@ -92,7 +74,7 @@ const EmployeeGrid = ({
 
   return (
     <>
-      {employeeList.length ? (
+      {employeeList?.length ? (
         <GridContainer>
           {getEmployeesListingData(employeeList).map((employee) => (
             <EmployeeCard
@@ -103,9 +85,9 @@ const EmployeeGrid = ({
             />
           ))}
         </GridContainer>
-      ) : (
+      ) : !employeesFetchLoading ? (
         <NotFoundText>Record not Found</NotFoundText>
-      )}
+      ) : null}
 
       {employeesFetchLoading && <Loader />}
       <div ref={observerTarget}></div>

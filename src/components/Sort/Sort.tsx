@@ -4,8 +4,11 @@ import { SortContainer } from "./Sort.styles";
 import Select, { SingleValue } from "react-select";
 import { useState } from "react";
 import { IReactSelectOption } from "../../interfaces/common";
+import { useAppDispatch } from "../../hooks/storeHelpers";
+import { employeeListClear } from "../../core/store/employeesList/actions";
 
 const Sort = () => {
+  const dispatch = useAppDispatch();
   const [sort, setSort] = useState<SingleValue<IReactSelectOption>>({
     label: "ID",
     value: "id",
@@ -19,6 +22,7 @@ const Sort = () => {
   ];
 
   const handleSortChange = (option: SingleValue<IReactSelectOption>) => {
+    dispatch(employeeListClear());
     setSort(option);
     searchParams.set("offset", "0");
     searchParams.set("sortBy", option?.value!);
@@ -34,6 +38,7 @@ const Sort = () => {
   };
 
   const handleSortDirectionChange = () => {
+    dispatch(employeeListClear());
     const sortDirection = searchParams.get("sortDir");
     if (sortDirection === "asc") searchParams.set("sortDir", "desc");
     else searchParams.set("sortDir", "asc");
