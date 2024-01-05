@@ -6,7 +6,6 @@ export const onRequest = (config: AxiosRequestConfig) => {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     config.headers = {
         "Content-type": "application/json",
-        "Content-type": "application/json",
         ...config.headers,
         ...headers,
     };
