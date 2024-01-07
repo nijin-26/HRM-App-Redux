@@ -9,18 +9,18 @@ const ToggleView = ({ gridView, handleToggleGridView }: TToggleViewProps) => {
     return (
         <ToggleViewWrapper>
             <div
-                className={!gridView ? "active" : ""}
-                onClick={handleToggleGridView}
-            >
-                <span className="material-symbols-rounded">list</span>
-                <p>List View</p>
-            </div>
-            <div
                 className={gridView ? "active" : ""}
                 onClick={handleToggleGridView}
             >
                 <span className="material-symbols-rounded">grid_view</span>
-                <p>Grid View</p>
+                <p>Grid</p>
+            </div>
+            <div
+                className={!gridView ? "active" : ""}
+                onClick={handleToggleGridView}
+            >
+                <span className="material-symbols-rounded">list</span>
+                <p>List</p>
             </div>
         </ToggleViewWrapper>
     );
