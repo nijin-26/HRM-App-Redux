@@ -84,47 +84,8 @@ const ManageEmployees = () => {
     }
   };
 
-  // const handleLoadData = () => {
-  //   let hasMore = true;
-
-  //   if (employeesCount === undefined) hasMore = true;
-  //   else if (
-  //     (employeeList && employeeList.length >= employeesCount) ||
-  //     employeesCount === 0
-  //   ) {
-  //     hasMore = false;
-  //   }
-  //   if (employeesFetchLoading || !hasMore) return;
-
-  //   const nextOffset = Number(searchParams.get("offset")) ?? 0;
-  //   searchParams.set("offset", String(nextOffset + limit));
-  //   setSearchParams(searchParams);
-  //   dispatch(fetchEmployees(getSearchParams()));
-  // };
-
-  // useEffect(() => {
-  //   const { current } = observerTarget;
-
-  //   const handleIntersection: IntersectionObserverCallback = (entries) => {
-  //     if (entries[0].isIntersecting) handleLoadData();
-  //   };
-
-  //   const observer = new IntersectionObserver(handleIntersection, {
-  //     root: null, // Use the viewport as the root
-  //     rootMargin: "0px", // No margin around the root
-  //     threshold: 1, // Trigger when 50% of the element is visible
-  //   });
-
-  //   if (current) observer.observe(current);
-
-  //   return () => {
-  //     if (current) observer.unobserve(current);
-  //   };
-  // }, [handleLoadData]);
-
   useEffect(() => {
     if (isFirstRendered.current) {
-      console.log("use effect in manage employee is called");
       isFirstRendered.current = false;
     }
     return () => {
@@ -165,13 +126,12 @@ const ManageEmployees = () => {
             </div>
 
             {toggleGridView ? (
-              <>
-                <EmployeeGrid
-                  employeeList={employeeList}
-                  setIsModalOpen={setIsModalOpen}
-                  setDeleteEmployee={setEmpIdToDelete}
-                />
-              </>
+              <EmployeeGrid
+                employeeList={employeeList}
+                employeesCount={employeesCount}
+                setIsModalOpen={setIsModalOpen}
+                setDeleteEmployee={setEmpIdToDelete}
+              />
             ) : (
               <>
                 <StyledEmployeesTable

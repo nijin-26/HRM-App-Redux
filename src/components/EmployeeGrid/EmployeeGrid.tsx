@@ -6,16 +6,19 @@ import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { IApiEmployee } from "../../interfaces/ApiDataInterface";
 import { useEffect, useRef } from "react";
+
 import { Loader } from "..";
 import { useSearchParams } from "react-router-dom";
 import { initQueryParams } from "../../pages/ManageEmployees/constants";
 
 const EmployeeGrid = ({
   employeeList,
+  employeesCount,
   setIsModalOpen,
   setDeleteEmployee,
 }: {
   employeeList: IApiEmployee[];
+  employeesCount: number | undefined;
   setIsModalOpen: (isOpen: boolean) => void;
   setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
@@ -25,30 +28,38 @@ const EmployeeGrid = ({
   const employeesFetchLoading = useAppSelector(
     selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
   );
-  const employeesCount = useAppSelector((state) => state.employees.count);
 
   let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
 
   const handleLoadData = () => {
+    let currentOffset = Number(searchParams.get("offset"));
+
+    if (
+      employeesFetchLoading ||
+      !employeesCount ||
+      typeof currentOffset !== "number"
+    )
+      return;
+
     let hasMore = true;
 
-    if (employeesCount === undefined) hasMore = true;
-    else if (
-      (employeeList && employeeList.length >= employeesCount) ||
+    if (
+      (employeesCount &&
+        employeeList &&
+        employeeList.length >= employeesCount) ||
       employeesCount === 0
     ) {
       hasMore = false;
     }
 
-    console.log(
-      employeesFetchLoading,
-      !hasMore,
-      "Employee GRID loading, has more false"
-    );
-    if (employeesFetchLoading || !hasMore) return;
-    console.log("After condition checkj");
-    const nextOffset = Number(searchParams.get("offset")) ?? 0;
-    searchParams.set("offset", String(nextOffset + limit));
+    if (!hasMore) return;
+
+    const maxOffset = Math.max(0, Math.floor(employeesCount! / limit) * limit); // (28 / 10) * 10 = 28
+    const newOffset = Math.min(currentOffset + limit, maxOffset);
+
+    if (newOffset > maxOffset || newOffset <= currentOffset) return;
+
+    searchParams.set("offset", String(newOffset));
     setSearchParams(searchParams);
   };
 
