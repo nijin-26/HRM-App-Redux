@@ -1,9 +1,9 @@
 import styled from "styled-components";
 
 export const ToggleViewWrapper = styled.div`
-    width: max-content;
+    height: 100%;
     border: 1px solid #000;
-    border-radius: 8px;
+    border-radius: 2px;
     display: flex;
     justify-content: start;
     align-items: center;
