@@ -7,3 +7,10 @@ export const GridContainer = styled.div`
     justify-content: center;
     align-items: center;
 `;
+
+export const NotFoundText = styled.p`
+    width: 100%;
+    color: red;
+    text-align: center;
+    text-transform: uppercase;
+`;

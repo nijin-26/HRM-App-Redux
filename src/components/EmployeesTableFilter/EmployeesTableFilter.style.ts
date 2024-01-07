@@ -10,7 +10,7 @@ export const StyledEmployeesFilterWrap = styled.div`
 
 export const CustomSelectStyles: StylesConfig<
     IReactSelectOption,
-    true,
+    boolean,
     GroupBase<IReactSelectOption>
 > = {
     control: (provided, state) => ({

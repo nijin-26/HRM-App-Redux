@@ -15,15 +15,21 @@ export const StyledManageEmployeesWrap = styled.section`
         display: flex;
         gap: 15px;
     }
+
+    .employees-view {
+        display: flex;
+        gap: 8px;
+        height: 40px;
+    }
 `;
 
 export const StyledEmployeesTable = styled(Table)`
-    & .employee-actions {
-        padding-left: 0;
-        margin: 0;
-        list-style: none;
-        align-items: center;
-        gap: 25px;
+  & .employee-actions {
+    padding-left: 0;
+    margin: 0;
+    list-style: none;
+    align-items: center;
+    gap: 25px;
 
         & li button,
         & li a {
@@ -52,4 +58,26 @@ export const StyledEmployeesTable = styled(Table)`
             color: red;
         }
     }
+
+    & li span {
+      color: #000;
+
+      &:hover {
+        scale: 1.2;
+        font-variation-settings: "FILL" 1;
+      }
+    }
+
+    & .view-emp-btn span {
+      color: green;
+    }
+
+    & .edit-emp-btn span {
+      color: var(--edit-clr);
+    }
+
+    & .delete-emp-btn span {
+      color: red;
+    }
+  }
 `;

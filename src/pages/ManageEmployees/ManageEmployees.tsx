@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
 import { empTableHeaders, defaultSearchParams } from "./constants";
@@ -14,6 +14,7 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from "../../components";
+import { ISearchParams } from "../../interfaces/common";
 import { getEmployeesListingData } from "../../utils";
 import {
     fetchEmployees,
@@ -24,11 +25,12 @@ import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
 import ToggleView from "../../components/ToggleView/ToggleView";
 import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
-import { ISearchParams } from "../../interfaces/common";
+import Sort from "../../components/Sort/Sort";
 
 const ManageEmployees = () => {
     const [searchParams] = useSearchParams();
     const dispatch = useAppDispatch();
+    const isFirstRendered = useRef(true);
 
     const [isModalopen, setIsModalOpen] = useState(false);
     const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
@@ -36,31 +38,48 @@ const ManageEmployees = () => {
     );
 
     const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
-    const offset =
-        Number(searchParams.get("offset")) || defaultSearchParams.offset;
-    const limit =
-        Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
+    let offset =
+        Number(searchParams.get("offset")) || defaultSearchParams.offset;
+    let limit = Number(searchParams.get("limit")) || defaultSearchParams.limit;
+
+    const employeeList = useAppSelector(
+        (state) => state.employees.employeesList
+    );
     const employeesListSlice = useAppSelector(
         selectEmployeesListSlice(offset, limit)
     );
+
     const employeesCount = useAppSelector((state) => state.employees.count);
     const employeesFetchLoading = useAppSelector(
         selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
     );
+
     const employeeDeleteLoading = useAppSelector(
         selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
     );
 
     const getSearchParams = (): ISearchParams => {
-        const sortBy = searchParams.get("sortBy") || defaultSearchParams.sortBy;
+        const limit = searchParams.get("limit")
+            ? Number(searchParams.get("limit"))
+            : defaultSearchParams.limit;
+        const offset = searchParams.get("offset")
+            ? Number(searchParams.get("offset"))
+            : defaultSearchParams.offset;
+        const sortBy = searchParams.get("sortBy") ?? defaultSearchParams.sortBy;
         const sortDir =
-            searchParams.get("sortDir") || defaultSearchParams.sortDir;
+            searchParams.get("sortDir") ?? defaultSearchParams.sortDir;
         const skillIds =
-            searchParams.get("skillIds") || defaultSearchParams.skillIds;
-        const search = searchParams.get("search") || defaultSearchParams.search;
-
-        return { limit, offset, sortBy, sortDir, skillIds, search };
+            searchParams.get("skillIds") ?? defaultSearchParams.skillIds;
+        const search = searchParams.get("search") ?? defaultSearchParams.search;
+        return {
+            limit,
+            offset,
+            sortBy,
+            sortDir,
+            skillIds,
+            search,
+        };
     };
 
     const deleteConfirmHandler = () => {
@@ -71,6 +90,16 @@ const ManageEmployees = () => {
     };
 
     useEffect(() => {
+        if (isFirstRendered.current) {
+            isFirstRendered.current = false;
+        }
+        return () => {
+            isFirstRendered.current = true;
+        };
+    }, []);
+
+    useEffect(() => {
+        if (isFirstRendered.current) return;
         dispatch(fetchEmployees(getSearchParams()));
     }, [searchParams]);
 
@@ -100,10 +129,13 @@ const ManageEmployees = () => {
                                     setToggleGridView((prev) => !prev);
                                 }}
                             />
+                            <Sort />
                         </div>
 
                         {toggleGridView ? (
                             <EmployeeGrid
+                                employeeList={employeeList}
+                                employeesCount={employeesCount}
                                 setIsModalOpen={setIsModalOpen}
                                 setDeleteEmployee={setEmpIdToDelete}
                             />

@@ -1,70 +1,69 @@
-import { useSearchParams } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../hooks/storeHelpers";
-import { defaultSearchParams } from "../../pages/ManageEmployees/constants";
-import { GridContainer } from "./EmployeeGrid.styles";
+import { useAppSelector } from "../../hooks/storeHelpers";
+import { GridContainer, NotFoundText } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
+import { IApiEmployee } from "../../interfaces/ApiDataInterface";
+import { useEffect, useRef } from "react";
+
 import { Loader } from "..";
-import { useEffect, useRef, useState } from "react";
-import { fetchEmployees } from "../../core/store/employeesList/actions";
-import { ISearchParams } from "../../interfaces/common";
+import { useSearchParams } from "react-router-dom";
+import { defaultSearchParams } from "../../pages/ManageEmployees/constants";
 
 const EmployeeGrid = ({
+    employeeList,
+    employeesCount,
     setIsModalOpen,
     setDeleteEmployee,
 }: {
+    employeeList: IApiEmployee[];
+    employeesCount: number | undefined;
     setIsModalOpen: (isOpen: boolean) => void;
     setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
-    const [offset, setOffset] = useState(0);
-
     const observerTarget = useRef(null);
-    const [searchParams] = useSearchParams();
-
-    const employeeList = useAppSelector(
-        (state) => state.employees.employeesList
-    );
-    const employeesCount = useAppSelector((state) => state.employees.count);
-    const dispatch = useAppDispatch();
-
-    let limit = 10;
+    const [searchParams, setSearchParams] = useSearchParams();
 
     const employeesFetchLoading = useAppSelector(
         selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
     );
 
-    const getSearchParams = (): ISearchParams => {
-        const sortBy = searchParams.get("sortBy") ?? defaultSearchParams.sortBy;
-        const sortDir =
-            searchParams.get("sortDir") ?? defaultSearchParams.sortDir;
-        const skillIds =
-            searchParams.get("skillIds") ?? defaultSearchParams.skillIds;
-        const search = searchParams.get("search") ?? defaultSearchParams.search;
-        return {
-            limit,
-            offset,
-            sortBy,
-            sortDir,
-            skillIds,
-            search,
-        };
-    };
+    let limit = Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
     const handleLoadData = () => {
+        let currentOffset = Number(searchParams.get("offset"));
+
+        if (
+            employeesFetchLoading ||
+            !employeesCount ||
+            typeof currentOffset !== "number"
+        )
+            return;
+
         let hasMore = true;
 
-        if (employeesCount === undefined) hasMore = true;
-        else if (
-            (employeeList && employeeList.length >= employeesCount) ||
+        if (
+            (employeesCount &&
+                employeeList &&
+                employeeList.length >= employeesCount) ||
             employeesCount === 0
         ) {
             hasMore = false;
         }
-        if (employeesFetchLoading || !hasMore) return;
-        dispatch(fetchEmployees(getSearchParams()));
-        setOffset((prev) => prev + limit);
+
+        if (!hasMore) return;
+
+        const maxOffset = Math.max(
+            0,
+            Math.floor(employeesCount! / limit) * limit
+        ); // (28 / 10) * 10 = 28
+        const newOffset = Math.min(currentOffset + limit, maxOffset);
+
+        if (newOffset > maxOffset || newOffset <= currentOffset) return;
+
+        searchParams.set("offset", String(newOffset));
+        setSearchParams(searchParams);
     };
 
     useEffect(() => {
@@ -87,23 +86,23 @@ const EmployeeGrid = ({
         };
     }, [handleLoadData]);
 
-    console.log("count: ", employeesCount);
-    console.log("length:", employeeList.length);
-
     return (
         <>
-            <GridContainer>
-                {employeeList.length
-                    ? getEmployeesListingData(employeeList).map((employee) => (
-                          <EmployeeCard
-                              key={employee.id}
-                              employeeData={employee}
-                              setIsModalOpen={setIsModalOpen}
-                              setDeleteEmployee={setDeleteEmployee}
-                          />
-                      ))
-                    : null}
-            </GridContainer>
+            {employeeList?.length ? (
+                <GridContainer>
+                    {getEmployeesListingData(employeeList).map((employee) => (
+                        <EmployeeCard
+                            key={employee.id}
+                            employeeData={employee}
+                            setIsModalOpen={setIsModalOpen}
+                            setDeleteEmployee={setDeleteEmployee}
+                        />
+                    ))}
+                </GridContainer>
+            ) : !employeesFetchLoading ? (
+                <NotFoundText>Record not Found</NotFoundText>
+            ) : null}
+
             {employeesFetchLoading && <Loader />}
             <div ref={observerTarget}></div>
         </>

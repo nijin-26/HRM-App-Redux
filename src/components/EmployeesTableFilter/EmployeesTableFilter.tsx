@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
 import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Input, Button } from "..";
 import Select, { MultiValue } from "react-select";
 import {
@@ -21,11 +21,18 @@ const EmployeesTableFilter: React.FC = () => {
         searchParams.get("search") || ""
     );
 
+    const prevSkillFilter = useRef<MultiValue<IReactSelectOption>>([]);
+    const prevEmpNameFilter = useRef<string>(searchParams.get("search") || "");
+
     const selectSkillsData = useAppSelector(
         (state) => state.dropdownData.skills.skillsData
     );
 
     const handleSearchInputChange = () => {
+        if (empNameFilter === prevEmpNameFilter.current) {
+            return;
+        }
+        dispatch(employeeListClear());
         searchParams.set("offset", "0");
 
         if (!empNameFilter) {
@@ -34,9 +41,17 @@ const EmployeesTableFilter: React.FC = () => {
             searchParams.set("search", empNameFilter);
         }
         setSearchParams(searchParams);
+        prevEmpNameFilter.current = empNameFilter;
     };
 
     const handleSkillSelectChange = () => {
+        if (
+            JSON.stringify(skillFilter) ===
+            JSON.stringify(prevSkillFilter.current)
+        ) {
+            return;
+        }
+        dispatch(employeeListClear());
         searchParams.set("offset", "0");
 
         if (!skillFilter.length) {
@@ -48,6 +63,7 @@ const EmployeesTableFilter: React.FC = () => {
             searchParams.set("skillIds", selectedOptionsValue.toString());
         }
         setSearchParams(searchParams);
+        prevSkillFilter.current = skillFilter;
     };
 
     const handleClearBtnClick = () => {
@@ -55,8 +71,10 @@ const EmployeesTableFilter: React.FC = () => {
             return;
         }
         setSkillFilter([]);
+        prevSkillFilter.current = [];
         searchParams.delete("skillIds");
         setEmpNameFilter("");
+        prevEmpNameFilter.current = "";
         searchParams.delete("search");
         dispatch(employeeListClear());
         setSearchParams(searchParams);
@@ -74,6 +92,7 @@ const EmployeesTableFilter: React.FC = () => {
                     (option) => urlSelectedSkillValues.includes(option.value)
                 );
                 setSkillFilter(selectedSkillsFromUrl);
+                prevSkillFilter.current = selectedSkillsFromUrl;
             }
         }
     }, [selectSkillsData]);
@@ -100,7 +119,6 @@ const EmployeesTableFilter: React.FC = () => {
                     setEmpNameFilter(
                         event.target.value.trimStart().toLowerCase()
                     );
-                    dispatch(employeeListClear());
                 }}
                 className="table-control-field"
             />
@@ -114,7 +132,6 @@ const EmployeesTableFilter: React.FC = () => {
                 placeholder="Filter by skills"
                 onChange={(selectedOptions) => {
                     setSkillFilter(selectedOptions);
-                    dispatch(employeeListClear());
                 }}
             />
             <Button
