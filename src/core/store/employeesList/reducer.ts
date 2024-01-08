@@ -30,15 +30,19 @@ const employeesReducer = (
                 employeesList: updatedEmployeesList,
             };
         case 'DELETE_EMPLOYEE_SUCCESS':
-            // const filteredEmployeeList = state.employeesList
-            //     .flat()
-            //     .filter((employee) => employee.id !== action.payload);
+            const filteredEmployeesList = state.employeesList
+                .flat()
+                .filter((employee) => employee.id !== action.payload);
+
+            const splitEmployeesList = [];
+            for (let i = 0; i < filteredEmployeesList.length; i += 10) {
+                splitEmployeesList.push(filteredEmployeesList.slice(i, i + 10));
+            }
 
             return {
                 ...state,
                 count: state.count ? state.count - 1 : state.count,
-                //TODO:
-                // employeesList:
+                employeesList: splitEmployeesList,
             };
         case 'EMPLOYEE_LIST_CLEAR':
             return {
