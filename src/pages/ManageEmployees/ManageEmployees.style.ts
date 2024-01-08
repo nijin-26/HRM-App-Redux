@@ -24,12 +24,12 @@ export const StyledManageEmployeesWrap = styled.section`
 `;
 
 export const StyledEmployeesTable = styled(Table)`
-  & .employee-actions {
-    padding-left: 0;
-    margin: 0;
-    list-style: none;
-    align-items: center;
-    gap: 25px;
+    & .employee-actions {
+        padding-left: 0;
+        margin: 0;
+        list-style: none;
+        align-items: center;
+        gap: 25px;
 
         & li button,
         & li a {
@@ -60,24 +60,23 @@ export const StyledEmployeesTable = styled(Table)`
     }
 
     & li span {
-      color: #000;
+        color: #000;
 
-      &:hover {
-        scale: 1.2;
-        font-variation-settings: "FILL" 1;
-      }
+        &:hover {
+            scale: 1.2;
+            font-variation-settings: "FILL" 1;
+        }
     }
 
     & .view-emp-btn span {
-      color: green;
+        color: green;
     }
 
     & .edit-emp-btn span {
-      color: var(--edit-clr);
+        color: var(--edit-clr);
     }
 
     & .delete-emp-btn span {
-      color: red;
+        color: red;
     }
-  }
 `;
