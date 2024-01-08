@@ -41,24 +41,6 @@ const employeesReducer = (
                     (emp) => emp.id !== action.payload
                 ),
             };
-        case 'ADD_EMPLOYEE_SUCCESS':
-            return {
-                ...state,
-                count: state.count ? state.count + 1 : 0,
-                employeesList: [
-                    ...state.employeesList,
-                    action.payload.storeData,
-                ],
-            };
-        case 'EDIT_EMPLOYEE_SUCCESS':
-            return {
-                ...state,
-                employeesList: state.employeesList.map((employee) =>
-                    employee.id === action.payload.storeData.id
-                        ? action.payload.storeData
-                        : employee
-                ),
-            };
         case 'EMPLOYEE_LIST_CLEAR':
             return {
                 ...state,

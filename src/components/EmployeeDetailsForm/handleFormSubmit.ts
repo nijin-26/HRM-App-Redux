@@ -1,9 +1,6 @@
 import { toast } from 'react-toastify';
 import { IEmployee } from '../../interfaces/common';
-import {
-    IApiEmployee,
-    IApiEmployeeSubmission,
-} from '../../interfaces/ApiDataInterface';
+import { IApiEmployeeSubmission } from '../../interfaces/ApiDataInterface';
 import { AppDispatch } from '../../core/store';
 import { getPhotoUrl } from '../../core/api/config/firebase';
 import {
@@ -39,20 +36,6 @@ const handleFormSubmit = async (
         photoId: photoUrl,
     };
 
-    const storeData: IApiEmployee = {
-        ...rest,
-        id,
-        role: role ? { id: Number(role.value), role: role.label } : null,
-        department: department
-            ? { id: Number(department.value), department: department.label }
-            : null,
-        skills: skills.map((skill) => ({
-            id: Number(skill.value),
-            skill: skill.label,
-        })),
-        moreDetails: JSON.stringify(moreDetails),
-    };
-
     const apiSubmitData: IApiEmployeeSubmission = {
         ...rest,
         role: role ? Number(role.value) : null,
@@ -61,11 +44,11 @@ const handleFormSubmit = async (
         moreDetails: JSON.stringify(moreDetails),
     };
 
-    formSubmitData.id
-        ? await dispatch(
-              editEmployeeAction(formSubmitData.id, apiSubmitData, storeData)
-          )
-        : await dispatch(addEmployeeAction(apiSubmitData, storeData));
+    if (formSubmitData.id) {
+        return dispatch(editEmployeeAction(formSubmitData.id, apiSubmitData));
+    } else {
+        return dispatch(addEmployeeAction(apiSubmitData));
+    }
 };
 
 export default handleFormSubmit;

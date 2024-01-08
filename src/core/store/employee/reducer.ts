@@ -22,6 +22,11 @@ const employeeReducer = (
                 ...state,
                 employeeData: action.payload,
             };
+        case 'CLEAR_EMPLOYEE_DATA':
+            return {
+                ...state,
+                employeeData: null,
+            };
         default:
             return state;
     }

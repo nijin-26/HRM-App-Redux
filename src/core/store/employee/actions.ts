@@ -8,10 +8,6 @@ import { REQUESTS_ENUM } from '../requests/requestsEnum';
 import { EmptyResponseDataError } from '../../../utils/errors';
 
 //Action Creators
-export const fetchEmployeeRequest = (): types.IFETCH_EMPLOYEE_REQUEST => ({
-    type: 'FETCH_EMPLOYEE_REQUEST',
-});
-
 export const fetchEmployeeSuccess = (
     employeeData: IApiEmployee
 ): types.IFETCH_EMPLOYEE_SUCCESS => ({
@@ -52,5 +48,11 @@ export const fetchEmployee = (employeeId: number): AppThunk => {
                 );
             }
         }
+    };
+};
+
+export const clearEmployeeData = (): types.ICLEAR_EMPLOYEE_DATA => {
+    return {
+        type: 'CLEAR_EMPLOYEE_DATA',
     };
 };

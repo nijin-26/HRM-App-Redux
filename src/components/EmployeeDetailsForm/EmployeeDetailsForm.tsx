@@ -79,14 +79,14 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                         onSubmit={async (values, { setSubmitting }) => {
                             setLoading(true);
 
-                            await handleFormSubmit(
+                            const id: number = await handleFormSubmit(
                                 values,
                                 photoRef.current,
                                 dispatch
                             );
                             setSubmitting(false);
                             setLoading(false);
-                            navigate(`/`);
+                            navigate(`/view-employee/${id}`, { replace: true });
                         }}
                     >
                         {(props) => {
