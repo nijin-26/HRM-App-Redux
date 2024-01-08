@@ -1,13 +1,20 @@
-import { IEmployee } from '../../interfaces/common';
-import { IApiEmployeeSubmission } from '../../interfaces/ApiDataInterface';
-import { API } from '../../core/api/useApi';
 import { toast } from 'react-toastify';
-import { getPhotoUrl } from '../../core/api/firebase';
+import { IEmployee } from '../../interfaces/common';
+import {
+    IApiEmployee,
+    IApiEmployeeSubmission,
+} from '../../interfaces/ApiDataInterface';
+import { AppDispatch } from '../../core/store';
+import { getPhotoUrl } from '../../core/api/config/firebase';
+import {
+    addEmployeeAction,
+    editEmployeeAction,
+} from '../../core/store/employeesList/actions';
 
 const handleFormSubmit = async (
     formSubmitData: IEmployee,
-    empId: string | null,
-    photoRef: HTMLInputElement | null
+    photoRef: HTMLInputElement | null,
+    dispatch: AppDispatch
 ) => {
     let photoUrl = '';
     try {
@@ -32,6 +39,20 @@ const handleFormSubmit = async (
         photoId: photoUrl,
     };
 
+    const storeData: IApiEmployee = {
+        ...rest,
+        id,
+        role: role ? { id: Number(role.value), role: role.label } : null,
+        department: department
+            ? { id: Number(department.value), department: department.label }
+            : null,
+        skills: skills.map((skill) => ({
+            id: Number(skill.value),
+            skill: skill.label,
+        })),
+        moreDetails: JSON.stringify(moreDetails),
+    };
+
     const apiSubmitData: IApiEmployeeSubmission = {
         ...rest,
         role: role ? Number(role.value) : null,
@@ -40,19 +61,11 @@ const handleFormSubmit = async (
         moreDetails: JSON.stringify(moreDetails),
     };
 
-    try {
-        await API({
-            method: empId ? 'PATCH' : 'POST',
-            url: empId ? `/employee/${empId}` : '/employee',
-            data: apiSubmitData,
-        });
-        toast.success(
-            `Employee details ${empId ? 'edited' : 'added'} successfully.`
-        );
-    } catch (error) {
-        toast.error(`${empId ? 'Edit' : 'Add'} employee details failed.`);
-        console.log(`${empId ? 'Edit' : 'Add'} failed`, error);
-    }
+    formSubmitData.id
+        ? await dispatch(
+              editEmployeeAction(formSubmitData.id, apiSubmitData, storeData)
+          )
+        : await dispatch(addEmployeeAction(apiSubmitData, storeData));
 };
 
 export default handleFormSubmit;

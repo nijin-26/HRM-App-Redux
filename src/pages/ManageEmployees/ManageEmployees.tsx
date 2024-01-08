@@ -1,175 +1,176 @@
-import { useState, useEffect } from 'react';
-import { empTableHeaders, initQueryParams } from './constants';
+import { useState, useEffect, useRef } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import { empTableHeaders, initQueryParams } from "./constants";
 import {
-    StyledManageEmployeesWrap,
-    StyledEmployeesTable,
-} from './ManageEmployees.style';
-import { useSearchParams } from 'react-router-dom';
+  StyledManageEmployeesWrap,
+  StyledEmployeesTable,
+} from "./ManageEmployees.style";
 import {
-    Modal,
-    Pagination,
-    EmployeesTableFilter,
-    LinkButton,
-    Loader,
-} from '../../components';
-import { toast } from 'react-toastify';
-import { useAppContext } from '../../core/contexts/AppContext';
-import useApi, { API } from '../../core/api/useApi';
-import { IApiFetchEmployeesArray } from '../../interfaces/ApiDataInterface';
-import { IEmployeeListing, IDeleteEmployee } from '../../interfaces/common';
-import { getEmployeesListingData } from '../../utils';
+  Modal,
+  Pagination,
+  EmployeesTableFilter,
+  LinkButton,
+  Loader,
+  EmployeeDeleteModal,
+} from "../../components";
+import { IQueryParams } from "../../interfaces/common";
+import { getEmployeesListingData } from "../../utils";
+import {
+  fetchEmployees,
+  deleteEmployeeAction,
+} from "../../core/store/employeesList/actions";
+import { selectRequestInProgress } from "../../core/store/requests/reducer";
+import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
+import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
+import ToggleView from "../../components/ToggleView/ToggleView";
+import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
+import Sort from "../../components/Sort/Sort";
 
-const ManageEmployees: React.FC = () => {
-    const { appState } = useAppContext();
-    const [searchParams] = useSearchParams();
+const ManageEmployees = () => {
+  const [searchParams] = useSearchParams();
+  const dispatch = useAppDispatch();
+  const isFirstRendered = useRef(true);
 
-    const [isModalopen, setIsModalOpen] = useState(false);
-    const [employees, setEmployees] = useState<IEmployeeListing[]>([]);
-    const [deleteEmployee, setDeleteEmployee] = useState<IDeleteEmployee>({
-        isDeleting: false,
-        empIdToDelete: undefined,
-    });
+  const [isModalopen, setIsModalOpen] = useState(false);
+  const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
+    undefined
+  );
 
-    const getFetchURL = () => {
-        const limit = searchParams.get('limit') ?? initQueryParams.limit;
-        const offset = searchParams.get('offset') ?? initQueryParams.offset;
-        const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
-        const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
-        return `/employee?limit=${limit}&offset=${offset}&sortBy=${sortBy}&sortDir=${sortDir}`;
+  const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
+
+  let offset = Number(searchParams.get("offset")) || initQueryParams.offset;
+  let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
+
+  const employeeList = useAppSelector((state) => state.employees.employeesList);
+  const employeesListSlice = useAppSelector(
+    selectEmployeesListSlice(offset, limit)
+  );
+
+  const employeesCount = useAppSelector((state) => state.employees.count);
+  const employeesFetchLoading = useAppSelector(
+    selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
+  );
+
+  const employeeDeleteLoading = useAppSelector(
+    selectRequestInProgress(REQUESTS_ENUM.deleteEmployee)
+  );
+
+  const getSearchParams = (): IQueryParams => {
+    const limit = searchParams.get("limit")
+      ? Number(searchParams.get("limit"))
+      : initQueryParams.limit;
+    const offset = searchParams.get("offset")
+      ? Number(searchParams.get("offset"))
+      : initQueryParams.offset;
+    const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
+    const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
+    const skillIds = searchParams.get("skillIds");
+    const search = searchParams.get("search");
+    return {
+      limit,
+      offset,
+      sortBy,
+      sortDir,
+      skillIds,
+      search,
     };
+  };
 
-    const deleteConfirmHandler = async () => {
-        setDeleteEmployee({
-            isDeleting: true,
-            empIdToDelete: deleteEmployee.empIdToDelete,
-        });
-        setIsModalOpen(false);
-        try {
-            await API({
-                method: 'DELETE',
-                url: `/employee/${deleteEmployee.empIdToDelete}`,
-            });
-            toast.success('Employee Added Successfully');
-            refreshEmployeesList();
-        } catch (error) {
-            toast.error('Employee deletion failed');
-            console.log('delete Failed!', error);
-        } finally {
-            setDeleteEmployee({
-                isDeleting: false,
-                empIdToDelete: undefined,
-            });
-        }
+  const deleteConfirmHandler = () => {
+    setIsModalOpen(false);
+    if (empIdToDelete) {
+      dispatch(deleteEmployeeAction(empIdToDelete));
+    }
+  };
+
+  useEffect(() => {
+    if (isFirstRendered.current) {
+      isFirstRendered.current = false;
+    }
+    return () => {
+      isFirstRendered.current = true;
     };
+  }, []);
 
-    const filterEmployeesList = (employeesList: IEmployeeListing[]) => {
-        return employeesList.filter((employee) => {
-            let shouldInclude = true;
+  useEffect(() => {
+    if (isFirstRendered.current) return;
+    dispatch(fetchEmployees(getSearchParams()));
+  }, [searchParams]);
 
-            const employeeName = employee.fullName.trim().toLowerCase();
-            const selectedSkillsForFilter = appState.skillsFilter.map((skill) =>
-                Number(skill.value)
-            );
-            if (!(employeeName.indexOf(appState.employeeNameFilter) > -1)) {
-                shouldInclude = false;
-            }
-
-            if (
-                !selectedSkillsForFilter.every((skill) =>
-                    employee['skills'].includes(skill)
-                )
-            ) {
-                shouldInclude = false;
-            }
-
-            return shouldInclude;
-        });
-    };
-
-    const isSearchFilters = () => {
-        if (
-            appState.employeeNameFilter === '' &&
-            appState.skillsFilter.length === 0
-        ) {
-            return false;
-        }
-        return true;
-    };
-
-    const {
-        response: employeesList,
-        loading,
-        refresh: refreshEmployeesList,
-        error: fetchError,
-    } = useApi<IApiFetchEmployeesArray>('GET', getFetchURL());
-
-    useEffect(() => {
-        if (fetchError) {
-            toast.error(
-                'Could not fetch employees List. Please try reloading the page.'
-            );
-        }
-
-        if (employeesList) {
-            const EmployeesData = employeesList.data.employees;
-            setEmployees(
-                getEmployeesListingData(
-                    EmployeesData,
-                    setIsModalOpen,
-                    setDeleteEmployee
-                )
-            );
-        }
-    }, [loading]);
-
-    return (
+  return (
+    <>
+      {employeeDeleteLoading ? (
+        <Loader className="full-screen-loader" />
+      ) : (
         <>
-            {deleteEmployee.isDeleting ? (
-                <Loader className="full-screen-loader" />
-            ) : (
-                <>
-                    <StyledManageEmployeesWrap>
-                        <div className="employees-table-controls">
-                            <EmployeesTableFilter />
-                            <LinkButton
-                                to="/add-employee"
-                                className="primary icon-btn table-control-field"
-                            >
-                                <span>Add Employee</span>
-                                <span className="material-symbols-rounded">
-                                    person_add
-                                </span>
-                            </LinkButton>
-                        </div>
-                        <StyledEmployeesTable
-                            tableHeaders={empTableHeaders}
-                            tableData={
-                                employees.length
-                                    ? filterEmployeesList(employees)
-                                    : []
-                            }
-                            loading={loading}
-                        />
-                        {employeesList && !isSearchFilters() ? (
-                            <Pagination
-                                totalEntries={employeesList.data.count}
-                                key={searchParams.get('offset')}
-                            />
-                        ) : null}
-                    </StyledManageEmployeesWrap>
+          <StyledManageEmployeesWrap>
+            <div className="employees-table-controls">
+              <EmployeesTableFilter />
+              <LinkButton
+                to="/add-employee"
+                className="primary icon-btn table-control-field"
+              >
+                <span>Add Employee</span>
+                <span className="material-symbols-rounded">person_add</span>
+              </LinkButton>
+            </div>
+            <div className="employees-view">
+              <ToggleView
+                gridView={toggleGridView}
+                handleToggleGridView={(state: boolean) => {
+                  setToggleGridView(state);
+                }}
+              />
+              <Sort />
+            </div>
 
-                    <Modal
-                        $isOpen={isModalopen}
-                        text="Are you sure you want to permanently delete the employee
-                    record?"
-                        type="yesCancel"
-                        confirmClickHandler={deleteConfirmHandler}
-                        cancelClickHandler={() => setIsModalOpen(false)}
-                    />
-                </>
+            {toggleGridView ? (
+              <EmployeeGrid
+                employeeList={employeeList}
+                employeesCount={employeesCount}
+                setIsModalOpen={setIsModalOpen}
+                setDeleteEmployee={setEmpIdToDelete}
+              />
+            ) : (
+              <>
+                <StyledEmployeesTable
+                  tableHeaders={empTableHeaders}
+                  tableData={
+                    employeesListSlice.length
+                      ? getEmployeesListingData(
+                          employeesListSlice,
+                          setIsModalOpen,
+                          setEmpIdToDelete
+                        )
+                      : []
+                  }
+                  loading={employeesFetchLoading}
+                />
+                {employeesCount && employeesCount > limit ? (
+                  <Pagination
+                    totalEntries={employeesCount}
+                    key={searchParams.get("offset")}
+                  />
+                ) : null}
+              </>
             )}
+          </StyledManageEmployeesWrap>
+
+          <Modal
+            $isOpen={isModalopen}
+            cancelClickHandler={() => setIsModalOpen(false)}
+          >
+            <EmployeeDeleteModal
+              confirmClickHandler={deleteConfirmHandler}
+              cancelClickHandler={() => setIsModalOpen(false)}
+              employeeIdToDelete={empIdToDelete}
+            />
+          </Modal>
         </>
-    );
+      )}
+    </>
+  );
 };
 
 export default ManageEmployees;
