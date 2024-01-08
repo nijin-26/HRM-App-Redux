@@ -1,4 +1,7 @@
-import { IApiEmployeesData } from '../../../interfaces/ApiDataInterface';
+import {
+    IApiEmployee,
+    IApiEmployeesData,
+} from '../../../interfaces/ApiDataInterface';
 
 //Action Definitions
 export interface IFETCH_EMPLOYEES_SUCCESS {
@@ -12,7 +15,10 @@ export interface IFETCH_EMPLOYEES_SUCCESS {
 
 export interface IDELETE_EMPLOYEE_SUCCESS {
     type: 'DELETE_EMPLOYEE_SUCCESS';
-    payload: number;
+    payload: {
+        empIdToDelete: number;
+        empToAppend?: IApiEmployee;
+    };
 }
 
 export interface IEMPLOYEE_LIST_CLEAR {

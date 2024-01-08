@@ -1,4 +1,5 @@
 import {
+    IApiEmployee,
     IApiEmployeeSubmission,
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
@@ -32,29 +33,6 @@ const fetchEmployeesSuccess = (
 });
 
 //Thunk Action creator
-// export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
-//     return async (dispatch: AppDispatch) => {
-//         try {
-//             const { data } = await requestHelper(
-//                 dispatch,
-//                 REQUESTS_ENUM.getEmployeesList,
-//                 () => getEmployeesList(searchParams)
-//             );
-//             dispatch(
-//                 fetchEmployeesSuccess(
-//                     data.data,
-//                     searchParams.offset,
-//                     searchParams.limit
-//                 )
-//             );
-//         } catch (error) {
-//             console.log(error);
-//             toast.error(
-//                 'Could not fetch employee details. Please try reloading the page.'
-//             );
-//         }
-//     };
-// };
 export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     return async (dispatch: AppDispatch, getState: () => RootState) => {
         const employeesListSlice =
@@ -65,7 +43,6 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
         if (employeesListSlice) {
             return;
         }
-
         try {
             const { data } = await requestHelper(
                 dispatch,
@@ -88,24 +65,53 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     };
 };
 
+const fetchNextEmployee = (searchParams: ISearchParams): AppThunk => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        const empListInStoreLength =
+            getState().employees.employeesList.flat().length;
+        searchParams.limit = 1;
+        searchParams.offset = empListInStoreLength;
+
+        const { data } = await requestHelper(
+            dispatch,
+            REQUESTS_ENUM.getNextEmployee,
+            () => getEmployeesList(searchParams)
+        );
+        return data.data.employees[0];
+    };
+};
+
 //EMPLOYEE DELETE
 const deleteEmployeeSuccess = (
-    deletedEmpId: number
+    empIdToDelete: number,
+    empToAppend?: IApiEmployee
 ): types.IDELETE_EMPLOYEE_SUCCESS => ({
     type: 'DELETE_EMPLOYEE_SUCCESS',
-    payload: deletedEmpId,
+    payload: {
+        empIdToDelete,
+        empToAppend,
+    },
 });
 
 //thunk action creator
-export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
+export const deleteEmployeeAction = (
+    empIdToDelete: number,
+    searchParams: ISearchParams
+): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
+            const empToAppend: IApiEmployee | undefined = await dispatch(
+                fetchNextEmployee(searchParams)
+            );
+
             await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
                 deleteEmployee(empIdToDelete)
             );
-            dispatch(deleteEmployeeSuccess(empIdToDelete));
+
+            dispatch(deleteEmployeeSuccess(empIdToDelete, empToAppend));
             toast.success('Employee deleted Successfully');
         } catch (error) {
+            console.log(error);
             toast.error('Employee deletion failed');
         }
     };
@@ -115,7 +121,6 @@ export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
 //thunk function
 export const addEmployeeAction = (
     apiSubmissionData: IApiEmployeeSubmission
-    // storeData: IApiEmployee
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {

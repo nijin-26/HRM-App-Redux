@@ -63,7 +63,7 @@ const ManageEmployees: React.FC = () => {
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empIdToDelete) {
-            dispatch(deleteEmployeeAction(empIdToDelete));
+            dispatch(deleteEmployeeAction(empIdToDelete, getSearchParams()));
         }
     };
 

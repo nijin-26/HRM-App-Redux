@@ -30,9 +30,16 @@ const employeesReducer = (
                 employeesList: updatedEmployeesList,
             };
         case 'DELETE_EMPLOYEE_SUCCESS':
+            console.log(state.employeesList);
             const filteredEmployeesList = state.employeesList
                 .flat()
-                .filter((employee) => employee.id !== action.payload);
+                .filter(
+                    (employee) => employee.id !== action.payload.empIdToDelete
+                );
+
+            if (action.payload.empToAppend) {
+                filteredEmployeesList.push(action.payload.empToAppend);
+            }
 
             const splitEmployeesList = [];
             for (let i = 0; i < filteredEmployeesList.length; i += 10) {
