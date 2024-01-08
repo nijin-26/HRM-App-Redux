@@ -6,14 +6,16 @@ export const CardContainer = styled.div`
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0px 0px 10px #ccc;
-  transition: scale 0.5s;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  cursor: pointer;
+  transition: all 0.5s;
 
-  /* &:hover {
+  &:hover {
     scale: 1.02;
-  } */
+    box-shadow: 0px 10px 10px #ccc;
+  }
 `;
 
 export const CardHeader = styled.div`
@@ -21,8 +23,9 @@ export const CardHeader = styled.div`
   background-color: var(--primary-clr);
   border-radius: 8px 8px 0 0;
   padding: 16px;
-
   position: relative;
+  display: flex;
+  justify-content: space-between;
 
   img {
     position: absolute;
@@ -36,6 +39,40 @@ export const CardHeader = styled.div`
     background-color: #fff;
     /* border: 2px solid var(--primary-clr); */
     box-shadow: 0px 0px 10px #ccc;
+  }
+
+  .employee-id {
+    color: #fff;
+    font-weight: bold;
+  }
+
+  .icons {
+    padding: 12px 0;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 10px;
+    color: #fff;
+    transition: all 0.3s;
+  }
+
+  .icons a {
+    color: inherit;
+    transition: all 0.3s;
+  }
+
+  .icons a:hover {
+    color: #000;
+  }
+
+  .icons > span {
+    cursor: pointer;
+    font-size: 26px;
+    transition: all 0.3s;
+  }
+
+  .icons > span:hover {
+    color: #000;
   }
 `;
 
@@ -94,33 +131,6 @@ export const CardBody = styled.div`
   .divider {
     width: 100%;
     border: 1px solid #ccc;
-  }
-
-  .icons {
-    padding: 12px 0;
-    display: flex;
-    justify-content: right;
-    gap: 10px;
-    color: #000;
-    transition: all 0.3s;
-  }
-
-  .icons a {
-    color: inherit;
-    transition: all 0.3s;
-  }
-
-  .icons a:hover {
-    color: #000;
-  }
-
-  .icons > span {
-    cursor: pointer;
-    transition: all 0.3s;
-  }
-
-  .icons > span:hover {
-    color: #000;
   }
 `;
 

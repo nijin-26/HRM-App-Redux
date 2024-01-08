@@ -28,9 +28,8 @@ import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
 import Sort from "../../components/Sort/Sort";
 
 const ManageEmployees = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const dispatch = useAppDispatch();
-  const isFirstRendered = useRef(true);
 
   const [isModalopen, setIsModalOpen] = useState(false);
   const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
@@ -85,16 +84,6 @@ const ManageEmployees = () => {
   };
 
   useEffect(() => {
-    if (isFirstRendered.current) {
-      isFirstRendered.current = false;
-    }
-    return () => {
-      isFirstRendered.current = true;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isFirstRendered.current) return;
     dispatch(fetchEmployees(getSearchParams()));
   }, [searchParams]);
 
@@ -119,6 +108,8 @@ const ManageEmployees = () => {
               <ToggleView
                 gridView={toggleGridView}
                 handleToggleGridView={(state: boolean) => {
+                  searchParams.set("offset", "0");
+                  setSearchParams(searchParams);
                   setToggleGridView(state);
                 }}
               />

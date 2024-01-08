@@ -44,9 +44,7 @@ const EmployeeGrid = ({
     let hasMore = true;
 
     if (
-      (employeesCount &&
-        employeeList &&
-        employeeList.length >= employeesCount) ||
+      (employeeList && employeeList.length >= employeesCount) ||
       employeesCount === 0
     ) {
       hasMore = false;
