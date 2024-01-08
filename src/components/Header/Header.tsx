@@ -1,13 +1,13 @@
 import { StyledHeader, Navbar } from './Header.style';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 const Header: React.FC = () => {
     return (
         <StyledHeader>
             <Navbar>
-                <a href="/employees">
+                <Link to="/employees">
                     <h1 className="brand-logo">HRM APP</h1>
-                </a>
+                </Link>
                 <ul className="navlinks">
                     <li>
                         <NavLink to="/view-employee" end>

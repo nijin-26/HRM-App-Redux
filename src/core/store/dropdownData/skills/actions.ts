@@ -25,6 +25,7 @@ export const fetchSkills = (): AppThunk => {
                 REQUESTS_ENUM.getSkills,
                 getSkills
             );
+            //TODO : FETCH NEXT EMPLOYEE
             dispatch(fetchSkillsSuccess(fetchResponse.data));
         } catch (error) {
             console.log(error);
