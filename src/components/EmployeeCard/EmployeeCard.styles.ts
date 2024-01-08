@@ -66,7 +66,7 @@ export const CardBody = styled.div`
   .details_wrapper {
     padding: 0 16px;
     margin: 10px 0;
-    width: 230px;
+    width: 300px;
     display: flex;
     flex-direction: column;
     align-items: start;

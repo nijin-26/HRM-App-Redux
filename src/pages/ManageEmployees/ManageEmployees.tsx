@@ -118,8 +118,8 @@ const ManageEmployees = () => {
             <div className="employees-view">
               <ToggleView
                 gridView={toggleGridView}
-                handleToggleGridView={() => {
-                  setToggleGridView((prev) => !prev);
+                handleToggleGridView={(state: boolean) => {
+                  setToggleGridView(state);
                 }}
               />
               <Sort />
