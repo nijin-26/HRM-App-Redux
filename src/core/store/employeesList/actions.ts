@@ -10,7 +10,7 @@ import {
     addEmployee,
     editEmployee,
 } from '../../api';
-import { AppDispatch, AppThunk } from '..';
+import { AppDispatch, AppThunk, RootState } from '..';
 import { requestHelper } from '../requests/actions';
 import { REQUESTS_ENUM } from '../requests/requestsEnum';
 import { ISearchParams } from '../../../interfaces/common';
@@ -19,22 +19,66 @@ import { clearEmployeeData } from '../employee/actions';
 //Action Creators
 //EMPLOYEES LIST FETCH
 const fetchEmployeesSuccess = (
-    employeesData: IApiEmployeesData
+    employeesData: IApiEmployeesData,
+    offset: number,
+    limit: number
 ): types.IFETCH_EMPLOYEES_SUCCESS => ({
     type: 'FETCH_EMPLOYEES_SUCCESS',
-    payload: employeesData,
+    payload: {
+        response: employeesData,
+        offset,
+        limit,
+    },
 });
 
 //Thunk Action creator
+// export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
+//     return async (dispatch: AppDispatch) => {
+//         try {
+//             const { data } = await requestHelper(
+//                 dispatch,
+//                 REQUESTS_ENUM.getEmployeesList,
+//                 () => getEmployeesList(searchParams)
+//             );
+//             dispatch(
+//                 fetchEmployeesSuccess(
+//                     data.data,
+//                     searchParams.offset,
+//                     searchParams.limit
+//                 )
+//             );
+//         } catch (error) {
+//             console.log(error);
+//             toast.error(
+//                 'Could not fetch employee details. Please try reloading the page.'
+//             );
+//         }
+//     };
+// };
 export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
-    return async (dispatch: AppDispatch) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        const employeesListSlice =
+            getState().employees.employeesList[
+                Math.floor(searchParams.offset / searchParams.limit)
+            ];
+
+        if (employeesListSlice) {
+            return;
+        }
+
         try {
             const { data } = await requestHelper(
                 dispatch,
                 REQUESTS_ENUM.getEmployeesList,
                 () => getEmployeesList(searchParams)
             );
-            dispatch(fetchEmployeesSuccess(data.data));
+            dispatch(
+                fetchEmployeesSuccess(
+                    data.data,
+                    searchParams.offset,
+                    searchParams.limit
+                )
+            );
         } catch (error) {
             console.log(error);
             toast.error(

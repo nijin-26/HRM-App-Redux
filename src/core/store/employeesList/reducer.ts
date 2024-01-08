@@ -4,7 +4,7 @@ import { ActionType } from './types';
 import { RootState } from '..';
 
 interface IEmployeesState {
-    employeesList: IApiEmployee[];
+    employeesList: IApiEmployee[][];
     count: number | undefined;
 }
 
@@ -19,32 +19,31 @@ const employeesReducer = (
 ): IEmployeesState => {
     switch (action.type) {
         case 'FETCH_EMPLOYEES_SUCCESS':
-            const employeeListIds = new Set(
-                state.employeesList.map((employee) => employee.id)
-            );
+            const updatedEmployeesList = [...state.employeesList];
+            const { offset, limit, response } = action.payload;
+
+            const rowIndex = Math.floor(offset / limit);
+            updatedEmployeesList[rowIndex] = response.employees;
+            return {
+                ...state,
+                count: response.count,
+                employeesList: updatedEmployeesList,
+            };
+        case 'DELETE_EMPLOYEE_SUCCESS':
+            // const filteredEmployeeList = state.employeesList
+            //     .flat()
+            //     .filter((employee) => employee.id !== action.payload);
 
             return {
                 ...state,
-                count: action.payload.count,
-                employeesList: [
-                    ...state.employeesList,
-                    ...action.payload.employees.filter(
-                        (employee) => !employeeListIds.has(employee.id)
-                    ),
-                ],
-            };
-        case 'DELETE_EMPLOYEE_SUCCESS':
-            return {
-                ...state,
                 count: state.count ? state.count - 1 : state.count,
-                employeesList: state.employeesList.filter(
-                    (emp) => emp.id !== action.payload
-                ),
+                //TODO:
+                // employeesList:
             };
         case 'EMPLOYEE_LIST_CLEAR':
             return {
                 ...state,
-                count: 0,
+                count: undefined,
                 employeesList: [],
             };
         default:
@@ -55,7 +54,18 @@ const employeesReducer = (
 export const selectEmployeesListSlice = (offset: number, limit: number) =>
     createSelector(
         (state: RootState) => state.employees.employeesList,
-        (employeesList) => employeesList.slice(offset, offset + limit)
+        (employeesList) => {
+            const employeeSlice = employeesList[Math.floor(offset / limit)];
+            if (employeeSlice) {
+                return employeeSlice;
+            }
+            return [];
+        }
     );
+
+export const selectEmployeesList = createSelector(
+    (state: RootState) => state.employees.employeesList,
+    (employeesList) => employeesList.flat()
+);
 
 export default employeesReducer;

@@ -3,7 +3,11 @@ import { IApiEmployeesData } from '../../../interfaces/ApiDataInterface';
 //Action Definitions
 export interface IFETCH_EMPLOYEES_SUCCESS {
     type: 'FETCH_EMPLOYEES_SUCCESS';
-    payload: IApiEmployeesData;
+    payload: {
+        response: IApiEmployeesData;
+        offset: number;
+        limit: number;
+    };
 }
 
 export interface IDELETE_EMPLOYEE_SUCCESS {
