@@ -1,7 +1,7 @@
-import { useState, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { Formik } from 'formik';
+import { useState, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import { Field, Formik, FormikHelpers } from "formik";
 import {
     Button,
     CustomInput,
@@ -9,18 +9,18 @@ import {
     CustomRadioGroup,
     CustomSelect,
     Loader,
-} from '..';
-import StyledFormWrap from './EmployeeDetailsForm.style';
+} from "..";
+import StyledFormWrap from "./EmployeeDetailsForm.style";
 import {
     genders,
     locations,
     prefillDataOnEmployeeAdd,
-} from '../../pages/ManageEmployees/constants';
-import validate from './validation';
-import { IEmployee } from '../../interfaces/common';
-import handleFormSubmit from './handleFormSubmit';
-import { sortObjByKey } from '../../utils';
-import profilePictureAvatar from '../../assets/images/add-profile-photo.svg';
+} from "../../pages/ManageEmployees/constants";
+import validate from "./validation";
+import { IEmployee } from "../../interfaces/common";
+import handleFormSubmit from "./handleFormSubmit";
+import { sortObjByKey } from "../../utils";
+import profilePictureAvatar from "../../assets/images/add-profile-photo.svg";
 
 interface IEmployeeDetailsForm {
     prefillData?: IEmployee;
@@ -59,9 +59,20 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
     const handlePhotoLabelClick = (
         e: React.KeyboardEvent<HTMLLabelElement>
     ) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             photoRef.current?.click();
         }
+    };
+
+    const handleForm = async (
+        values: IEmployee,
+        { setSubmitting }: FormikHelpers<IEmployee>
+    ) => {
+        setLoading(true);
+        await handleFormSubmit(values, photoRef.current, dispatch);
+        setSubmitting(false);
+        setLoading(false);
+        navigate(`/`);
     };
 
     return (
@@ -74,18 +85,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                         initialValues={prefillData}
                         enableReinitialize
                         validationSchema={validate}
-                        onSubmit={async (values, { setSubmitting }) => {
-                            setLoading(true);
-
-                            await handleFormSubmit(
-                                values,
-                                photoRef.current,
-                                dispatch
-                            );
-                            setSubmitting(false);
-                            setLoading(false);
-                            navigate(`/`);
-                        }}
+                        onSubmit={handleForm}
                     >
                         {(props) => {
                             return (
@@ -175,20 +175,41 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                     </div>
                                     <div className="flex form-row">
                                         <div className="form-entry">
-                                            <CustomSelect
-                                                name="role"
-                                                label="Role"
-                                                options={selectRoles}
-                                                placeholder="Select a Role"
+                                            <CustomInput
+                                                label="Password"
+                                                name="password"
+                                                id="password"
+                                                type="password"
+                                                required
+                                                // disabled
+                                            />
+                                        </div>
+                                        <div className="form-entry">
+                                            <CustomInput
+                                                label="Mobile Number"
+                                                name="phone"
+                                                id="phone"
+                                                type="text"
                                                 required
                                             />
                                         </div>
+                                    </div>
+                                    <div className="flex form-row">
                                         <div className="form-entry">
                                             <CustomSelect
                                                 name="department"
                                                 label="Department"
                                                 options={selectDepartments}
                                                 placeholder="Select a Department"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-entry">
+                                            <CustomSelect
+                                                name="role"
+                                                label="Role"
+                                                options={selectRoles}
+                                                placeholder="Select a Role"
                                                 required
                                             />
                                         </div>
@@ -208,7 +229,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                                 label="Location"
                                                 options={sortObjByKey(
                                                     locations,
-                                                    'label'
+                                                    "label"
                                                 )}
                                                 placeholder="Select a Location"
                                                 required
@@ -227,6 +248,16 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                                 required
                                             />
                                         </div>
+                                    </div>
+                                    <div className="form-entry checkbox">
+                                        <Field
+                                            type="checkbox"
+                                            name="isAdmin"
+                                            id="isAdmin"
+                                        />
+                                        <label htmlFor="isAdmin">
+                                            Provide Admin Access
+                                        </label>
                                     </div>
                                     <div className="form-controls-container flex">
                                         <Button

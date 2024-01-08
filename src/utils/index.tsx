@@ -3,10 +3,10 @@ import {
     IEmployee,
     IReactSelectOption,
     // IDeleteEmployee,
-} from '../interfaces/common';
-import { IApiEmployee } from '../interfaces/ApiDataInterface';
-import { Button, LinkButton } from '../components';
-import { locations } from '../pages/ManageEmployees/constants';
+} from "../interfaces/common";
+import { IApiEmployee } from "../interfaces/ApiDataInterface";
+import { Button, LinkButton } from "../components";
+import { locations } from "../pages/ManageEmployees/constants";
 
 //sort array object by sortKey (slice() to create a new array)
 export const sortObjByKey = (srcObjArray: any[], sortKey: string) => {
@@ -43,8 +43,8 @@ export const modifySelectOptionsArray = (
     for (const optionObj of optionsArr) {
         newOptionsArr.push(modifySelectOption(optionObj, curLabelKey));
     }
-    newOptionsArr = sortObjByKey(newOptionsArr, 'label');
-    return filterObjByKey(newOptionsArr, 'label');
+    newOptionsArr = sortObjByKey(newOptionsArr, "label");
+    return filterObjByKey(newOptionsArr, "label");
 };
 
 export const getObjectFromLabel = (
@@ -70,26 +70,26 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
         : {};
     const newEmployeeObj: IEmployee = {
         id: employeeObj.id,
-        firstName: employeeObj.firstName || '',
-        lastName: employeeObj.lastName || '',
+        firstName: employeeObj.firstName || "",
+        lastName: employeeObj.lastName || "",
         isActive: employeeObj.isActive || false,
-        dob: employeeObj.dob || '',
-        email: employeeObj.email || '',
-        phone: employeeObj.phone || '',
-        designation: employeeObj.designation || '',
-        salary: employeeObj.salary || '',
-        dateOfJoining: employeeObj.dateOfJoining || '',
-        address: employeeObj.address || '',
+        dob: employeeObj.dob || "",
+        email: employeeObj.email || "",
+        phone: employeeObj.phone || "",
+        designation: employeeObj.designation || "",
+        salary: employeeObj.salary || "",
+        dateOfJoining: employeeObj.dateOfJoining || "",
+        address: employeeObj.address || "",
         department: employeeObj.department
-            ? modifySelectOption(employeeObj.department, 'department')
+            ? modifySelectOption(employeeObj.department, "department")
             : null,
 
         role: employeeObj.role
-            ? modifySelectOption(employeeObj.role, 'role')
+            ? modifySelectOption(employeeObj.role, "role")
             : null,
 
         skills: employeeObj.skills
-            ? modifySelectOptionsArray(employeeObj.skills, 'skill')
+            ? modifySelectOptionsArray(employeeObj.skills, "skill")
             : [],
 
         moreDetails: employeeObj.moreDetails,
@@ -97,8 +97,9 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
             ? getObjectFromLabel(moreDetails.location, locations)
             : null,
 
-        gender: moreDetails?.gender ? moreDetails.gender : '',
-        photoId: moreDetails?.photoId ? moreDetails.photoId : '',
+        gender: moreDetails?.gender ? moreDetails.gender : "",
+        photoId: moreDetails?.photoId ? moreDetails.photoId : "",
+        isAdmin: moreDetails.isAdmin ?? false,
     };
     return newEmployeeObj;
 };
@@ -123,10 +124,10 @@ export const getEmployeesListingData = (
 
         const newEmp: IEmployeeListing = {
             ...rest,
-            fullName: firstName + ' ' + lastName,
-            department: department ? department.label : 'N/A',
-            role: role ? role.label : 'N/A',
-            location: location ? location.label : 'N/A',
+            fullName: firstName + " " + lastName,
+            department: department ? department.label : "N/A",
+            role: role ? role.label : "N/A",
+            location: location ? location.label : "N/A",
             skills: skills.map((skill) => Number(skill.value)),
             actions: (
                 <ul className="employee-actions flex-container">

@@ -1,11 +1,15 @@
-import { Button } from '..';
-import useAuth from '../../hooks/useAuth';
-import { StyledHeader, Navbar } from './Header.style';
-import { Link, NavLink } from 'react-router-dom';
+import { Button } from "..";
+import { useAppSelector } from "../../hooks/storeHelpers";
+import useAuth from "../../hooks/useAuth";
+import { StyledHeader, Navbar } from "./Header.style";
+import { Link, NavLink } from "react-router-dom";
+
+import avatar from "../../assets/images/employee-avatar.svg";
 
 const Header: React.FC = () => {
     const { logout } = useAuth();
 
+    const userName = useAppSelector((state) => state.auth.userName);
     return (
         <StyledHeader>
             <Navbar>
@@ -14,14 +18,33 @@ const Header: React.FC = () => {
                 </Link>
                 <ul className="navlinks">
                     <li>
-                        <NavLink to="/view-employee" end>
-                            Search Employee
-                        </NavLink>
-                    </li>
-                    <li>
-                        <Button onClick={logout} className="outline">
+                        <div className="navbar-actions">
+                            <div className="user-card">
+                                <img
+                                    src={avatar}
+                                    alt="user-image"
+                                    className="user-card-image"
+                                />
+                                <div className="user-card-body">
+                                    <span style={{ fontWeight: 700 }}>
+                                        {userName.charAt(0).toUpperCase() +
+                                            userName.slice(1)}
+                                    </span>
+                                </div>
+                                <span
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        logout();
+                                    }}
+                                    className="logout-btn material-symbols-rounded"
+                                >
+                                    logout
+                                </span>
+                            </div>
+                        </div>
+                        {/* <Button onClick={logout} className="outline">
                             Logout
-                        </Button>
+                        </Button> */}
                     </li>
                 </ul>
             </Navbar>

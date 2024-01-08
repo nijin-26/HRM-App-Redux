@@ -1,4 +1,4 @@
-import { useField, Field } from 'formik';
+import { useField, Field } from "formik";
 
 interface ICustomInput {
     label: string;
@@ -8,22 +8,29 @@ interface ICustomInput {
     placeholder?: string;
     className?: string;
     required?: boolean;
+    disabled?: boolean;
 }
 
-const CustomInput: React.FC<ICustomInput> = ({ label, required, ...props }) => {
+const CustomInput: React.FC<ICustomInput> = ({
+    label,
+    required,
+    disabled = false,
+    ...props
+}) => {
     const [field, meta] = useField(props);
     return (
         <>
             <label
                 htmlFor={props.id || props.name}
-                className={required ? 'required-field' : ''}
+                className={required ? "required-field" : ""}
             >
                 {label}
             </label>
             <Field
                 {...field}
                 {...props}
-                className={meta.touched && meta.error ? 'invalid' : ''}
+                disabled={disabled}
+                className={meta.touched && meta.error ? "invalid" : ""}
             />
             {meta.touched && meta.error ? (
                 <div className="error-msg">{meta.error}</div>

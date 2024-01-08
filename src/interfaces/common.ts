@@ -2,7 +2,9 @@ export interface IEmployee {
     id: number;
     firstName: string;
     lastName: string;
+    password?: string;
     isActive: boolean;
+    isAdmin: boolean;
     dob: string;
     email: string;
     phone: string;
