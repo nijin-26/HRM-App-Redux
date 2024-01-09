@@ -33,6 +33,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
 }) => {
     const location = useLocation();
     const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.auth);
 
     const isAddPage =
         location.pathname.split("/")[1] === "add-employee" ? true : false;
@@ -254,16 +255,18 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="form-entry checkbox">
-                                        <Field
-                                            type="checkbox"
-                                            name="isAdmin"
-                                            id="isAdmin"
-                                        />
-                                        <label htmlFor="isAdmin">
-                                            Provide Admin Access
-                                        </label>
-                                    </div>
+                                    {user.isAdmin && (
+                                        <div className="form-entry checkbox">
+                                            <Field
+                                                type="checkbox"
+                                                name="isAdmin"
+                                                id="isAdmin"
+                                            />
+                                            <label htmlFor="isAdmin">
+                                                Provide Admin Access
+                                            </label>
+                                        </div>
+                                    )}
                                     <div className="form-controls-container flex">
                                         <Button
                                             className="outline"
