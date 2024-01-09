@@ -75,6 +75,52 @@ const Navbar = styled.nav`
             }
         }
     }
+
+    .navbar-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .user-card {
+        height: 50px;
+        padding-inline: 12px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        border: 1px solid var(--primary-clr);
+        border-radius: 8px;
+        color: var(--primary-clr);
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+
+        &:hover {
+            scale: 1.02;
+        }
+
+        & > .user-card-image {
+            width: 38px;
+            height: 38px;
+            /* border: 1px solid var(--primary-clr); */
+            border-radius: 50%;
+        }
+
+        .user-card-body {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .logout-btn {
+            font-size: 28px;
+            color: var(--primary-clr);
+            cursor: pointer;
+            transition: all 0.3 ease-in-out;
+        }
+
+        .logout-btn:hover {
+            scale: 1.03;
+            color: #000;
+        }
+    }
 `;
 
 export { StyledHeader, Navbar };

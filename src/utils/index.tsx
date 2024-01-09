@@ -2,6 +2,7 @@ import {
     IEmployeeListing,
     IEmployee,
     IReactSelectOption,
+    // IDeleteEmployee,
 } from "../interfaces/common";
 import { IApiEmployee } from "../interfaces/ApiDataInterface";
 import { Button, LinkButton } from "../components";
@@ -98,6 +99,7 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
 
         gender: moreDetails?.gender ? moreDetails.gender : "",
         photoId: moreDetails?.photoId ? moreDetails.photoId : "",
+        isAdmin: moreDetails.isAdmin ?? false,
     };
     return newEmployeeObj;
 };
@@ -105,8 +107,9 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
 //modify fetched employee details to format for employee listing table
 export const getEmployeesListingData = (
     employeesList: IApiEmployee[],
-    setIsModalOpen?: (isOpen: boolean) => void,
-    setEmpIdToDelete?: (empIdToDelete: number) => void
+    setIsModalOpen: (isOpen: boolean) => void,
+    setEmpIdToDelete: (empIdToDelete: number) => void,
+    isAdmin: boolean
 ) => {
     const newEmpList: IEmployeeListing[] = [];
     for (const emp of employeesList) {
@@ -139,30 +142,35 @@ export const getEmployeesListingData = (
                             </span>
                         </LinkButton>
                     </li>
-                    <li>
-                        <LinkButton
-                            to={`/edit-employee/${emp.id}`}
-                            className="edit-emp-btn flex-container"
-                        >
-                            <span className="material-symbols-rounded">
-                                edit_square
-                            </span>
-                        </LinkButton>
-                    </li>
-                    <li>
-                        <Button
-                            type="button"
-                            className="delete-emp-btn flex-container"
-                            onClick={() => {
-                                setEmpIdToDelete!(emp.id);
-                                setIsModalOpen!(true);
-                            }}
-                        >
-                            <span className="material-symbols-rounded">
-                                delete
-                            </span>
-                        </Button>
-                    </li>
+                    {isAdmin && (
+                        <>
+                            {" "}
+                            <li>
+                                <LinkButton
+                                    to={`/edit-employee/${emp.id}`}
+                                    className="edit-emp-btn flex-container"
+                                >
+                                    <span className="material-symbols-rounded">
+                                        edit_square
+                                    </span>
+                                </LinkButton>
+                            </li>
+                            <li>
+                                <Button
+                                    type="button"
+                                    className="delete-emp-btn flex-container"
+                                    onClick={() => {
+                                        setEmpIdToDelete(emp.id);
+                                        setIsModalOpen(true);
+                                    }}
+                                >
+                                    <span className="material-symbols-rounded">
+                                        delete
+                                    </span>
+                                </Button>
+                            </li>{" "}
+                        </>
+                    )}
                 </ul>
             ),
         };

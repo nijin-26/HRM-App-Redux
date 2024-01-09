@@ -15,6 +15,7 @@ import { AppDispatch, AppThunk } from "..";
 import { requestHelper } from "../requests/actions";
 import { REQUESTS_ENUM } from "../requests/requestsEnum";
 import { ISearchParams } from "../../../interfaces/common";
+import { signUp } from "../../api/services/auth";
 
 //Action Creators
 //EMPLOYEES LIST FETCH
@@ -83,12 +84,22 @@ export const addEmployeeAction = (
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
+            const userPassword = storeData.password;
+            delete storeData.password;
+
+            console.log(apiSubmissionData, "API SUBMISSION DATA");
             const { data } = await requestHelper(
                 dispatch,
                 REQUESTS_ENUM.addEmployee,
                 () => addEmployee(apiSubmissionData)
             );
             storeData.id = data.data.id;
+
+            const signupResponse = await signUp({
+                username: String(data.data.id),
+                password: userPassword!,
+            });
+            console.log(signupResponse);
             dispatch(addEmployeeSuccess(apiSubmissionData, storeData));
             toast.success("Employee details added successfully.");
         } catch (error) {
@@ -115,6 +126,8 @@ export const editEmployeeAction = (
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
+            delete storeData.password;
+
             await requestHelper(dispatch, REQUESTS_ENUM.editEmployee, () =>
                 editEmployee(employeeId, apiSubmissionData)
             );

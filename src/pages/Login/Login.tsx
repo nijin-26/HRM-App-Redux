@@ -14,8 +14,8 @@ const Login: React.FC = () => {
     const { login, loginLoading } = useAuth();
 
     const initialValues: ILoginForm = {
-        username: "abhib",
-        password: "abhib",
+        username: "497",
+        password: "admin@123",
     };
 
     const handleLogin = async (values: ILoginForm) => {
@@ -45,7 +45,7 @@ const Login: React.FC = () => {
                             </h2>
                             <div className="form-row">
                                 <CustomInput
-                                    label="Username"
+                                    label="User ID"
                                     name="username"
                                     id="username"
                                     type="text"

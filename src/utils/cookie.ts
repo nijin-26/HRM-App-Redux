@@ -5,51 +5,46 @@ import { toast } from "react-toastify";
 type cookieName = "accessToken" | "refreshToken";
 
 export const getCookie = (name: cookieName) => {
-    const value = `; ${document.cookie}`;
-    const parts: string[] = value?.split(`; ${name}=`);
-    if (parts.length === 2) {
-        return parts?.pop()?.split(";")?.shift();
-    }
-    return null;
+  const value = `; ${document.cookie}`;
+  const parts: string[] = value?.split(`; ${name}=`);
+  if (parts.length === 2) {
+    return parts?.pop()?.split(";")?.shift();
+  }
+  return null;
 };
 
 export const removeCookie = (name: cookieName) => {
-    const expiredDate = new Date(0).toUTCString();
-    document.cookie = `${name}=; expires=${expiredDate}; path=/`;
+  const expiredDate = new Date(0).toUTCString();
+  document.cookie = `${name}=; expires=${expiredDate}; path=/`;
 };
 
 export const setCookie = (name: cookieName, value: string) => {
-    const decodedToken = jwtDecode(value);
-    const expiration = new Date(0);
+  const decodedToken = jwtDecode(value);
+  const expiration = new Date(0);
 
-    if (decodedToken.exp) {
-        expiration.setUTCSeconds(decodedToken.exp);
-    }
-    const cookieValue =
-        encodeURIComponent(value) +
-        (decodedToken.exp ? `; expires=${expiration.toUTCString()}` : "");
+  if (decodedToken.exp) {
+    expiration.setUTCSeconds(decodedToken.exp);
+  }
+  const cookieValue =
+    encodeURIComponent(value) +
+    (decodedToken.exp ? `; expires=${expiration.toUTCString()}` : "");
 
-    document.cookie = `${name}=${cookieValue}; path=/`;
+  document.cookie = `${name}=${cookieValue}; path=/`;
 };
 
 export const refreshTokens = async () => {
-    const currentRefreshToken = getCookie("refreshToken");
-    if (currentRefreshToken) {
-        try {
-            const { data: newTokens } =
-                await renewAccessToken(currentRefreshToken);
-            setCookie("accessToken", newTokens.access_token);
-            setCookie("refreshToken", newTokens.refresh_token);
-            return newTokens;
-        } catch (error) {
-            toast.error(
-                "Unable to refresh your session. Please log in again to continue."
-            );
-            console.log(error);
-            removeCookie("accessToken");
-            removeCookie("refreshToken");
-        }
-    } else {
-        return null;
+  const currentRefreshToken = getCookie("refreshToken");
+  if (currentRefreshToken) {
+    try {
+      const { data: newTokens } = await renewAccessToken(currentRefreshToken);
+      return newTokens;
+    } catch (error) {
+      toast.error(
+        "Unable to refresh your session. Please log in again to continue."
+      );
+      removeCookie("accessToken");
+      removeCookie("refreshToken");
+      return;
     }
+  } else return;
 };

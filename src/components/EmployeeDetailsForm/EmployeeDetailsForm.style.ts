@@ -64,6 +64,22 @@ const StyledFormWrap = styled.div`
 
     & .form-entry {
         margin-bottom: 12px;
+
+        &.checkbox {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 10px;
+
+            label {
+                margin: 0;
+                width: 100%;
+                flex: 1;
+            }
+            input {
+                width: 20px;
+            }
+        }
     }
 
     & .error-msg {

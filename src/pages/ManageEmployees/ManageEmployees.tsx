@@ -43,6 +43,7 @@ const ManageEmployees = () => {
         Number(searchParams.get("offset")) || defaultSearchParams.offset;
     let limit = Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
+    const user = useAppSelector(state => state.auth)
     const employeeList = useAppSelector(
         (state) => state.employees.employeesList
     );
@@ -112,15 +113,17 @@ const ManageEmployees = () => {
                     <StyledManageEmployeesWrap>
                         <div className="employees-table-controls">
                             <EmployeesTableFilter />
-                            <LinkButton
-                                to="/add-employee"
-                                className="primary icon-btn table-control-field"
-                            >
-                                <span>Add Employee</span>
-                                <span className="material-symbols-rounded">
-                                    person_add
-                                </span>
-                            </LinkButton>
+                            {user.isAdmin && (
+                                <LinkButton
+                                    to="/add-employee"
+                                    className="primary icon-btn table-control-field"
+                                >
+                                    <span>Add Employee</span>
+                                    <span className="material-symbols-rounded">
+                                        person_add
+                                    </span>
+                                </LinkButton>
+                            )}
                         </div>
                         <div className="employees-view">
                             <ToggleView
@@ -148,7 +151,8 @@ const ManageEmployees = () => {
                                             ? getEmployeesListingData(
                                                   employeesListSlice,
                                                   setIsModalOpen,
-                                                  setEmpIdToDelete
+                                                  setEmpIdToDelete,
+                                                  user.isAdmin!
                                               )
                                             : []
                                     }

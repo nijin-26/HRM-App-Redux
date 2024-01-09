@@ -8,9 +8,15 @@ interface ICustomInput {
     placeholder?: string;
     className?: string;
     required?: boolean;
+    disabled?: boolean;
 }
 
-const CustomInput: React.FC<ICustomInput> = ({ label, required, ...props }) => {
+const CustomInput: React.FC<ICustomInput> = ({
+    label,
+    required,
+    disabled = false,
+    ...props
+}) => {
     const [field, meta] = useField(props);
     return (
         <>
@@ -23,6 +29,7 @@ const CustomInput: React.FC<ICustomInput> = ({ label, required, ...props }) => {
             <Field
                 {...field}
                 {...props}
+                disabled={disabled}
                 className={meta.touched && meta.error ? "invalid" : ""}
             />
             {meta.touched && meta.error ? (

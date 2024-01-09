@@ -23,6 +23,7 @@ const ViewEmployeeDetails = () => {
         return;
     }
 
+    const user = useAppSelector((state) => state.auth);
     const employeeDetails = useAppSelector(selectEmployeeDetails);
     const employeeFetchLoading = useAppSelector(
         selectRequestInProgress(REQUESTS_ENUM.getEmployee)
@@ -147,12 +148,15 @@ const ViewEmployeeDetails = () => {
                             </dl>
                         </div>
                         <div className="navigation-controls">
-                            <LinkButton
-                                to={`/edit-employee/${employeeId}`}
-                                className="primary edit-emp-btn"
-                            >
-                                Edit Employee Details
-                            </LinkButton>
+                            {user.isAdmin ||
+                            String(user.userID) === employeeId ? (
+                                <LinkButton
+                                    to={`/edit-employee/${employeeId}`}
+                                    className="primary edit-emp-btn"
+                                >
+                                    Edit Employee Details
+                                </LinkButton>
+                            ) : null}
                             <Button
                                 className="primary"
                                 onClick={() => navigate(-1)}

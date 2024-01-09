@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
-import { Formik } from "formik";
+import { Field, Formik, FormikHelpers } from "formik";
 import {
     Button,
     CustomInput,
@@ -31,7 +31,13 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
+    const location = useLocation();
     const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.auth);
+
+    const isAddPage =
+        location.pathname.split("/")[1] === "add-employee" ? true : false;
+
     const navigate = useNavigate();
 
     const selectSkills = useAppSelector(
@@ -64,6 +70,17 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         }
     };
 
+    const handleForm = async (
+        values: IEmployee,
+        { setSubmitting }: FormikHelpers<IEmployee>
+    ) => {
+        setLoading(true);
+        await handleFormSubmit(values, photoRef.current, dispatch);
+        setSubmitting(false);
+        setLoading(false);
+        navigate(`/`);
+    };
+
     return (
         <>
             {loading ? (
@@ -73,19 +90,8 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                     <Formik
                         initialValues={prefillData}
                         enableReinitialize
-                        validationSchema={validate}
-                        onSubmit={async (values, { setSubmitting }) => {
-                            setLoading(true);
-
-                            await handleFormSubmit(
-                                values,
-                                photoRef.current,
-                                dispatch
-                            );
-                            setSubmitting(false);
-                            setLoading(false);
-                            navigate(`/`);
-                        }}
+                        validationSchema={validate(isAddPage)}
+                        onSubmit={handleForm}
                     >
                         {(props) => {
                             return (
@@ -175,20 +181,41 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                     </div>
                                     <div className="flex form-row">
                                         <div className="form-entry">
-                                            <CustomSelect
-                                                name="role"
-                                                label="Role"
-                                                options={selectRoles}
-                                                placeholder="Select a Role"
+                                            <CustomInput
+                                                label="Password"
+                                                name="password"
+                                                id="password"
+                                                type="password"
+                                                required
+                                                disabled={!isAddPage}
+                                            />
+                                        </div>
+                                        <div className="form-entry">
+                                            <CustomInput
+                                                label="Mobile Number"
+                                                name="phone"
+                                                id="phone"
+                                                type="text"
                                                 required
                                             />
                                         </div>
+                                    </div>
+                                    <div className="flex form-row">
                                         <div className="form-entry">
                                             <CustomSelect
                                                 name="department"
                                                 label="Department"
                                                 options={selectDepartments}
                                                 placeholder="Select a Department"
+                                                required
+                                            />
+                                        </div>
+                                        <div className="form-entry">
+                                            <CustomSelect
+                                                name="role"
+                                                label="Role"
+                                                options={selectRoles}
+                                                placeholder="Select a Role"
                                                 required
                                             />
                                         </div>
@@ -228,6 +255,18 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
+                                    {user.isAdmin && (
+                                        <div className="form-entry checkbox">
+                                            <Field
+                                                type="checkbox"
+                                                name="isAdmin"
+                                                id="isAdmin"
+                                            />
+                                            <label htmlFor="isAdmin">
+                                                Provide Admin Access
+                                            </label>
+                                        </div>
+                                    )}
                                     <div className="form-controls-container flex">
                                         <Button
                                             className="outline"

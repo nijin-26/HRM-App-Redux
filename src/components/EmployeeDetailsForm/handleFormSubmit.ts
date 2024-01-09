@@ -30,13 +30,24 @@ const handleFormSubmit = async (
         console.log(error);
     }
 
-    const { id, gender, location, photoId, role, department, skills, ...rest } =
-        formSubmitData;
+    const {
+        id,
+        gender,
+        location,
+        photoId,
+        role,
+        department,
+        skills,
+        isAdmin,
+        password,
+        ...rest
+    } = formSubmitData;
 
     const moreDetails = {
         gender: gender,
         location: location ? location.label : null,
         photoId: photoUrl,
+        isAdmin: isAdmin,
     };
 
     const storeData: IApiEmployee = {
@@ -51,6 +62,7 @@ const handleFormSubmit = async (
             skill: skill.label,
         })),
         moreDetails: JSON.stringify(moreDetails),
+        password: password,
     };
 
     const apiSubmitData: IApiEmployeeSubmission = {
