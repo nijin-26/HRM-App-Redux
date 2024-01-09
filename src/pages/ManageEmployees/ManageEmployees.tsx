@@ -43,7 +43,7 @@ const ManageEmployees = () => {
         Number(searchParams.get("offset")) || defaultSearchParams.offset;
     let limit = Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
-    const user = useAppSelector(state => state.auth)
+    const user = useAppSelector((state) => state.auth);
     const employeeList = useAppSelector(
         (state) => state.employees.employeesList
     );

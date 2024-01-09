@@ -1,4 +1,3 @@
-
 import { IAuth } from "./reducer";
 
 //Action Types

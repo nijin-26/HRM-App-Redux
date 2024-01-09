@@ -107,9 +107,9 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
 //modify fetched employee details to format for employee listing table
 export const getEmployeesListingData = (
     employeesList: IApiEmployee[],
-    setIsModalOpen: (isOpen: boolean) => void,
-    setEmpIdToDelete: (empIdToDelete: number) => void,
-    isAdmin: boolean
+    setIsModalOpen?: (isOpen: boolean) => void,
+    setEmpIdToDelete?: (empIdToDelete: number) => void,
+    isAdmin?: boolean
 ) => {
     const newEmpList: IEmployeeListing[] = [];
     for (const emp of employeesList) {
@@ -160,8 +160,8 @@ export const getEmployeesListingData = (
                                     type="button"
                                     className="delete-emp-btn flex-container"
                                     onClick={() => {
-                                        setEmpIdToDelete(emp.id);
-                                        setIsModalOpen(true);
+                                        setEmpIdToDelete!(emp.id);
+                                        setIsModalOpen!(true);
                                     }}
                                 >
                                     <span className="material-symbols-rounded">

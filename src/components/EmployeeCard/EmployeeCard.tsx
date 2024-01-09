@@ -3,6 +3,7 @@ import { CardBody, CardContainer, CardHeader } from "./EmployeeCard.styles";
 import avatar from "../../assets/images/employee-avatar.svg";
 import { IEmployeeListing } from "../../interfaces/common";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppSelector } from "../../hooks/storeHelpers";
 
 const EmployeeCard = ({
     employeeData,
@@ -14,6 +15,7 @@ const EmployeeCard = ({
     setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
     const navigate = useNavigate();
+    const user = useAppSelector((state) => state.auth);
 
     return (
         <CardContainer>
@@ -64,20 +66,24 @@ const EmployeeCard = ({
                         visibility
                     </span>
 
-                    <Link to={`/edit-employee/${employeeData.id}`}>
-                        <span className="material-symbols-rounded">
-                            edit_square
-                        </span>
-                    </Link>
-                    <span
-                        className="material-symbols-rounded"
-                        onClick={() => {
-                            setDeleteEmployee(employeeData.id);
-                            setIsModalOpen(true);
-                        }}
-                    >
-                        person_remove
-                    </span>
+                    {user.isAdmin && (
+                        <>
+                            <Link to={`/edit-employee/${employeeData.id}`}>
+                                <span className="material-symbols-rounded">
+                                    edit_square
+                                </span>
+                            </Link>
+                            <span
+                                className="material-symbols-rounded"
+                                onClick={() => {
+                                    setDeleteEmployee(employeeData.id);
+                                    setIsModalOpen(true);
+                                }}
+                            >
+                                person_remove
+                            </span>
+                        </>
+                    )}
                 </div>
             </CardBody>
         </CardContainer>
