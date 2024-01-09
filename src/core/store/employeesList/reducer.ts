@@ -2,9 +2,10 @@ import { createSelector } from 'reselect';
 import { IApiEmployee } from '../../../interfaces/ApiDataInterface';
 import { ActionType } from './types';
 import { RootState } from '..';
+import { fillEmptySlotsWithValue } from '../../../utils';
 
 interface IEmployeesState {
-    employeesList: IApiEmployee[][];
+    employeesList: (IApiEmployee[] | null)[];
     count: number | undefined;
 }
 
@@ -24,27 +25,55 @@ const employeesReducer = (
 
             const rowIndex = Math.floor(offset / limit);
             updatedEmployeesList[rowIndex] = response.employees;
+
             return {
                 ...state,
                 count: response.count,
-                employeesList: updatedEmployeesList,
+                employeesList: fillEmptySlotsWithValue(
+                    updatedEmployeesList,
+                    null
+                ),
             };
         case 'DELETE_EMPLOYEE_SUCCESS':
-            console.log(state.employeesList);
+            //remove deleted element from flattened employeesList
             const filteredEmployeesList = state.employeesList
                 .flat()
-                .filter(
-                    (employee) => employee.id !== action.payload.empIdToDelete
-                );
+                .filter((employee) => {
+                    if (!employee) {
+                        return true;
+                    }
+                    return employee.id !== action.payload.empIdToDelete;
+                });
 
+            //append the fetched employee to the end (if it exists)
+            // if (action.payload.empToAppend) {
+            //     filteredEmployeesList.push(action.payload.empToAppend);
+            // }
             if (action.payload.empToAppend) {
-                filteredEmployeesList.push(action.payload.empToAppend);
+                filteredEmployeesList.splice(
+                    action.payload.insertIndex,
+                    0,
+                    action.payload.empToAppend
+                );
             }
 
-            const splitEmployeesList = [];
-            for (let i = 0; i < filteredEmployeesList.length; i += 10) {
-                splitEmployeesList.push(filteredEmployeesList.slice(i, i + 10));
+            //split flattened array back into limit sized smaller arrays
+            const splitEmployeesList: (IApiEmployee[] | null)[] = [];
+            console.log(filteredEmployeesList);
+            let i = 0;
+            while (i < filteredEmployeesList.length) {
+                if (!filteredEmployeesList[i]) {
+                    console.log('null seen');
+                    splitEmployeesList.push(null);
+                    i++;
+                } else {
+                    splitEmployeesList.push(
+                        filteredEmployeesList.slice(i, i + 10) as IApiEmployee[]
+                    );
+                    i += 10;
+                }
             }
+            console.log('splitted array : ', splitEmployeesList);
 
             return {
                 ...state,

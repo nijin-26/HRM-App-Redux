@@ -18,6 +18,7 @@ export interface IDELETE_EMPLOYEE_SUCCESS {
     payload: {
         empIdToDelete: number;
         empToAppend?: IApiEmployee;
+        insertIndex: number;
     };
 }
 

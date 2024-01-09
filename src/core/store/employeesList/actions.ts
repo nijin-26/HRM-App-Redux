@@ -65,18 +65,40 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     };
 };
 
-const fetchNextEmployee = (searchParams: ISearchParams): AppThunk => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        const empListInStoreLength =
-            getState().employees.employeesList.flat().length;
+// const fetchNextEmployee = (searchParams: ISearchParams): AppThunk => {
+//     return async (dispatch: AppDispatch, getState: () => RootState) => {
+//         const { employeesList } = getState().employees;
+
+//         const biggestOffset = employeesList.length - 1;
+//         const targetOffset =
+//             biggestOffset * searchParams.limit +
+//             employeesList[biggestOffset]!.length;
+
+//         searchParams.limit = 1;
+//         searchParams.offset = targetOffset;
+
+//         const { data } = await requestHelper(
+//             dispatch,
+//             REQUESTS_ENUM.getNextEmployee,
+//             () => getEmployeesList(searchParams)
+//         );
+//         return data.data.employees[0];
+//     };
+// };
+const fetchNextEmployee = (
+    searchParams: ISearchParams,
+    fetchOffset: number
+): AppThunk => {
+    return async (dispatch: AppDispatch) => {
+        searchParams.offset = fetchOffset;
         searchParams.limit = 1;
-        searchParams.offset = empListInStoreLength;
 
         const { data } = await requestHelper(
             dispatch,
             REQUESTS_ENUM.getNextEmployee,
             () => getEmployeesList(searchParams)
         );
+        console.log(data.data.employees[0]);
         return data.data.employees[0];
     };
 };
@@ -84,12 +106,14 @@ const fetchNextEmployee = (searchParams: ISearchParams): AppThunk => {
 //EMPLOYEE DELETE
 const deleteEmployeeSuccess = (
     empIdToDelete: number,
+    insertIndex: number,
     empToAppend?: IApiEmployee
 ): types.IDELETE_EMPLOYEE_SUCCESS => ({
     type: 'DELETE_EMPLOYEE_SUCCESS',
     payload: {
         empIdToDelete,
         empToAppend,
+        insertIndex,
     },
 });
 
@@ -98,17 +122,34 @@ export const deleteEmployeeAction = (
     empIdToDelete: number,
     searchParams: ISearchParams
 ): AppThunk => {
-    return async (dispatch: AppDispatch) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        const { employeesList } = getState().employees;
+
+        let i = 0;
+        while (i < employeesList.length) {
+            if (!employeesList[i]) {
+                break;
+            }
+            i++;
+        }
+        const fetchOffset = i * searchParams.limit;
+
         try {
-            const empToAppend: IApiEmployee | undefined = await dispatch(
-                fetchNextEmployee(searchParams)
+            const empToAppend = await dispatch(
+                fetchNextEmployee(searchParams, fetchOffset)
             );
 
             await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
                 deleteEmployee(empIdToDelete)
             );
 
-            dispatch(deleteEmployeeSuccess(empIdToDelete, empToAppend));
+            dispatch(
+                deleteEmployeeSuccess(
+                    empIdToDelete,
+                    fetchOffset - 1,
+                    empToAppend
+                )
+            );
             toast.success('Employee deleted Successfully');
         } catch (error) {
             console.log(error);

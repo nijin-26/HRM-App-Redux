@@ -133,8 +133,8 @@ export const prefillDataOnEmployeeAdd: IEmployee = {
 export const defaultSearchParams: ISearchParams = {
     offset: 0,
     limit: 10,
-    sortBy: 'id',
-    sortDir: 'desc',
+    sortBy: 'firstName',
+    sortDir: 'asc',
     skillIds: '',
     search: '',
 };
