@@ -2,7 +2,7 @@ import { CardBody, CardContainer, CardHeader } from "./EmployeeCard.styles";
 
 import avatar from "../../assets/images/employee-avatar.svg";
 import { IEmployeeListing } from "../../interfaces/common";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/storeHelpers";
 
 const EmployeeCard = ({
