@@ -102,7 +102,8 @@ const ManageEmployees: React.FC = () => {
                                     ? getEmployeesListingData(
                                           employeesListSlice,
                                           setIsModalOpen,
-                                          setEmpIdToDelete
+                                          setEmpIdToDelete,
+                                          user.isAdmin!
                                       )
                                     : []
                             }
