@@ -1,7 +1,14 @@
+// import { AppDispatch, AppThunk } from "..";
+// import { getEmployee } from "../../api";
+// import { requestHelper } from "../requests/actions";
+// import { REQUESTS_ENUM } from "../requests/requestsEnum";
+
+import { IAuth } from "./reducer";
+
 //Action Types
 interface ILOGIN_USER {
     type: "LOGIN_USER";
-    payload: string;
+    payload: IAuth;
 }
 
 interface ILOGOUT_USER {
@@ -11,8 +18,9 @@ interface ILOGOUT_USER {
 export type ActionType = ILOGIN_USER | ILOGOUT_USER;
 
 //Action Creators
-export const loginUser = (userName: string): ILOGIN_USER => ({
+export const loginUser = (userDetails: IAuth): ILOGIN_USER => ({
     type: "LOGIN_USER",
-    payload: userName,
+    payload: userDetails,
 });
+
 export const logoutUser = (): ILOGOUT_USER => ({ type: "LOGOUT_USER" });

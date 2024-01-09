@@ -1,15 +1,17 @@
-import { Button } from "..";
 import { useAppSelector } from "../../hooks/storeHelpers";
 import useAuth from "../../hooks/useAuth";
 import { StyledHeader, Navbar } from "./Header.style";
-import { Link, NavLink } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import avatar from "../../assets/images/employee-avatar.svg";
+import { toast } from "react-toastify";
 
 const Header: React.FC = () => {
     const { logout } = useAuth();
 
-    const userName = useAppSelector((state) => state.auth.userName);
+    const user = useAppSelector((state) => state.auth);
+
+    const navigate = useNavigate();
     return (
         <StyledHeader>
             <Navbar>
@@ -19,16 +21,31 @@ const Header: React.FC = () => {
                 <ul className="navlinks">
                     <li>
                         <div className="navbar-actions">
-                            <div className="user-card">
+                            <div
+                                className="user-card"
+                                onClick={() =>
+                                    user.userID
+                                        ? navigate(
+                                              `view-employee/${user.userID}`
+                                          )
+                                        : toast.info("User Profile Not Found.")
+                                }
+                            >
                                 <img
-                                    src={avatar}
+                                    src={
+                                        user.imageURL !== ""
+                                            ? user.imageURL
+                                            : avatar
+                                    }
                                     alt="user-image"
                                     className="user-card-image"
                                 />
                                 <div className="user-card-body">
                                     <span style={{ fontWeight: 700 }}>
-                                        {userName.charAt(0).toUpperCase() +
-                                            userName.slice(1)}
+                                        {user.userName
+                                            ?.charAt(0)
+                                            .toUpperCase() +
+                                            user.userName.slice(1)}
                                     </span>
                                 </div>
                                 <span

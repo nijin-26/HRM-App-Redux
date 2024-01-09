@@ -1,11 +1,11 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import { useAppSelector, useAppDispatch } from '../../hooks/storeHelpers';
-import { empTableHeaders, initQueryParams } from './constants';
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
+import { empTableHeaders, initQueryParams } from "./constants";
 import {
     StyledManageEmployeesWrap,
     StyledEmployeesTable,
-} from './ManageEmployees.style';
+} from "./ManageEmployees.style";
 import {
     Modal,
     Pagination,
@@ -13,28 +13,29 @@ import {
     LinkButton,
     Loader,
     EmployeeDeleteModal,
-} from '../../components';
-import { IQueryParams } from '../../interfaces/common';
-import { getEmployeesListingData } from '../../utils';
+} from "../../components";
+import { IQueryParams } from "../../interfaces/common";
+import { getEmployeesListingData } from "../../utils";
 import {
     fetchEmployees,
     deleteEmployeeAction,
-} from '../../core/store/employeesList/actions';
-import { selectRequestInProgress } from '../../core/store/requests/reducer';
-import { selectEmployeesListSlice } from '../../core/store/employeesList/reducer';
-import { REQUESTS_ENUM } from '../../core/store/requests/requestsEnum';
+} from "../../core/store/employeesList/actions";
+import { selectRequestInProgress } from "../../core/store/requests/reducer";
+import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
+import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 
 const ManageEmployees: React.FC = () => {
     const [searchParams] = useSearchParams();
     const dispatch = useAppDispatch();
+    const user = useAppSelector((state) => state.auth);
 
     const [isModalopen, setIsModalOpen] = useState(false);
     const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
         undefined
     );
 
-    const offset = Number(searchParams.get('offset')) || initQueryParams.offset;
-    const limit = Number(searchParams.get('limit')) || initQueryParams.limit;
+    const offset = Number(searchParams.get("offset")) || initQueryParams.offset;
+    const limit = Number(searchParams.get("limit")) || initQueryParams.limit;
 
     const employeesListSlice = useAppSelector(
         selectEmployeesListSlice(offset, limit)
@@ -48,16 +49,16 @@ const ManageEmployees: React.FC = () => {
     );
 
     const getSearchParams = (): IQueryParams => {
-        const limit = searchParams.get('limit')
-            ? Number(searchParams.get('limit'))
+        const limit = searchParams.get("limit")
+            ? Number(searchParams.get("limit"))
             : initQueryParams.limit;
-        const offset = searchParams.get('offset')
-            ? Number(searchParams.get('offset'))
+        const offset = searchParams.get("offset")
+            ? Number(searchParams.get("offset"))
             : initQueryParams.offset;
-        const sortBy = searchParams.get('sortBy') ?? initQueryParams.sortBy;
-        const sortDir = searchParams.get('sortDir') ?? initQueryParams.sortDir;
-        const skillIds = searchParams.get('skillIds');
-        const search = searchParams.get('search');
+        const sortBy = searchParams.get("sortBy") ?? initQueryParams.sortBy;
+        const sortDir = searchParams.get("sortDir") ?? initQueryParams.sortDir;
+        const skillIds = searchParams.get("skillIds");
+        const search = searchParams.get("search");
 
         return { limit, offset, sortBy, sortDir, skillIds, search };
     };
@@ -82,15 +83,17 @@ const ManageEmployees: React.FC = () => {
                     <StyledManageEmployeesWrap>
                         <div className="employees-table-controls">
                             <EmployeesTableFilter />
-                            <LinkButton
-                                to="/add-employee"
-                                className="primary icon-btn table-control-field"
-                            >
-                                <span>Add Employee</span>
-                                <span className="material-symbols-rounded">
-                                    person_add
-                                </span>
-                            </LinkButton>
+                            {user.isAdmin && (
+                                <LinkButton
+                                    to="/add-employee"
+                                    className="primary icon-btn table-control-field"
+                                >
+                                    <span>Add Employee</span>
+                                    <span className="material-symbols-rounded">
+                                        person_add
+                                    </span>
+                                </LinkButton>
+                            )}
                         </div>
                         <StyledEmployeesTable
                             tableHeaders={empTableHeaders}
@@ -108,7 +111,7 @@ const ManageEmployees: React.FC = () => {
                         {employeesCount && employeesCount > limit ? (
                             <Pagination
                                 totalEntries={employeesCount}
-                                key={searchParams.get('offset')}
+                                key={searchParams.get("offset")}
                             />
                         ) : null}
                     </StyledManageEmployeesWrap>

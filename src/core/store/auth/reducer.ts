@@ -1,22 +1,35 @@
 import { getCookie } from "../../../utils/cookie";
 import { ActionType } from "./actions";
 
-interface IAuth {
-    isLoggedIn: boolean;
+export interface IAuth {
+    isLoggedIn?: boolean;
+    userID?: number;
     userName: string;
+    imageURL?: string;
+    isAdmin?: boolean;
 }
 
 const initialState: IAuth = {
+    userID: undefined,
     userName: "",
+    imageURL: "",
+    isAdmin: false,
     isLoggedIn: getCookie("accessToken") ? true : false,
 };
 
 const AuthReducer = (state = initialState, action: ActionType): IAuth => {
     switch (action.type) {
         case "LOGIN_USER":
-            return { ...state, userName: action.payload, isLoggedIn: true };
+            return { ...state, ...action.payload, isLoggedIn: true };
         case "LOGOUT_USER":
-            return { ...state, userName: "", isLoggedIn: false };
+            return {
+                ...state,
+                userName: "",
+                userID: undefined,
+                imageURL: "",
+                isAdmin: false,
+                isLoggedIn: false,
+            };
         default:
             return state;
     }
