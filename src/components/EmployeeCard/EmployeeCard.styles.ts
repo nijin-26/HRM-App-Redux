@@ -6,14 +6,16 @@ export const CardContainer = styled.div`
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0px 0px 10px #ccc;
-    transition: scale 0.5s;
     display: flex;
     flex-direction: column;
     gap: 12px;
+    cursor: pointer;
+    transition: all 0.5s;
 
-    /* &:hover {
-    scale: 1.02;
-  } */
+    &:hover {
+        scale: 1.02;
+        box-shadow: 0px 10px 10px #ccc;
+    }
 `;
 
 export const CardHeader = styled.div`
@@ -21,8 +23,9 @@ export const CardHeader = styled.div`
     background-color: var(--primary-clr);
     border-radius: 8px 8px 0 0;
     padding: 16px;
-
     position: relative;
+    display: flex;
+    justify-content: space-between;
 
     img {
         position: absolute;
@@ -36,6 +39,40 @@ export const CardHeader = styled.div`
         background-color: #fff;
         /* border: 2px solid var(--primary-clr); */
         box-shadow: 0px 0px 10px #ccc;
+    }
+
+    .employee-id {
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .icons {
+        padding: 12px 0;
+        display: flex;
+        justify-content: right;
+        align-items: center;
+        gap: 10px;
+        color: #fff;
+        transition: all 0.3s;
+    }
+
+    .icons a {
+        color: inherit;
+        transition: all 0.3s;
+    }
+
+    .icons a:hover {
+        color: #000;
+    }
+
+    .icons > span {
+        cursor: pointer;
+        font-size: 26px;
+        transition: all 0.3s;
+    }
+
+    .icons > span:hover {
+        color: #000;
     }
 `;
 
@@ -66,7 +103,7 @@ export const CardBody = styled.div`
     .details_wrapper {
         padding: 0 16px;
         margin: 10px 0;
-        width: 230px;
+        width: 300px;
         display: flex;
         flex-direction: column;
         align-items: start;
@@ -95,89 +132,4 @@ export const CardBody = styled.div`
         width: 100%;
         border: 1px solid #ccc;
     }
-
-    .icons {
-        padding: 12px 0;
-        display: flex;
-        justify-content: right;
-        gap: 10px;
-        color: #000;
-        transition: all 0.3s;
-    }
-
-    .icons a {
-        color: inherit;
-        transition: all 0.3s;
-    }
-
-    .icons a:hover {
-        color: #000;
-    }
-
-    .icons > span {
-        cursor: pointer;
-        transition: all 0.3s;
-    }
-
-    .icons > span:hover {
-        color: #000;
-    }
 `;
-
-// ! <<<<<<<<<< Horizontal Card >>>>>>>>>>>>>>>
-
-// export const CardContainer = styled.div`
-//   flex: 1 0 350px;
-//   max-width: 350px;
-//   border: 1px solid #ccc;
-//   border-radius: 8px;
-//   box-shadow: 0px 0px 10px #ccc;
-//   transition: scale 0.5s;
-//   display: flex;
-//   align-items: stretch;
-//   gap: 12px;
-//   cursor: pointer;
-
-//   &:hover {
-//     scale: 1.02;
-//   }
-
-//   .employee_image_container {
-//     padding: 16px;
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     gap: 10px;
-//     background-color: var(--primary-clr);
-//     color: #fff;
-//     border-radius: 8px 0px 0px 8px;
-//     font-weight: 500;
-//   }
-
-//   img {
-//     width: 64px;
-//     height: 64px;
-//     border-radius: 50%;
-//     object-fit: cover;
-//     border: 1px solid #fff;
-//   }
-
-//   .employee_details {
-//     padding: 16px;
-//     display: flex;
-//     flex-direction: column;
-//     justify-content: center;
-//     & > * {
-//       margin: 0;
-//     }
-
-//     h3 {
-//       text-transform: uppercase;
-//     }
-
-//     .role {
-//       color: gray;
-//       margin-bottom: 8px;
-//     }
-//   }
-// `;
