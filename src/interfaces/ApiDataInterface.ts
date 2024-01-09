@@ -7,12 +7,22 @@ export interface IAPISignInResponse {
     access_token: string;
     refresh_token: string;
 }
+export interface IAPISignUpRequest {
+    username: string;
+    password: string;
+}
+
+export interface IAPISignUpResponse {
+    id: number;
+    username: string;
+}
 
 export interface IApiEmployee {
     id: number;
     firstName: string;
     lastName: string;
     isActive: boolean;
+    password?: string;
     dob: string;
     email: string;
     phone: string;

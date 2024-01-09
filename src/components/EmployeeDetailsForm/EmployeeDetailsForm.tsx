@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
 import { Field, Formik, FormikHelpers } from "formik";
 import {
@@ -31,7 +31,12 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
+    const location = useLocation();
     const dispatch = useAppDispatch();
+
+    const isAddPage =
+        location.pathname.split("/")[1] === "add-employee" ? true : false;
+
     const navigate = useNavigate();
 
     const selectSkills = useAppSelector(
@@ -84,7 +89,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                     <Formik
                         initialValues={prefillData}
                         enableReinitialize
-                        validationSchema={validate}
+                        validationSchema={validate(isAddPage)}
                         onSubmit={handleForm}
                     >
                         {(props) => {
@@ -181,7 +186,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                                 id="password"
                                                 type="password"
                                                 required
-                                                // disabled
+                                                disabled={!isAddPage}
                                             />
                                         </div>
                                         <div className="form-entry">

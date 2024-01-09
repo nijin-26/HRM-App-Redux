@@ -39,6 +39,7 @@ const handleFormSubmit = async (
         department,
         skills,
         isAdmin,
+        password,
         ...rest
     } = formSubmitData;
 
@@ -61,6 +62,7 @@ const handleFormSubmit = async (
             skill: skill.label,
         })),
         moreDetails: JSON.stringify(moreDetails),
+        password: password,
     };
 
     const apiSubmitData: IApiEmployeeSubmission = {
