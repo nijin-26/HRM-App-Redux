@@ -41,7 +41,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
     const isAddPage =
         location.pathname.split("/")[1] === "add-employee" ? true : false;
 
-    // Admins can't remove there on admin access
+    // if admin in their own edit details page
     const isNotAdminEditPage =
         user.isAdmin &&
         !isAddPage &&
@@ -268,18 +268,21 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    {(isNotAdminEditPage || isAddPage) && (
-                                        <div className="form-entry checkbox">
-                                            <Field
-                                                type="checkbox"
-                                                name="isAdmin"
-                                                id="isAdmin"
-                                            />
-                                            <label htmlFor="isAdmin">
-                                                Provide Admin Access
-                                            </label>
-                                        </div>
-                                    )}
+                                    {
+                                        // Admins cannot edit their own isAdmin flag
+                                        (isNotAdminEditPage || isAddPage) && (
+                                            <div className="form-entry checkbox">
+                                                <Field
+                                                    type="checkbox"
+                                                    name="isAdmin"
+                                                    id="isAdmin"
+                                                />
+                                                <label htmlFor="isAdmin">
+                                                    Provide Admin Access
+                                                </label>
+                                            </div>
+                                        )
+                                    }
                                     <div className="form-controls-container flex">
                                         <Button
                                             className="outline"
