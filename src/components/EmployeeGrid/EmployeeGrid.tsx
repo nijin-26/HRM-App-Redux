@@ -1,4 +1,4 @@
-import { useAppSelector } from "../../hooks/storeHelpers";
+import {  useAppSelector } from "../../hooks/storeHelpers";
 import { GridContainer, NotFoundText } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
@@ -46,9 +46,8 @@ const EmployeeGrid = ({
         if (
             (employeeList && employeeList.length >= employeesCount) ||
             employeesCount === 0
-        ) {
+        )
             hasMore = false;
-        }
 
         if (!hasMore) return;
 
@@ -83,6 +82,11 @@ const EmployeeGrid = ({
             if (current) observer.unobserve(current);
         };
     }, [handleLoadData]);
+
+    useEffect(() => {
+        searchParams.set("offset", "0");
+        setSearchParams(searchParams);
+    }, []);
 
     return (
         <>

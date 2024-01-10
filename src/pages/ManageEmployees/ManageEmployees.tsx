@@ -28,7 +28,7 @@ import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
 import Sort from "../../components/Sort/Sort";
 
 const ManageEmployees = () => {
-    const [searchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch();
 
     const [isModalopen, setIsModalOpen] = useState(false);
@@ -117,8 +117,10 @@ const ManageEmployees = () => {
                         <div className="employees-view">
                             <ToggleView
                                 gridView={toggleGridView}
-                                handleToggleGridView={() => {
-                                    setToggleGridView((prev) => !prev);
+                                handleToggleGridView={(state) => {
+                                    searchParams.set("offset", "0");
+                                    setSearchParams(searchParams);
+                                    setToggleGridView(state);
                                 }}
                             />
                             <Sort />
