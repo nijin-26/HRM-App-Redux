@@ -10,7 +10,7 @@ import {
     addEmployee,
     editEmployee,
 } from "../../api";
-import { AppDispatch, AppThunk } from "..";
+import { AppDispatch, AppThunk, RootState } from "..";
 import { requestHelper } from "../requests/actions";
 import { REQUESTS_ENUM } from "../requests/requestsEnum";
 import { ISearchParams } from "../../../interfaces/common";
@@ -34,7 +34,16 @@ const fetchEmployeesSuccess = (
 
 //Thunk Action creator
 export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
-    return async (dispatch: AppDispatch) => {
+    return async (dispatch: AppDispatch, getState: () => RootState) => {
+        const employeesList = getState().employees.employeesList;
+        const fetchPageNumber = Math.floor(
+            searchParams.offset / searchParams.limit
+        );
+
+        if (employeesList[fetchPageNumber]) {
+            return;
+        }
+
         try {
             const { data } = await requestHelper(
                 dispatch,
@@ -57,17 +66,31 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     };
 };
 
+//EMPLOYEE DELETE
+const deleteEmployeeSuccess = (
+    pageOfEmployee: number
+): types.IDELETE_EMPLOYEE_SUCCESS => ({
+    type: "DELETE_EMPLOYEE_SUCCESS",
+    payload: {
+        pageOfEmployee,
+    },
+});
+
 //thunk action creator
 export const deleteEmployeeAction = (
     empIdToDelete: number,
     searchParams: ISearchParams
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
+        const pageOfEmployee = Math.floor(
+            searchParams.offset / searchParams.limit
+        );
+
         try {
             await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
                 deleteEmployee(empIdToDelete)
             );
-
+            dispatch(deleteEmployeeSuccess(pageOfEmployee));
             dispatch(fetchEmployees(searchParams));
             toast.success("Employee deleted Successfully");
         } catch (error) {
