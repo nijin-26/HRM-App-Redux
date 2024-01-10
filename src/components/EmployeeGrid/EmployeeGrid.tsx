@@ -12,96 +12,104 @@ import { useSearchParams } from "react-router-dom";
 import { initQueryParams } from "../../pages/ManageEmployees/constants";
 
 const EmployeeGrid = ({
-  employeeList,
-  employeesCount,
-  setIsModalOpen,
-  setDeleteEmployee,
+    employeeList,
+    employeesCount,
+    setIsModalOpen,
+    setDeleteEmployee,
 }: {
-  employeeList: IApiEmployee[];
-  employeesCount: number | undefined;
-  setIsModalOpen: (isOpen: boolean) => void;
-  setDeleteEmployee: (deleteEmployeeId: number) => void;
+    employeeList: IApiEmployee[];
+    employeesCount: number | undefined;
+    setIsModalOpen: (isOpen: boolean) => void;
+    setDeleteEmployee: (deleteEmployeeId: number) => void;
 }) => {
-  const observerTarget = useRef(null);
-  const [searchParams, setSearchParams] = useSearchParams();
+    const observerTarget = useRef(null);
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  const employeesFetchLoading = useAppSelector(
-    selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
-  );
+    const employeesFetchLoading = useAppSelector(
+        selectRequestInProgress(REQUESTS_ENUM.getEmployeesList)
+    );
 
-  let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
+    let limit = Number(searchParams.get("limit")) || initQueryParams.limit;
 
-  const handleLoadData = () => {
-    let currentOffset = Number(searchParams.get("offset"));
+    const handleLoadData = () => {
+        let currentOffset = Number(searchParams.get("offset"));
 
-    if (
-      employeesFetchLoading ||
-      !employeesCount ||
-      typeof currentOffset !== "number"
-    )
-      return;
+        if (
+            employeesFetchLoading ||
+            !employeesCount ||
+            typeof currentOffset !== "number"
+        )
+            return;
 
-    let hasMore = true;
+        let hasMore = true;
 
-    if (
-      (employeeList && employeeList.length >= employeesCount) ||
-      employeesCount === 0
-    ) {
-      hasMore = false;
-    }
+        if (
+            (employeeList && employeeList.length >= employeesCount) ||
+            employeesCount === 0
+        ) {
+            hasMore = false;
+        }
 
-    if (!hasMore) return;
+        if (!hasMore) return;
 
-    const maxOffset = Math.max(0, Math.floor(employeesCount! / limit) * limit); // (28 / 10) * 10 = 28
-    const newOffset = Math.min(currentOffset + limit, maxOffset);
+        const maxOffset = Math.max(
+            0,
+            Math.floor(employeesCount! / limit) * limit
+        ); // (28 / 10) * 10 = 28
+        const newOffset = Math.min(currentOffset + limit, maxOffset);
 
-    if (newOffset > maxOffset || newOffset <= currentOffset) return;
+        if (newOffset > maxOffset || newOffset <= currentOffset) return;
 
-    searchParams.set("offset", String(newOffset));
-    setSearchParams(searchParams);
-  };
-
-  useEffect(() => {
-    const { current } = observerTarget;
-
-    const handleIntersection: IntersectionObserverCallback = (entries) => {
-      if (entries[0].isIntersecting) handleLoadData();
+        searchParams.set("offset", String(newOffset));
+        setSearchParams(searchParams);
     };
 
-    const observer = new IntersectionObserver(handleIntersection, {
-      root: null, // Use the viewport as the root
-      rootMargin: "0px", // No margin around the root
-      threshold: 1, // Trigger when 50% of the element is visible
-    });
+    useEffect(() => {
+        const { current } = observerTarget;
 
-    if (current) observer.observe(current);
+        const handleIntersection: IntersectionObserverCallback = (entries) => {
+            if (entries[0].isIntersecting) handleLoadData();
+        };
 
-    return () => {
-      if (current) observer.unobserve(current);
-    };
-  }, [handleLoadData]);
+        const observer = new IntersectionObserver(handleIntersection, {
+            root: null, // Use the viewport as the root
+            rootMargin: "0px", // No margin around the root
+            threshold: 1, // Trigger when 50% of the element is visible
+        });
 
-  return (
-    <>
-      {employeeList?.length ? (
-        <GridContainer>
-          {getEmployeesListingData(employeeList).map((employee) => (
-            <EmployeeCard
-              key={employee.id}
-              employeeData={employee}
-              setIsModalOpen={setIsModalOpen}
-              setDeleteEmployee={setDeleteEmployee}
-            />
-          ))}
-        </GridContainer>
-      ) : !employeesFetchLoading ? (
-        <NotFoundText>Record not Found</NotFoundText>
-      ) : null}
+        if (current) observer.observe(current);
 
-      {employeesFetchLoading && <Loader />}
-      <div ref={observerTarget}></div>
-    </>
-  );
+        return () => {
+            if (current) observer.unobserve(current);
+        };
+    }, [handleLoadData]);
+
+    useEffect(() => {
+        searchParams.set("offset", "0");
+        setSearchParams(searchParams);
+    }, []);
+
+    return (
+        <>
+            {employeeList?.length ? (
+                <GridContainer>
+                    {getEmployeesListingData(employeeList).map((employee) => (
+                        <EmployeeCard
+                            key={employee.id}
+                            employeeData={employee}
+                            setIsModalOpen={setIsModalOpen}
+                            setDeleteEmployee={setDeleteEmployee}
+                        />
+                    ))}
+                </GridContainer>
+            ) : !employeesFetchLoading ? (
+                <NotFoundText>Record not Found</NotFoundText>
+            ) : null}
+
+            {employeesFetchLoading && <Loader />}
+            <div ref={observerTarget}></div>
+        </>
+    );
 };
 
 export default EmployeeGrid;
