@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
-import { Field, Formik } from "formik";
+import { Field, Formik, FormikHelpers } from "formik";
 import {
     Button,
     CustomInput,
@@ -31,12 +31,21 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         ...prefillDataOnEmployeeAdd,
     },
 }) => {
+    const [loading, setLoading] = useState(false);
+
     const location = useLocation();
     const dispatch = useAppDispatch();
+
     const user = useAppSelector((state) => state.auth);
 
     const isAddPage =
         location.pathname.split("/")[1] === "add-employee" ? true : false;
+
+    // Admins can't remove there on admin access
+    const isNotAdminEditPage =
+        user.isAdmin &&
+        !isAddPage &&
+        location.pathname.split("/")[2] !== String(user.userID);
 
     const navigate = useNavigate();
 
@@ -49,8 +58,6 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
     const selectRoles = useAppSelector(
         (state) => state.dropdownData.roles.rolesData
     );
-
-    const [loading, setLoading] = useState(false);
 
     const [photoId, setPhotoId] = useState(prefillData.photoId);
     const [isPhotoInputDirty, setIsPhotoInputDirty] = useState<boolean>(false);
@@ -72,6 +79,21 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         }
     };
 
+    const handleForm = async (
+        values: IEmployee,
+        { setSubmitting }: FormikHelpers<IEmployee>
+    ) => {
+        setLoading(true);
+        const id: number = await handleFormSubmit(
+            values,
+            photoRef.current,
+            dispatch
+        );
+        setSubmitting(false);
+        setLoading(false);
+        navigate(`/view-employee/${id}`, { replace: true });
+    };
+
     return (
         <>
             {loading ? (
@@ -82,18 +104,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                         initialValues={prefillData}
                         enableReinitialize
                         validationSchema={validate(isAddPage)}
-                        onSubmit={async (values, { setSubmitting }) => {
-                            setLoading(true);
-
-                            const id: number = await handleFormSubmit(
-                                values,
-                                photoRef.current,
-                                dispatch
-                            );
-                            setSubmitting(false);
-                            setLoading(false);
-                            navigate(`/view-employee/${id}`, { replace: true });
-                        }}
+                        onSubmit={handleForm}
                     >
                         {(props) => {
                             return (
@@ -257,7 +268,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    {user.isAdmin && (
+                                    {(isNotAdminEditPage || isAddPage) && (
                                         <div className="form-entry checkbox">
                                             <Field
                                                 type="checkbox"
