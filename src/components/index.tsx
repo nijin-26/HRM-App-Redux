@@ -15,6 +15,7 @@ import LinkButton from "./common/LinkButton/LinkButton.tsx";
 import EmployeeDetailsForm from "./EmployeeDetailsForm/EmployeeDetailsForm.tsx";
 import EmployeesTableFilter from "./EmployeesTableFilter/EmployeesTableFilter.tsx";
 import EmployeeDeleteModal from "./EmployeeDeleteModal/EmployeeDeleteModal.tsx";
+import LogoutModal from "./LogoutModal/LogoutModal.tsx";
 
 export {
     Header,
@@ -34,4 +35,5 @@ export {
     EmployeeDetailsForm,
     EmployeesTableFilter,
     EmployeeDeleteModal,
+    LogoutModal,
 };

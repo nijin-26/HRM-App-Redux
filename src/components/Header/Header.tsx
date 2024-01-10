@@ -1,13 +1,15 @@
 import { useAppSelector } from "../../hooks/storeHelpers";
 import useAuth from "../../hooks/useAuth";
+import { useState } from "react";
 import { StyledHeader, Navbar } from "./Header.style";
 import { Link, useNavigate } from "react-router-dom";
-
 import avatar from "../../assets/images/employee-avatar.svg";
 import { toast } from "react-toastify";
+import { LogoutModal, Modal } from "..";
 
 const Header: React.FC = () => {
     const { logout } = useAuth();
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
     const user = useAppSelector((state) => state.auth);
 
@@ -51,7 +53,8 @@ const Header: React.FC = () => {
                                 <span
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        logout();
+                                        // logout();
+                                        setIsModalOpen(true);
                                     }}
                                     className="logout-btn material-symbols-rounded"
                                 >
@@ -61,6 +64,15 @@ const Header: React.FC = () => {
                         </div>
                     </li>
                 </ul>
+                <Modal
+                    $isOpen={isModalOpen}
+                    cancelClickHandler={() => setIsModalOpen(false)}
+                >
+                    <LogoutModal
+                        confirmClickHandler={logout}
+                        cancelClickHandler={() => setIsModalOpen(false)}
+                    />
+                </Modal>
             </Navbar>
         </StyledHeader>
     );
