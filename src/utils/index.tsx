@@ -144,7 +144,6 @@ export const getEmployeesListingData = (
                     </li>
                     {isAdmin && (
                         <>
-                            {" "}
                             <li>
                                 <LinkButton
                                     to={`/edit-employee/${emp.id}`}
@@ -168,7 +167,7 @@ export const getEmployeesListingData = (
                                         delete
                                     </span>
                                 </Button>
-                            </li>{" "}
+                            </li>
                         </>
                     )}
                 </ul>
