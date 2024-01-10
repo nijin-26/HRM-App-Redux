@@ -126,6 +126,13 @@ const ViewEmployeeDetails = () => {
                                     </dd>
                                 </div>
                                 <div className="data-entry">
+                                    <dt>Mobile Number</dt>
+                                    <dd className="mobile-number">
+                                        {employeeDetails.phone ||
+                                            notAvailableString}
+                                    </dd>
+                                </div>
+                                <div className="data-entry">
                                     <dt>Skills</dt>
                                     <dd>
                                         {employeeDetails.skills.length ? (

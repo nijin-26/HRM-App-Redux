@@ -53,6 +53,7 @@ const EmployeeCard = ({
                             : employeeData.photoId
                     }
                     alt=""
+                    draggable="false"
                 />
             </CardHeader>
             <CardBody>

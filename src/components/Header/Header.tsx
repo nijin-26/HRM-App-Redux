@@ -41,6 +41,7 @@ const Header: React.FC = () => {
                                     }
                                     alt="user-image"
                                     className="user-card-image"
+                                    draggable="false"
                                 />
                                 <div className="user-card-body">
                                     <span style={{ fontWeight: 700 }}>
