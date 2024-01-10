@@ -36,16 +36,20 @@ export const refreshTokens = async () => {
     const currentRefreshToken = getCookie("refreshToken");
     if (currentRefreshToken) {
         try {
-            const { data: newTokens } =
-                await renewAccessToken(currentRefreshToken);
+            const { data: newTokens } = await renewAccessToken(
+                currentRefreshToken
+            );
             return newTokens;
         } catch (error) {
             toast.error(
                 "Unable to refresh your session. Please log in again to continue."
             );
-            removeCookie("accessToken");
-            removeCookie("refreshToken");
             return;
         }
-    } else return;
+    } else {
+        toast.error(
+            "Unable to refresh your session. Please log in again to continue."
+        );
+        return;
+    }
 };

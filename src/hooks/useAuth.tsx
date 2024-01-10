@@ -82,8 +82,6 @@ const useAuth = () => {
                     await fetchUserDetails(userID);
                 } else dispatch(loginUser({ userName: username }));
 
-                console.log("after if else");
-
                 toast.success("Welcome. You are succesfully logged in.");
                 navigate("/");
                 setLoginLoading(false);
