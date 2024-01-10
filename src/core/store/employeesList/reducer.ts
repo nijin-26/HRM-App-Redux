@@ -65,7 +65,6 @@ export const selectEmployeesList = createSelector(
             if (page) {
                 flattenedEmployeesList.push(...page);
             } else {
-                console.log(flattenedEmployeesList);
                 break;
             }
         }

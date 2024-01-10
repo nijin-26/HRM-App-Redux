@@ -85,7 +85,6 @@ export const addEmployeeAction = (
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
-            console.log(apiSubmissionData, "API SUBMISSION DATA");
             const { data } = await requestHelper(
                 dispatch,
                 REQUESTS_ENUM.addEmployee,
@@ -96,7 +95,6 @@ export const addEmployeeAction = (
                 username: String(data.data.id),
                 password: userPassword,
             });
-            console.log(signupResponse);
             dispatch(employeeListClear());
             toast.success("Employee details added successfully.");
             return data.data.id;
