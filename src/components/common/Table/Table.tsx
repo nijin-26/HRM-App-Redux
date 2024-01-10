@@ -1,5 +1,5 @@
 import StyledTable from "./Table.style";
-import { Loader, Button } from "../..";
+import { Loader, Button, NoResultsMessage } from "../..";
 import { useSearchParams } from "react-router-dom";
 import { defaultSearchParams } from "../../../pages/ManageEmployees/constants";
 import upArrow from "../../../assets/images/up-arrow.svg";
@@ -74,7 +74,7 @@ const Table: React.FC<ITable> = ({
         tableBodyData = (
             <tr>
                 <td colSpan={100} className="text-center">
-                    It seems we can't find any results based on your search.
+                    <NoResultsMessage />
                 </td>
             </tr>
         );

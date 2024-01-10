@@ -1,15 +1,14 @@
 import { useAppSelector } from "../../hooks/storeHelpers";
-import { GridContainer, NoDataContainer } from "./EmployeeGrid.styles";
+import { GridContainer } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { IApiEmployee } from "../../interfaces/ApiDataInterface";
 import { useEffect, useRef } from "react";
-import { Loader } from "..";
+import { Loader, NoResultsMessage } from "..";
 import { useSearchParams } from "react-router-dom";
 import { defaultSearchParams } from "../../pages/ManageEmployees/constants";
-import noDataImage from "../../assets/images/no-data.png";
 
 const EmployeeGrid = ({
     employeeList,
@@ -102,17 +101,7 @@ const EmployeeGrid = ({
                     ))}
                 </GridContainer>
             ) : !employeesFetchLoading ? (
-                <NoDataContainer>
-                    <img
-                        src={noDataImage}
-                        alt="no-data-image"
-                        className="no-data-img"
-                    />
-                    <h2>No Results Found</h2>
-                    <p>
-                        It seems we can't find any results based on your search.
-                    </p>
-                </NoDataContainer>
+                <NoResultsMessage />
             ) : null}
 
             {employeesFetchLoading && <Loader />}

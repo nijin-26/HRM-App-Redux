@@ -14,6 +14,7 @@ import Pagination from "./common/Pagination/Pagination.tsx";
 import LinkButton from "./common/LinkButton/LinkButton.tsx";
 import EmployeeDetailsForm from "./EmployeeDetailsForm/EmployeeDetailsForm.tsx";
 import EmployeesTableFilter from "./EmployeesTableFilter/EmployeesTableFilter.tsx";
+import NoResultsMessage from "./common/NoResultsMessage/NoResultsMessage.tsx";
 import EmployeeDeleteModal from "./EmployeeDeleteModal/EmployeeDeleteModal.tsx";
 import LogoutModal from "./LogoutModal/LogoutModal.tsx";
 
@@ -34,6 +35,7 @@ export {
     LinkButton,
     EmployeeDetailsForm,
     EmployeesTableFilter,
+    NoResultsMessage,
     EmployeeDeleteModal,
     LogoutModal,
 };
