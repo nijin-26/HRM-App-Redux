@@ -2,9 +2,10 @@ import { createSelector } from "reselect";
 import { IApiEmployee } from "../../../interfaces/ApiDataInterface";
 import { ActionType } from "./types";
 import { RootState } from "..";
+import { fillEmptySlotsWithValue } from "../../../utils";
 
 interface IEmployeesState {
-    employeesList: IApiEmployee[];
+    employeesList: (IApiEmployee[] | null)[];
     count: number | undefined;
 }
 
@@ -19,44 +20,18 @@ const employeesReducer = (
 ): IEmployeesState => {
     switch (action.type) {
         case "FETCH_EMPLOYEES_SUCCESS":
-            const employeeListIds = new Set(
-                state.employeesList.map((employee) => employee.id)
-            );
+            const updatedEmployeesList = [...state.employeesList];
+            const { offset, limit, response } = action.payload;
+
+            const rowIndex = Math.floor(offset / limit);
+            updatedEmployeesList[rowIndex] = response.employees;
 
             return {
                 ...state,
-                count: action.payload.count,
-                employeesList: [
-                    ...state.employeesList,
-                    ...action.payload.employees.filter(
-                        (employee) => !employeeListIds.has(employee.id)
-                    ),
-                ],
-            };
-        case "DELETE_EMPLOYEE_SUCCESS":
-            return {
-                ...state,
-                count: state.count ? state.count - 1 : state.count,
-                employeesList: state.employeesList.filter(
-                    (emp) => emp.id !== action.payload
-                ),
-            };
-        case "ADD_EMPLOYEE_SUCCESS":
-            return {
-                ...state,
-                count: state.count ? state.count + 1 : 0,
-                employeesList: [
-                    ...state.employeesList,
-                    action.payload.storeData,
-                ],
-            };
-        case "EDIT_EMPLOYEE_SUCCESS":
-            return {
-                ...state,
-                employeesList: state.employeesList.map((employee) =>
-                    employee.id === action.payload.storeData.id
-                        ? action.payload.storeData
-                        : employee
+                count: response.count,
+                employeesList: fillEmptySlotsWithValue(
+                    updatedEmployeesList,
+                    null
                 ),
             };
         case "EMPLOYEE_LIST_CLEAR":
@@ -73,7 +48,18 @@ const employeesReducer = (
 export const selectEmployeesListSlice = (offset: number, limit: number) =>
     createSelector(
         (state: RootState) => state.employees.employeesList,
-        (employeesList) => employeesList.slice(offset, offset + limit)
+        (employeesList) => {
+            const employeeSlice = employeesList[Math.floor(offset / limit)];
+            if (employeeSlice) {
+                return employeeSlice;
+            }
+            return [];
+        }
     );
+
+export const selectEmployeesList = createSelector(
+    (state: RootState) => state.employees.employeesList,
+    (employeesList) => employeesList.flat()
+);
 
 export default employeesReducer;

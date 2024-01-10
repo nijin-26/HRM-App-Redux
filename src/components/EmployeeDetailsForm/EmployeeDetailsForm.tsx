@@ -53,12 +53,14 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
     const [loading, setLoading] = useState(false);
 
     const [photoId, setPhotoId] = useState(prefillData.photoId);
+    const [isPhotoInputDirty, setIsPhotoInputDirty] = useState<boolean>(false);
     const photoRef = useRef<HTMLInputElement>(null);
 
     const photoUploadHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const imgFile = e.target.files[0];
             setPhotoId(URL.createObjectURL(imgFile));
+            setIsPhotoInputDirty(true);
         }
     };
 
@@ -92,6 +94,19 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                         enableReinitialize
                         validationSchema={validate(isAddPage)}
                         onSubmit={handleForm}
+                        validationSchema={validate}
+                        onSubmit={async (values, { setSubmitting }) => {
+                            setLoading(true);
+
+                            const id: number = await handleFormSubmit(
+                                values,
+                                photoRef.current,
+                                dispatch
+                            );
+                            setSubmitting(false);
+                            setLoading(false);
+                            navigate(`/view-employee/${id}`, { replace: true });
+                        }}
                     >
                         {(props) => {
                             return (
@@ -277,7 +292,13 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                         <Button
                                             className="primary"
                                             type="submit"
-                                            disabled={props.isSubmitting}
+                                            disabled={
+                                                props.isSubmitting ||
+                                                !(
+                                                    props.dirty ||
+                                                    isPhotoInputDirty
+                                                )
+                                            }
                                         >
                                             SUBMIT
                                         </Button>

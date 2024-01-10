@@ -69,6 +69,28 @@ export const genders: IReactSelectOption[] = [
     { value: "others", label: "Others" },
 ];
 
+// export const prefillDataOnEmployeeAdd: IEmployee = {
+//     id: 0,
+//     firstName: '',
+//     email: '',
+//     dob: '',
+//     gender: '',
+//     address: '',
+//     role: null,
+//     department: null,
+//     dateOfJoining: '',
+//     location: null,
+//     skills: [],
+//     moreDetails: '',
+//     lastName: '',
+//     isActive: true,
+//     designation: '',
+//     phone: '',
+//     salary: '',
+//     photoId: '',
+// };
+
+//FOR TESTING
 export const prefillDataOnEmployeeAdd: IEmployee = {
     id: 0,
     firstName: "abhib",

@@ -17,12 +17,10 @@ const EmployeesTableFilter: React.FC = () => {
     const [skillFilter, setSkillFilter] = useState<
         MultiValue<IReactSelectOption>
     >([]);
-    const [empNameFilter, setEmpNameFilter] = useState<string>(
-        searchParams.get("search") || ""
-    );
+    const [empNameFilter, setEmpNameFilter] = useState<string>("");
 
-    const prevSkillFilter = useRef<MultiValue<IReactSelectOption>>([]);
-    const prevEmpNameFilter = useRef<string>(searchParams.get("search") || "");
+    const prevSkillFilter = useRef<MultiValue<IReactSelectOption>>(skillFilter);
+    const prevEmpNameFilter = useRef<string>(empNameFilter);
 
     const selectSkillsData = useAppSelector(
         (state) => state.dropdownData.skills.skillsData
@@ -80,22 +78,35 @@ const EmployeesTableFilter: React.FC = () => {
         setSearchParams(searchParams);
     };
 
-    // Update skill filter select dropdown state based on URL parameters
+    // Update skill filter select dropdown state based on URL param
     useEffect(() => {
         if (selectSkillsData) {
-            const urlSelectedSkillValues = searchParams
-                .get("skillIds")
-                ?.split(",");
+            const urlSelectedSkillValues =
+                searchParams.get("skillIds")?.split(",") || [];
 
-            if (urlSelectedSkillValues) {
-                const selectedSkillsFromUrl = selectSkillsData.filter(
-                    (option) => urlSelectedSkillValues.includes(option.value)
-                );
+            const selectedSkillsFromUrl = selectSkillsData.filter((option) =>
+                urlSelectedSkillValues.includes(option.value)
+            );
+            if (
+                JSON.stringify(selectedSkillsFromUrl) !==
+                JSON.stringify(skillFilter)
+            ) {
+                dispatch(employeeListClear());
                 setSkillFilter(selectedSkillsFromUrl);
                 prevSkillFilter.current = selectedSkillsFromUrl;
             }
         }
-    }, [selectSkillsData]);
+    }, [selectSkillsData, searchParams.get("skillIds")]);
+
+    //Update employee name filter state based on URL params
+    useEffect(() => {
+        const newSearchValue = searchParams.get("search") || "";
+        if (newSearchValue !== empNameFilter) {
+            dispatch(employeeListClear());
+            setEmpNameFilter(newSearchValue);
+            prevEmpNameFilter.current = newSearchValue;
+        }
+    }, [searchParams.get("search")]);
 
     const debounceTimeout = 500;
 

@@ -1,5 +1,4 @@
 import {
-    IApiEmployee,
     IApiEmployeeSubmission,
     IApiEmployeesData,
 } from "../../../interfaces/ApiDataInterface";
@@ -16,14 +15,21 @@ import { requestHelper } from "../requests/actions";
 import { REQUESTS_ENUM } from "../requests/requestsEnum";
 import { ISearchParams } from "../../../interfaces/common";
 import { signUp } from "../../api/services/auth";
+import { clearEmployeeData } from "../employee/actions";
 
 //Action Creators
 //EMPLOYEES LIST FETCH
 const fetchEmployeesSuccess = (
-    employeesData: IApiEmployeesData
+    employeesData: IApiEmployeesData,
+    offset: number,
+    limit: number
 ): types.IFETCH_EMPLOYEES_SUCCESS => ({
     type: "FETCH_EMPLOYEES_SUCCESS",
-    payload: employeesData,
+    payload: {
+        response: employeesData,
+        offset,
+        limit,
+    },
 });
 
 //Thunk Action creator
@@ -35,7 +41,13 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
                 REQUESTS_ENUM.getEmployeesList,
                 () => getEmployeesList(searchParams)
             );
-            dispatch(fetchEmployeesSuccess(data.data));
+            dispatch(
+                fetchEmployeesSuccess(
+                    data.data,
+                    searchParams.offset,
+                    searchParams.limit
+                )
+            );
         } catch (error) {
             console.log(error);
             toast.error(
@@ -45,42 +57,30 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     };
 };
 
-//EMPLOYEE DELETE
-const deleteEmployeeSuccess = (
-    deletedEmpId: number
-): types.IDELETE_EMPLOYEE_SUCCESS => ({
-    type: "DELETE_EMPLOYEE_SUCCESS",
-    payload: deletedEmpId,
-});
-
 //thunk action creator
-export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
+export const deleteEmployeeAction = (
+    empIdToDelete: number,
+    searchParams: ISearchParams
+): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
             await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
                 deleteEmployee(empIdToDelete)
             );
-            dispatch(deleteEmployeeSuccess(empIdToDelete));
+
+            dispatch(fetchEmployees(searchParams));
             toast.success("Employee deleted Successfully");
         } catch (error) {
+            console.log(error);
             toast.error("Employee deletion failed");
         }
     };
 };
 
-//EMPLOYEE ADD
-const addEmployeeSuccess = (
-    apiSubmissionData: IApiEmployeeSubmission,
-    storeData: IApiEmployee
-): types.IADD_EMPLOYEE_SUCCESS => ({
-    type: "ADD_EMPLOYEE_SUCCESS",
-    payload: { apiSubmissionData, storeData },
-});
-
+// EMPLOYEE ADD
 //thunk function
 export const addEmployeeAction = (
-    apiSubmissionData: IApiEmployeeSubmission,
-    storeData: IApiEmployee
+    apiSubmissionData: IApiEmployeeSubmission
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
@@ -93,15 +93,15 @@ export const addEmployeeAction = (
                 REQUESTS_ENUM.addEmployee,
                 () => addEmployee(apiSubmissionData)
             );
-            storeData.id = data.data.id;
 
             const signupResponse = await signUp({
                 username: String(data.data.id),
                 password: userPassword!,
             });
             console.log(signupResponse);
-            dispatch(addEmployeeSuccess(apiSubmissionData, storeData));
+            dispatch(employeeListClear());
             toast.success("Employee details added successfully.");
+            return data.data.id;
         } catch (error) {
             console.log(error);
             toast.error("Could not add employee details. Please try again.");
@@ -110,29 +110,22 @@ export const addEmployeeAction = (
 };
 
 // EMPLOYEE EDIT
-const editEmployeeSuccess = (
-    apiSubmissionData: IApiEmployeeSubmission,
-    storeData: IApiEmployee
-): types.IEDIT_EMPLOYEE_SUCCESS => ({
-    type: "EDIT_EMPLOYEE_SUCCESS",
-    payload: { apiSubmissionData, storeData },
-});
-
 //thunk function
 export const editEmployeeAction = (
     employeeId: number,
-    apiSubmissionData: IApiEmployeeSubmission,
-    storeData: IApiEmployee
+    apiSubmissionData: IApiEmployeeSubmission
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
-            delete storeData.password;
-
-            await requestHelper(dispatch, REQUESTS_ENUM.editEmployee, () =>
-                editEmployee(employeeId, apiSubmissionData)
+            const { data } = await requestHelper(
+                dispatch,
+                REQUESTS_ENUM.editEmployee,
+                () => editEmployee(employeeId, apiSubmissionData)
             );
-            dispatch(editEmployeeSuccess(apiSubmissionData, storeData));
+            dispatch(employeeListClear());
+            dispatch(clearEmployeeData());
             toast.success("Employee details edited successfully.");
+            return data.data.id;
         } catch (error) {
             console.log(error);
             toast.error("Could not edit employee details. Please try again.");

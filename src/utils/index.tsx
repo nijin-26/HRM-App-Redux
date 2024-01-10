@@ -8,6 +8,12 @@ import { IApiEmployee } from "../interfaces/ApiDataInterface";
 import { Button, LinkButton } from "../components";
 import { locations } from "../pages/ManageEmployees/constants";
 
+export const fillEmptySlotsWithValue = (arr: any[], value: any) =>
+    Array.from(arr, (_, i) => {
+        if (!(i in arr)) return value;
+        else return arr[i];
+    });
+
 //sort array object by sortKey (slice() to create a new array)
 export const sortObjByKey = (srcObjArray: any[], sortKey: string) => {
     return srcObjArray
