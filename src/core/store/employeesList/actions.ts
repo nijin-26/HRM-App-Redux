@@ -91,7 +91,7 @@ export const addEmployeeAction = (
                 () => addEmployee(apiSubmissionData)
             );
 
-            const signupResponse = await signUp({
+            await signUp({
                 username: String(data.data.id),
                 password: userPassword,
             });
