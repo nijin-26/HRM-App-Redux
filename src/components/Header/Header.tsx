@@ -59,9 +59,6 @@ const Header: React.FC = () => {
                                 </span>
                             </div>
                         </div>
-                        {/* <Button onClick={logout} className="outline">
-                            Logout
-                        </Button> */}
                     </li>
                 </ul>
             </Navbar>

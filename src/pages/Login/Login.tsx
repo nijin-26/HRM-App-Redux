@@ -75,47 +75,6 @@ const Login: React.FC = () => {
             )}
         </>
     );
-
-    // return (
-    //     <StyledLoginWrap>
-    //         <div className="login-img-wrap">
-    //             <img src={loginBannerImage} alt="Login banner image" />
-    //         </div>
-    //         <Formik
-    //             initialValues={initialValues}
-    //             validationSchema={loginValidationSchema}
-    //             onSubmit={handleLogin}
-    //         >
-    //             <Form className="login-form">
-    //                 <h1 className="text-center">Hello! Welcome back.</h1>
-    //                 <h2 className="text-center">Login to your account</h2>
-    //                 <div className="form-row">
-    //                     <CustomInput
-    //                         label="Username"
-    //                         name="username"
-    //                         id="username"
-    //                         type="text"
-    //                         required
-    //                     />
-    //                 </div>
-    //                 <div className="form-row">
-    //                     <CustomInput
-    //                         label="Password"
-    //                         name="password"
-    //                         id="password"
-    //                         type="password"
-    //                         required
-    //                     />
-    //                 </div>
-    //                 <div className="form-controls">
-    //                     <Button className="primary submit-btn" type="submit">
-    //                         SUBMIT
-    //                     </Button>
-    //                 </div>
-    //             </Form>
-    //         </Formik>
-    //     </StyledLoginWrap>
-    // );
 };
 
 export default Login;
