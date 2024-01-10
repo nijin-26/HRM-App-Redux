@@ -1,5 +1,4 @@
 import {
-    IApiEmployee,
     IApiEmployeeSubmission,
     IApiEmployeesData,
 } from '../../../interfaces/ApiDataInterface';
@@ -11,7 +10,7 @@ import {
     addEmployee,
     editEmployee,
 } from '../../api';
-import { AppDispatch, AppThunk, RootState } from '..';
+import { AppDispatch, AppThunk } from '..';
 import { requestHelper } from '../requests/actions';
 import { REQUESTS_ENUM } from '../requests/requestsEnum';
 import { ISearchParams } from '../../../interfaces/common';
@@ -34,15 +33,7 @@ const fetchEmployeesSuccess = (
 
 //Thunk Action creator
 export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        const employeesListSlice =
-            getState().employees.employeesList[
-                Math.floor(searchParams.offset / searchParams.limit)
-            ];
-
-        if (employeesListSlice) {
-            return;
-        }
+    return async (dispatch: AppDispatch) => {
         try {
             const { data } = await requestHelper(
                 dispatch,
@@ -65,91 +56,18 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
     };
 };
 
-// const fetchNextEmployee = (searchParams: ISearchParams): AppThunk => {
-//     return async (dispatch: AppDispatch, getState: () => RootState) => {
-//         const { employeesList } = getState().employees;
-
-//         const biggestOffset = employeesList.length - 1;
-//         const targetOffset =
-//             biggestOffset * searchParams.limit +
-//             employeesList[biggestOffset]!.length;
-
-//         searchParams.limit = 1;
-//         searchParams.offset = targetOffset;
-
-//         const { data } = await requestHelper(
-//             dispatch,
-//             REQUESTS_ENUM.getNextEmployee,
-//             () => getEmployeesList(searchParams)
-//         );
-//         return data.data.employees[0];
-//     };
-// };
-const fetchNextEmployee = (
-    searchParams: ISearchParams,
-    fetchOffset: number
-): AppThunk => {
-    return async (dispatch: AppDispatch) => {
-        searchParams.offset = fetchOffset;
-        searchParams.limit = 1;
-
-        const { data } = await requestHelper(
-            dispatch,
-            REQUESTS_ENUM.getNextEmployee,
-            () => getEmployeesList(searchParams)
-        );
-        console.log(data.data.employees[0]);
-        return data.data.employees[0];
-    };
-};
-
-//EMPLOYEE DELETE
-const deleteEmployeeSuccess = (
-    empIdToDelete: number,
-    insertIndex: number,
-    empToAppend?: IApiEmployee
-): types.IDELETE_EMPLOYEE_SUCCESS => ({
-    type: 'DELETE_EMPLOYEE_SUCCESS',
-    payload: {
-        empIdToDelete,
-        empToAppend,
-        insertIndex,
-    },
-});
-
 //thunk action creator
 export const deleteEmployeeAction = (
     empIdToDelete: number,
     searchParams: ISearchParams
 ): AppThunk => {
-    return async (dispatch: AppDispatch, getState: () => RootState) => {
-        const { employeesList } = getState().employees;
-
-        let i = 0;
-        while (i < employeesList.length) {
-            if (!employeesList[i]) {
-                break;
-            }
-            i++;
-        }
-        const fetchOffset = i * searchParams.limit;
-
+    return async (dispatch: AppDispatch) => {
         try {
-            const empToAppend = await dispatch(
-                fetchNextEmployee(searchParams, fetchOffset)
-            );
-
             await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
                 deleteEmployee(empIdToDelete)
             );
 
-            dispatch(
-                deleteEmployeeSuccess(
-                    empIdToDelete,
-                    fetchOffset - 1,
-                    empToAppend
-                )
-            );
+            dispatch(fetchEmployees(searchParams));
             toast.success('Employee deleted Successfully');
         } catch (error) {
             console.log(error);

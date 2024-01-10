@@ -34,52 +34,6 @@ const employeesReducer = (
                     null
                 ),
             };
-        case 'DELETE_EMPLOYEE_SUCCESS':
-            //remove deleted element from flattened employeesList
-            const filteredEmployeesList = state.employeesList
-                .flat()
-                .filter((employee) => {
-                    if (!employee) {
-                        return true;
-                    }
-                    return employee.id !== action.payload.empIdToDelete;
-                });
-
-            //append the fetched employee to the end (if it exists)
-            // if (action.payload.empToAppend) {
-            //     filteredEmployeesList.push(action.payload.empToAppend);
-            // }
-            if (action.payload.empToAppend) {
-                filteredEmployeesList.splice(
-                    action.payload.insertIndex,
-                    0,
-                    action.payload.empToAppend
-                );
-            }
-
-            //split flattened array back into limit sized smaller arrays
-            const splitEmployeesList: (IApiEmployee[] | null)[] = [];
-            console.log(filteredEmployeesList);
-            let i = 0;
-            while (i < filteredEmployeesList.length) {
-                if (!filteredEmployeesList[i]) {
-                    console.log('null seen');
-                    splitEmployeesList.push(null);
-                    i++;
-                } else {
-                    splitEmployeesList.push(
-                        filteredEmployeesList.slice(i, i + 10) as IApiEmployee[]
-                    );
-                    i += 10;
-                }
-            }
-            console.log('splitted array : ', splitEmployeesList);
-
-            return {
-                ...state,
-                count: state.count ? state.count - 1 : state.count,
-                employeesList: splitEmployeesList,
-            };
         case 'EMPLOYEE_LIST_CLEAR':
             return {
                 ...state,
