@@ -1,4 +1,4 @@
-import {  useAppSelector } from "../../hooks/storeHelpers";
+import { useAppSelector } from "../../hooks/storeHelpers";
 import { GridContainer, NotFoundText } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
 import EmployeeCard from "../EmployeeCard/EmployeeCard";
@@ -102,7 +102,7 @@ const EmployeeGrid = ({
                     ))}
                 </GridContainer>
             ) : !employeesFetchLoading ? (
-                <NotFoundText>Record not Found</NotFoundText>
+                <NotFoundText>No records to display</NotFoundText>
             ) : null}
 
             {employeesFetchLoading && <Loader />}

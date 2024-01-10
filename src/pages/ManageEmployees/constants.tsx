@@ -76,6 +76,7 @@ export const genders: IReactSelectOption[] = [
 //     dob: '',
 //     gender: '',
 //     address: '',
+//     password: '',
 //     role: null,
 //     department: null,
 //     dateOfJoining: '',
@@ -98,8 +99,8 @@ export const prefillDataOnEmployeeAdd: IEmployee = {
     dob: "2017-06-01",
     gender: "female",
     address: "abc street, pqr",
-    password: "",
-    phone: "",
+    password: "aaaaa",
+    phone: "1234567890",
     role: {
         value: "1",
         label: "Developer",

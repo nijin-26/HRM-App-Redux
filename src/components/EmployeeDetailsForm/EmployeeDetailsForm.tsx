@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppSelector, useAppDispatch } from "../../hooks/storeHelpers";
-import { Field, Formik, FormikHelpers } from "formik";
+import { Field, Formik } from "formik";
 import {
     Button,
     CustomInput,
@@ -72,17 +72,6 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         }
     };
 
-    const handleForm = async (
-        values: IEmployee,
-        { setSubmitting }: FormikHelpers<IEmployee>
-    ) => {
-        setLoading(true);
-        await handleFormSubmit(values, photoRef.current, dispatch);
-        setSubmitting(false);
-        setLoading(false);
-        navigate(`/`);
-    };
-
     return (
         <>
             {loading ? (
@@ -93,8 +82,6 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                         initialValues={prefillData}
                         enableReinitialize
                         validationSchema={validate(isAddPage)}
-                        onSubmit={handleForm}
-                        validationSchema={validate}
                         onSubmit={async (values, { setSubmitting }) => {
                             setLoading(true);
 

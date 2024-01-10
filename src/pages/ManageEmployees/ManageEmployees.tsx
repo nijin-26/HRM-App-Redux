@@ -22,7 +22,10 @@ import {
 } from "../../core/store/employeesList/actions";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
-import { selectEmployeesListSlice } from "../../core/store/employeesList/reducer";
+import {
+    selectEmployeesList,
+    selectEmployeesListSlice,
+} from "../../core/store/employeesList/reducer";
 import ToggleView from "../../components/ToggleView/ToggleView";
 import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
 import Sort from "../../components/Sort/Sort";
@@ -43,9 +46,7 @@ const ManageEmployees = () => {
     let limit = Number(searchParams.get("limit")) || defaultSearchParams.limit;
 
     const user = useAppSelector((state) => state.auth);
-    const employeeList = useAppSelector(
-        (state) => state.employees.employeesList
-    );
+    const employeeList = useAppSelector((state) => selectEmployeesList(state));
     const employeesListSlice = useAppSelector(
         selectEmployeesListSlice(offset, limit)
     );

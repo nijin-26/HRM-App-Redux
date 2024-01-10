@@ -58,7 +58,7 @@ const handleFormSubmit = async (
     if (formSubmitData.id) {
         return dispatch(editEmployeeAction(formSubmitData.id, apiSubmitData));
     } else {
-        return dispatch(addEmployeeAction(apiSubmitData));
+        return dispatch(addEmployeeAction(apiSubmitData, password!));
     }
 };
 

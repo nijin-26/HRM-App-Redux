@@ -59,7 +59,18 @@ export const selectEmployeesListSlice = (offset: number, limit: number) =>
 
 export const selectEmployeesList = createSelector(
     (state: RootState) => state.employees.employeesList,
-    (employeesList) => employeesList.flat()
+    (employeesList) => {
+        const flattenedEmployeesList: IApiEmployee[] = [];
+        for (const page of employeesList) {
+            if (page) {
+                flattenedEmployeesList.push(...page);
+            } else {
+                console.log(flattenedEmployeesList);
+                break;
+            }
+        }
+        return flattenedEmployeesList;
+    }
 );
 
 export default employeesReducer;

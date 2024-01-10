@@ -80,13 +80,11 @@ export const deleteEmployeeAction = (
 // EMPLOYEE ADD
 //thunk function
 export const addEmployeeAction = (
-    apiSubmissionData: IApiEmployeeSubmission
+    apiSubmissionData: IApiEmployeeSubmission,
+    userPassword: string
 ): AppThunk => {
     return async (dispatch: AppDispatch) => {
         try {
-            const userPassword = storeData.password;
-            delete storeData.password;
-
             console.log(apiSubmissionData, "API SUBMISSION DATA");
             const { data } = await requestHelper(
                 dispatch,
@@ -96,7 +94,7 @@ export const addEmployeeAction = (
 
             const signupResponse = await signUp({
                 username: String(data.data.id),
-                password: userPassword!,
+                password: userPassword,
             });
             console.log(signupResponse);
             dispatch(employeeListClear());
