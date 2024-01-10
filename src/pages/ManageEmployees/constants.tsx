@@ -69,6 +69,12 @@ export const genders: IReactSelectOption[] = [
     { value: "others", label: "Others" },
 ];
 
+export const sortOptions: IReactSelectOption[] = [
+    { value: "id", label: "Employee ID" },
+    { value: "firstName", label: "First Name" },
+    { value: "email", label: "Email" },
+];
+
 // export const prefillDataOnEmployeeAdd: IEmployee = {
 //     id: 0,
 //     firstName: "",
