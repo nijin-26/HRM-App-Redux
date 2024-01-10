@@ -8,9 +8,23 @@ export const GridContainer = styled.div`
     align-items: center;
 `;
 
-export const NotFoundText = styled.p`
-    width: 100%;
-    color: red;
+export const NoDataContainer = styled.div`
+    margin-top: 30px;
     text-align: center;
-    text-transform: uppercase;
+
+    .no-data-img {
+        width: 400px;
+        height: auto;
+        display: block;
+        margin-inline: auto;
+    }
+
+    h2 {
+        font-size: 1.2em;
+    }
+
+    p {
+        width: 100%;
+        color: gray;
+    }
 `;

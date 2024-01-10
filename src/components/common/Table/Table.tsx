@@ -74,7 +74,7 @@ const Table: React.FC<ITable> = ({
         tableBodyData = (
             <tr>
                 <td colSpan={100} className="text-center">
-                    No records to display
+                    It seems we can't find any results based on your search.
                 </td>
             </tr>
         );
