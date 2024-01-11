@@ -122,6 +122,11 @@ const StyledFormWrap = styled.div`
         background-color: #f8d7da;
     }
 
+    & input.disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+
     & .skills-input-container {
         & input {
             height: auto;
