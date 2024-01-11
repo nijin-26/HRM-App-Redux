@@ -44,7 +44,7 @@ const EmployeeCard = ({
                                 setIsModalOpen(true);
                             }}
                         >
-                            person_remove
+                            delete
                         </span>
                     </div>
                 )}

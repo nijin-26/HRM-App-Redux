@@ -42,6 +42,7 @@ const StyledEmpDetailsWrap = styled.section`
             font-size: 2em;
             font-weight: 500;
             margin: 0 0 10px 0;
+            overflow-wrap: break-word;
         }
 
         & .role,

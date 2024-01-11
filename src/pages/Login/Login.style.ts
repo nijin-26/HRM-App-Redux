@@ -76,6 +76,10 @@ const StyledLoginWrap = styled.section`
         .login-img-wrap {
             display: none;
         }
+
+        h1 {
+            font-size: 1.6em;
+        }
     }
 `;
 
