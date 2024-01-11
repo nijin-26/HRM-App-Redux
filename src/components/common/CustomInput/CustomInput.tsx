@@ -22,7 +22,10 @@ const CustomInput: React.FC<ICustomInput> = ({
         <>
             <label
                 htmlFor={props.id || props.name}
-                className={required ? "required-field" : ""}
+                className={
+                    (disabled ? "disabled" : "") ||
+                    (required ? "required-field" : "")
+                }
             >
                 {label}
             </label>

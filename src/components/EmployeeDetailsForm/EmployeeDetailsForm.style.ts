@@ -5,7 +5,7 @@ const StyledFormWrap = styled.div`
     padding: 40px;
     margin: 20px auto;
     width: 700px;
-    box-shadow: 0 6px 20px -5px rgba(0, 0, 0);
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     border-radius: 5px;
 
     --input-field-height: 2em;
@@ -122,8 +122,12 @@ const StyledFormWrap = styled.div`
         background-color: #f8d7da;
     }
 
+    & label.disabled {
+        color: gray;
+    }
+
     & input.disabled {
-        background-color: #ccc;
+        background-color: #f1f0f0;
         cursor: not-allowed;
     }
 

@@ -9,7 +9,7 @@ const StyledEmpDetailsWrap = styled.section`
     .view-emp-card {
         display: flex;
         border-radius: 5px;
-        box-shadow: 0 6px 20px -5px rgba(0, 0, 0);
+        box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
         overflow: hidden;
 
         & .primary-employee-details {
