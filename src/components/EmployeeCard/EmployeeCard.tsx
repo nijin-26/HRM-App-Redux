@@ -17,6 +17,8 @@ const EmployeeCard = ({
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth);
 
+   
+
     return (
         <CardContainer
             onClick={() => navigate(`/view-employee/${employeeData.id}`)}

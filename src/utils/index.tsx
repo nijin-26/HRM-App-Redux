@@ -14,6 +14,12 @@ export const fillEmptySlotsWithValue = (arr: any[], value: any) =>
         else return arr[i];
     });
 
+export const getClippedString = (text: string, maxLength: number) => {
+        if (text.length > maxLength) {
+            return text.substring(0, maxLength) + "...";
+        } else return text
+    };
+
 //sort array object by sortKey (slice() to create a new array)
 export const sortObjByKey = (srcObjArray: any[], sortKey: string) => {
     return srcObjArray
@@ -126,16 +132,18 @@ export const getEmployeesListingData = (
             role,
             skills,
             location,
+            email,
             ...rest
         } = modifyFetchedEmployeeData(emp);
 
         const newEmp: IEmployeeListing = {
             ...rest,
-            fullName: firstName + " " + lastName,
+            fullName: getClippedString(firstName + " " + lastName,20), 
             department: department ? department.label : "N/A",
             role: role ? role.label : "N/A",
             location: location ? location.label : "N/A",
             skills: skills.map((skill) => Number(skill.value)),
+            email: getClippedString(email, 25),
             actions: (
                 <ul className="employee-actions flex-container">
                     <li>

@@ -5,7 +5,6 @@ import {
     setCookie,
 } from "../../../../utils/cookie";
 import { API } from ".";
-import { toast } from "react-toastify";
 
 enum HTTP_STATUS {
     SUCCESS = 200,
@@ -31,7 +30,6 @@ export async function onResponseError(error: AxiosError): Promise<AxiosError> {
         } else {
             removeCookie("accessToken");
             removeCookie("refreshToken");
-            toast.error("Session Expired.");
             location.reload();
         }
     }

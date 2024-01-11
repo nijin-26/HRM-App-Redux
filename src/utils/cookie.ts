@@ -36,9 +36,8 @@ export const refreshTokens = async () => {
     const currentRefreshToken = getCookie("refreshToken");
     if (currentRefreshToken) {
         try {
-            const { data: newTokens } = await renewAccessToken(
-                currentRefreshToken
-            );
+            const { data: newTokens } =
+                await renewAccessToken(currentRefreshToken);
             return newTokens;
         } catch (error) {
             toast.error(
