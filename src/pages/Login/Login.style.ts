@@ -18,8 +18,8 @@ const StyledLoginWrap = styled.section`
         align-items: center;
 
         img {
-            height: 320px;
-            width: 320px;
+            height: auto;
+            width: 100%;
         }
     }
 
@@ -69,6 +69,12 @@ const StyledLoginWrap = styled.section`
         .submit-btn {
             flex-grow: 1;
             justify-content: center;
+        }
+    }
+
+    @media only screen and (max-width: 700px) {
+        .login-img-wrap {
+            display: none;
         }
     }
 `;
