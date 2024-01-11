@@ -30,7 +30,10 @@ const CustomInput: React.FC<ICustomInput> = ({
                 {...field}
                 {...props}
                 disabled={disabled}
-                className={meta.touched && meta.error ? "invalid" : ""}
+                className={
+                    (disabled ? "disabled" : "") ||
+                    (meta.touched && meta.error ? "invalid" : "")
+                }
             />
             {meta.touched && meta.error ? (
                 <div className="error-msg">{meta.error}</div>

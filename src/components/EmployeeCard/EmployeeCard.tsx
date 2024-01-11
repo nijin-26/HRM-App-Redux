@@ -4,6 +4,8 @@ import avatar from "../../assets/images/employee-avatar.svg";
 import { IEmployeeListing } from "../../interfaces/common";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/storeHelpers";
+import { getClippedString } from "../../utils";
+import { Tooltip } from "react-tooltip";
 
 const EmployeeCard = ({
     employeeData,
@@ -16,8 +18,6 @@ const EmployeeCard = ({
 }) => {
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth);
-
-   
 
     return (
         <CardContainer
@@ -60,7 +60,16 @@ const EmployeeCard = ({
             </CardHeader>
             <CardBody>
                 <div className="card_header">
-                    <h3>{employeeData.fullName}</h3>
+                    <Tooltip
+                        anchorSelect={`.emp-fullname-${employeeData.id}`}
+                        noArrow
+                        place="bottom"
+                    >
+                        {employeeData.fullName}
+                    </Tooltip>
+                    <h3 className={`emp-fullname-${employeeData.id}`}>
+                        {getClippedString(employeeData.fullName, 20)}
+                    </h3>
                     <p className="role">{`${employeeData.role} - ${employeeData.department}`}</p>
                 </div>
 
@@ -69,7 +78,7 @@ const EmployeeCard = ({
                         <span className="material-symbols-rounded">mail</span>
                         <p>
                             <a href={`mailto:${employeeData.email}`}>
-                                {employeeData.email}
+                                {getClippedString(employeeData.email, 25)}
                             </a>
                         </p>
                     </div>

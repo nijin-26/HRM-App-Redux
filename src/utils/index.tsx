@@ -15,10 +15,10 @@ export const fillEmptySlotsWithValue = (arr: any[], value: any) =>
     });
 
 export const getClippedString = (text: string, maxLength: number) => {
-        if (text.length > maxLength) {
-            return text.substring(0, maxLength) + "...";
-        } else return text
-    };
+    if (text.length > maxLength) {
+        return text.substring(0, maxLength) + "...";
+    } else return text;
+};
 
 //sort array object by sortKey (slice() to create a new array)
 export const sortObjByKey = (srcObjArray: any[], sortKey: string) => {
@@ -138,7 +138,7 @@ export const getEmployeesListingData = (
 
         const newEmp: IEmployeeListing = {
             ...rest,
-            fullName: getClippedString(firstName + " " + lastName,20), 
+            fullName: firstName + " " + lastName,
             department: department ? department.label : "N/A",
             role: role ? role.label : "N/A",
             location: location ? location.label : "N/A",
