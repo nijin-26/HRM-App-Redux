@@ -4,6 +4,7 @@ import { Form, Formik } from "formik";
 import { Button, CustomInput, Loader } from "../../components";
 import loginBannerImage from "../../assets/images/login-page-image.svg";
 import loginValidationSchema from "./validation";
+import SEO from "../../components/common/SEO/SEO";
 
 interface ILoginForm {
     username: string;
@@ -24,6 +25,10 @@ const Login: React.FC = () => {
 
     return (
         <>
+            <SEO
+                title="Login HRM App"
+                description="Login to get access to HRM app."
+            />
             {loginLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (

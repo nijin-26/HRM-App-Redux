@@ -12,6 +12,7 @@ import {
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { selectEmployeeDetails } from "../../core/store/employee/reducer";
 import { clearRequest } from "../../core/store/requests/actions";
+import SEO from "../../components/common/SEO/SEO";
 
 const ViewEmployeeDetails = () => {
     const dispatch = useAppDispatch();
@@ -48,6 +49,10 @@ const ViewEmployeeDetails = () => {
 
     return (
         <>
+            <SEO
+                title={`${employeeDetails?.firstName} - HRM App`}
+                description="View page of employee"
+            />
             {employeeFetchLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (

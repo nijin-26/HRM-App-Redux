@@ -29,6 +29,7 @@ import {
 import ToggleView from "../../components/ToggleView/ToggleView";
 import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
 import Sort from "../../components/Sort/Sort";
+import SEO from "../../components/common/SEO/SEO";
 
 const ManageEmployees = () => {
     const [searchParams, setSearchParams] = useSearchParams();
@@ -96,6 +97,10 @@ const ManageEmployees = () => {
 
     return (
         <>
+            <SEO
+                title="Manage Employees - HRM App"
+                description="Manage employees in list or grid view"
+            />
             {employeeDeleteLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (

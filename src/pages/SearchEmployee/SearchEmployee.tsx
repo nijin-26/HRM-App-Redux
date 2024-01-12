@@ -3,11 +3,16 @@ import { Formik, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
 import { Button, LinkButton } from "../../components";
+import SEO from "../../components/common/SEO/SEO";
 
 const SearchEmployee = () => {
     const navigate = useNavigate();
     return (
         <FormContainer>
+            <SEO
+                title="Search Employee - HRM App"
+                description="Search an employee by their ID"
+            />
             <Formik
                 initialValues={{ employeeId: "" }}
                 validateOnBlur={false}
