@@ -40,7 +40,8 @@ const useAuth = () => {
                         );
                 }
             } else {
-                setCookie("accessToken", "");
+                // setCookie("accessToken", "");
+                document.cookie = `accessToken=''; path=/`;
                 removeCookie("accessToken");
             }
         };
