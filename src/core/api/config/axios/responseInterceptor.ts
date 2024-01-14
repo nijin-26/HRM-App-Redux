@@ -19,7 +19,8 @@ enum HTTP_STATUS {
 export async function onResponseError(error: AxiosError): Promise<AxiosError> {
     if (
         error.response?.status === HTTP_STATUS.UNAUTHORIZED &&
-        error.config!.url !== "auth/renew-token"
+        error.config!.url !== "auth/renew-token" &&
+        error.config!.url !== "auth/sign-in"
     ) {
         const response = await refreshTokens();
 

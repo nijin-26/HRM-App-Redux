@@ -19,19 +19,15 @@ const GlobalStyle = createGlobalStyle`
         --toastify-color-success: green;
     }
 
-    :root,
-    body,
-    #root {
-        height: 100%;
-    }
-
     body {
+        height: 100%;
         padding: 0;
         margin: 0;
         font-family: var(--primary-font);
     }
 
     #root {
+        min-height: 100%;
         display: flex;
         flex-direction: column;
     }

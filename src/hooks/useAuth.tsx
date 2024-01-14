@@ -39,6 +39,9 @@ const useAuth = () => {
                             loginUser({ userName: decodedToken.username })
                         );
                 }
+            } else {
+                setCookie("accessToken", "");
+                removeCookie("accessToken");
             }
         };
         isLoggedIn();
@@ -91,8 +94,8 @@ const useAuth = () => {
                 toast.error("Invalid Username or Password");
             } else {
                 toast.error("Could not login. Please try again");
+                console.log(error);
             }
-            console.log(error);
             logout();
             setLoginLoading(false);
         }
