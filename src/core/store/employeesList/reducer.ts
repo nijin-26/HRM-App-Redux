@@ -35,22 +35,6 @@ const employeesReducer = (
                 ),
             };
         }
-        case "DELETE_EMPLOYEE_SUCCESS": {
-            const updatedEmployeesList = [...state.employeesList];
-
-            for (
-                let i = action.payload.pageOfEmployee;
-                i < updatedEmployeesList.length;
-                i++
-            ) {
-                updatedEmployeesList[i] = null;
-            }
-
-            return {
-                ...state,
-                employeesList: updatedEmployeesList,
-            };
-        }
         case "EMPLOYEE_LIST_CLEAR":
             return {
                 ...state,

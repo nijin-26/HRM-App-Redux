@@ -40,7 +40,7 @@ const useAuth = () => {
                         );
                 }
             } else {
-                // setCookie("accessToken", "");
+                //to remove expired token (for firefox browser)
                 document.cookie = `accessToken=''; path=/`;
                 removeCookie("accessToken");
             }

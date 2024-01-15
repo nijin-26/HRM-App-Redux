@@ -67,31 +67,14 @@ export const fetchEmployees = (searchParams: ISearchParams): AppThunk => {
 };
 
 //EMPLOYEE DELETE
-const deleteEmployeeSuccess = (
-    pageOfEmployee: number
-): types.IDELETE_EMPLOYEE_SUCCESS => ({
-    type: "DELETE_EMPLOYEE_SUCCESS",
-    payload: {
-        pageOfEmployee,
-    },
-});
-
 //thunk action creator
-export const deleteEmployeeAction = (
-    empIdToDelete: number,
-    searchParams: ISearchParams
-): AppThunk => {
+export const deleteEmployeeAction = (empIdToDelete: number): AppThunk => {
     return async (dispatch: AppDispatch) => {
-        const pageOfEmployee = Math.floor(
-            searchParams.offset / searchParams.limit
-        );
-
         try {
             await requestHelper(dispatch, REQUESTS_ENUM.deleteEmployee, () =>
                 deleteEmployee(empIdToDelete)
             );
-            dispatch(deleteEmployeeSuccess(pageOfEmployee));
-            dispatch(fetchEmployees(searchParams));
+            dispatch(employeeListClear());
             toast.success("Employee deleted Successfully");
         } catch (error) {
             console.log(error);

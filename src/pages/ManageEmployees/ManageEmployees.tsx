@@ -86,7 +86,7 @@ const ManageEmployees = () => {
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empIdToDelete) {
-            dispatch(deleteEmployeeAction(empIdToDelete, getSearchParams()));
+            dispatch(deleteEmployeeAction(empIdToDelete));
         }
     };
 
