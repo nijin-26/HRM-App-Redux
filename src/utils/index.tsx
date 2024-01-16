@@ -7,6 +7,7 @@ import {
 import { IApiEmployee } from "../interfaces/ApiDataInterface";
 import { Button, LinkButton } from "../components";
 import { locations } from "../pages/ManageEmployees/constants";
+import { TEmpDelete } from "../pages/ManageEmployees/ManageEmployees";
 
 export const fillEmptySlotsWithValue = (arr: any[], value: any) =>
     Array.from(arr, (_, i) => {
@@ -120,7 +121,7 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
 export const getEmployeesListingData = (
     employeesList: IApiEmployee[],
     setIsModalOpen?: (isOpen: boolean) => void,
-    setEmpIdToDelete?: (empIdToDelete: number) => void,
+    setEmpDataToDelete?: (empData: TEmpDelete) => void,
     isAdmin?: boolean
 ) => {
     const newEmpList: IEmployeeListing[] = [];
@@ -173,7 +174,10 @@ export const getEmployeesListingData = (
                                     type="button"
                                     className="delete-emp-btn flex-container"
                                     onClick={() => {
-                                        setEmpIdToDelete!(emp.id);
+                                        setEmpDataToDelete!({
+                                            empId: emp.id,
+                                            email: emp.email,
+                                        });
                                         setIsModalOpen!(true);
                                     }}
                                 >

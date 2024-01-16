@@ -31,14 +31,17 @@ import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
 import Sort from "../../components/Sort/Sort";
 import SEO from "../../components/common/SEO/SEO";
 
+export type TEmpDelete = {
+    empId: number;
+    email: string;
+};
+
 const ManageEmployees = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch();
 
     const [isModalopen, setIsModalOpen] = useState(false);
-    const [empIdToDelete, setEmpIdToDelete] = useState<number | undefined>(
-        undefined
-    );
+    const [empToDelete, setEmpToDelete] = useState<TEmpDelete>();
 
     const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
 
@@ -86,8 +89,10 @@ const ManageEmployees = () => {
 
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
-        if (empIdToDelete) {
-            dispatch(deleteEmployeeAction(empIdToDelete, getSearchParams()));
+        if (empToDelete?.empId) {
+            dispatch(
+                deleteEmployeeAction(empToDelete?.empId, getSearchParams())
+            );
         }
     };
 
@@ -137,7 +142,7 @@ const ManageEmployees = () => {
                                 employeeList={employeeList}
                                 employeesCount={employeesCount}
                                 setIsModalOpen={setIsModalOpen}
-                                setDeleteEmployee={setEmpIdToDelete}
+                                setDeleteEmployee={setEmpToDelete}
                             />
                         ) : (
                             <>
@@ -148,7 +153,7 @@ const ManageEmployees = () => {
                                             ? getEmployeesListingData(
                                                   employeesListSlice,
                                                   setIsModalOpen,
-                                                  setEmpIdToDelete,
+                                                  setEmpToDelete,
                                                   user.isAdmin!
                                               )
                                             : []
@@ -172,7 +177,7 @@ const ManageEmployees = () => {
                         <EmployeeDeleteModal
                             confirmClickHandler={deleteConfirmHandler}
                             cancelClickHandler={() => setIsModalOpen(false)}
-                            employeeIdToDelete={empIdToDelete}
+                            empEmailToDelete={empToDelete?.email}
                         />
                     </Modal>
                 </>

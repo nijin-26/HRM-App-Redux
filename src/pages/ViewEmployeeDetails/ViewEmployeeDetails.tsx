@@ -88,13 +88,13 @@ const ViewEmployeeDetails = () => {
                                 </p>
                             </div>
                             <dl className="secondary-employee-details">
-                                <div className="data-entry">
+                                {/* <div className="data-entry">
                                     <dt>Employee ID</dt>
                                     <dd className="emp-id">
                                         {employeeDetails.id ||
                                             notAvailableString}
                                     </dd>
-                                </div>
+                                </div> */}
                                 <div className="data-entry">
                                     <dt>Email</dt>
                                     <dd className="email">

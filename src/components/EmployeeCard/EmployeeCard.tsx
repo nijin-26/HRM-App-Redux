@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/storeHelpers";
 import { getClippedString } from "../../utils";
 import { Tooltip } from "react-tooltip";
+import { TEmpDelete } from "../../pages/ManageEmployees/ManageEmployees";
 
 const EmployeeCard = ({
     employeeData,
@@ -14,7 +15,7 @@ const EmployeeCard = ({
 }: {
     employeeData: IEmployeeListing;
     setIsModalOpen: (isOpen: boolean) => void;
-    setDeleteEmployee: (deleteEmployeeId: number) => void;
+    setDeleteEmployee: (EmpData: TEmpDelete) => void;
 }) => {
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth);
@@ -24,7 +25,6 @@ const EmployeeCard = ({
             onClick={() => navigate(`/view-employee/${employeeData.id}`)}
         >
             <CardHeader>
-                <p className="employee-id">ID: {employeeData.id}</p>
                 {user.isAdmin && (
                     <div className="icons">
                         <span
@@ -40,7 +40,10 @@ const EmployeeCard = ({
                             className="material-symbols-rounded"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                setDeleteEmployee(employeeData.id);
+                                setDeleteEmployee({
+                                    email: employeeData.email,
+                                    empId: employeeData.id,
+                                });
                                 setIsModalOpen(true);
                             }}
                         >

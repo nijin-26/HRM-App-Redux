@@ -5,24 +5,24 @@ import { useState } from "react";
 interface IEmployeeDeleteModal {
     confirmClickHandler: () => void;
     cancelClickHandler: () => void;
-    employeeIdToDelete?: number;
+    empEmailToDelete?: string;
 }
 
 const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
     confirmClickHandler,
     cancelClickHandler,
-    employeeIdToDelete,
+    empEmailToDelete,
 }) => {
-    const [inputEmpId, setInputEmpId] = useState("");
+    const [email, setEmail] = useState("");
 
-    const isEmpIdEqual = employeeIdToDelete === Number(inputEmpId);
+    const isEmailEqual = empEmailToDelete === email;
 
     return (
         <StyledEmployeeDeleteModal>
             <h2 className="confirm-dialog-heading">Delete Employee</h2>
             <p className="confirm-dialog-msg">
-                To confirm the deletion of this employee, please enter their ID
-                in the field below.
+                To confirm the deletion of this employee, please enter their
+                Email <span>{empEmailToDelete}</span> in the field below.
             </p>
             <form
                 action=""
@@ -32,24 +32,24 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
                 }}
             >
                 <input
-                    type="text"
-                    value={inputEmpId}
+                    type="email"
+                    value={email}
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
-                        setInputEmpId(event.target.value)
+                        setEmail(event.target.value)
                     }
                 />
                 <div className="confirm-dialog-actions">
                     <Button
                         type="submit"
                         className="primary"
-                        disabled={!isEmpIdEqual}
+                        disabled={!isEmailEqual}
                     >
                         Delete
                     </Button>
                     <Button
                         className="outline"
                         onClick={() => {
-                            setInputEmpId("");
+                            setEmail("");
                             cancelClickHandler();
                         }}
                     >
