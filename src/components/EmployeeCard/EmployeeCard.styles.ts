@@ -37,7 +37,6 @@ export const CardHeader = styled.div`
         border-radius: 50%;
         object-fit: cover;
         background-color: #fff;
-        /* border: 2px solid var(--primary-clr); */
         box-shadow: 0px 0px 10px #ccc;
     }
 
@@ -46,33 +45,28 @@ export const CardHeader = styled.div`
         font-weight: bold;
     }
 
-    .icons {
-        padding: 12px 0;
-        display: flex;
-        justify-content: right;
+    .employee-actions {
+        padding-left: 0;
+        margin: 0;
+        list-style: none;
         align-items: center;
-        gap: 10px;
-        color: #fff;
-        transition: all 0.3s;
-    }
+        gap: 25px;
 
-    .icons a {
-        color: inherit;
-        transition: all 0.3s;
-    }
+        li button,
+        li a {
+            padding: 0;
+            align-items: center;
+        }
 
-    .icons a:hover {
-        color: #000;
-    }
+        li span {
+            color: #fff;
+            font-size: 26px;
 
-    .icons > span {
-        cursor: pointer;
-        font-size: 26px;
-        transition: all 0.3s;
-    }
-
-    .icons > span:hover {
-        color: #000;
+            &:hover {
+                scale: 1.2;
+                font-variation-settings: "FILL" 1;
+            }
+        }
     }
 `;
 

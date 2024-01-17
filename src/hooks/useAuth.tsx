@@ -23,22 +23,19 @@ const useAuth = () => {
     const [loginLoading, setLoginLoading] = useState(false);
 
     useEffect(() => {
-        const isLoggedIn = async () => {
-            const accessToken = getCookie("accessToken");
-            if (accessToken) {
-                const decodedToken: TDecodedToken = jwtDecode(accessToken);
-                const userEmail = decodedToken.username;
+        const accessToken = getCookie("accessToken");
+        if (accessToken) {
+            const decodedToken: TDecodedToken = jwtDecode(accessToken);
+            const userEmail = decodedToken.username;
 
-                if (isEmail(userEmail)) {
-                    await fetchUserDetails(userEmail);
-                } else dispatch(loginUser({ userName: decodedToken.username }));
-            } else {
-                //to remove expired token (for firefox browser)
-                document.cookie = `accessToken=''; path=/`;
-                removeCookie("accessToken");
-            }
-        };
-        isLoggedIn();
+            if (isEmail(userEmail)) {
+                fetchUserDetails(userEmail);
+            } else dispatch(loginUser({ userName: decodedToken.username }));
+        } else {
+            //to remove expired token (for firefox browser)
+            document.cookie = `accessToken=''; path=/`;
+            removeCookie("accessToken");
+        }
     }, []);
 
     const fetchUserDetails = async (userEmail: string) => {

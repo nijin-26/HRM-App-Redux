@@ -1,7 +1,7 @@
 import { useAppSelector } from "../../hooks/storeHelpers";
 import { GridContainer } from "./EmployeeGrid.styles";
 import { getEmployeesListingData } from "../../utils";
-import EmployeeCard from "../EmployeeCard/EmployeeCard";
+import { EmployeeCard } from "..";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { IApiEmployee } from "../../interfaces/ApiDataInterface";
@@ -54,7 +54,7 @@ const EmployeeGrid = ({
         const maxOffset = Math.max(
             0,
             Math.floor(employeesCount! / limit) * limit
-        ); // (28 / 10) * 10 = 28
+        ); // Math.floor(28 / 10) * 10 = 20
         const newOffset = Math.min(currentOffset + limit, maxOffset);
 
         if (newOffset > maxOffset || newOffset <= currentOffset) return;
@@ -73,7 +73,7 @@ const EmployeeGrid = ({
         const observer = new IntersectionObserver(handleIntersection, {
             root: null, // Use the viewport as the root
             rootMargin: "0px", // No margin around the root
-            threshold: 1, // Trigger when 50% of the element is visible
+            threshold: 1, // Trigger when 100% of the element is visible
         });
 
         if (current) observer.observe(current);

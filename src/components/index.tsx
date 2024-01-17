@@ -12,6 +12,7 @@ import CustomSelect from "./common/CustomSelect/CustomSelect.tsx";
 import Loader from "./common/Loader/Loader.tsx";
 import Pagination from "./common/Pagination/Pagination.tsx";
 import LinkButton from "./common/LinkButton/LinkButton.tsx";
+import EmployeeCard from "./EmployeeCard/EmployeeCard.tsx";
 import EmployeeDetailsForm from "./EmployeeDetailsForm/EmployeeDetailsForm.tsx";
 import EmployeesTableFilter from "./EmployeesTableFilter/EmployeesTableFilter.tsx";
 import NoResultsMessage from "./common/NoResultsMessage/NoResultsMessage.tsx";
@@ -33,6 +34,7 @@ export {
     Loader,
     Pagination,
     LinkButton,
+    EmployeeCard,
     EmployeeDetailsForm,
     EmployeesTableFilter,
     NoResultsMessage,

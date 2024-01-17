@@ -1,4 +1,5 @@
 import { CardBody, CardContainer, CardHeader } from "./EmployeeCard.styles";
+import { Button, LinkButton } from "..";
 
 import avatar from "../../assets/images/employee-avatar.svg";
 import { IEmployeeListing } from "../../interfaces/common";
@@ -26,30 +27,37 @@ const EmployeeCard = ({
         >
             <CardHeader>
                 {user.isAdmin && (
-                    <div className="icons">
-                        <span
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/edit-employee/${employeeData.id}`);
-                            }}
-                            className="material-symbols-rounded"
-                        >
-                            edit_square
-                        </span>
-                        <span
-                            className="material-symbols-rounded"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                setDeleteEmployee({
-                                    email: employeeData.email,
-                                    empId: employeeData.id,
-                                });
-                                setIsModalOpen(true);
-                            }}
-                        >
-                            delete
-                        </span>
-                    </div>
+                    <ul className="employee-actions flex-container">
+                        <>
+                            <li>
+                                <LinkButton
+                                    to={`/edit-employee/${employeeData.id}`}
+                                    className="edit-emp-btn flex-container"
+                                >
+                                    <span className="material-symbols-rounded">
+                                        edit_square
+                                    </span>
+                                </LinkButton>
+                            </li>
+                            <li>
+                                <Button
+                                    type="button"
+                                    className="delete-emp-btn flex-container"
+                                    onClick={() => {
+                                        setDeleteEmployee!({
+                                            email: employeeData.email,
+                                            empId: employeeData.id,
+                                        });
+                                        setIsModalOpen!(true);
+                                    }}
+                                >
+                                    <span className="material-symbols-rounded">
+                                        delete
+                                    </span>
+                                </Button>
+                            </li>
+                        </>
+                    </ul>
                 )}
                 <img
                     src={

@@ -50,7 +50,11 @@ const ViewEmployeeDetails = () => {
     return (
         <>
             <SEO
-                title={`${employeeDetails?.firstName} - HRM App`}
+                title={
+                    employeeDetails?.id === Number(employeeId)
+                        ? `${employeeDetails?.firstName} - HRM App`
+                        : ""
+                }
                 description="View page of employee"
             />
             {employeeFetchLoading ? (
@@ -88,13 +92,6 @@ const ViewEmployeeDetails = () => {
                                 </p>
                             </div>
                             <dl className="secondary-employee-details">
-                                {/* <div className="data-entry">
-                                    <dt>Employee ID</dt>
-                                    <dd className="emp-id">
-                                        {employeeDetails.id ||
-                                            notAvailableString}
-                                    </dd>
-                                </div> */}
                                 <div className="data-entry">
                                     <dt>Email</dt>
                                     <dd className="email">
