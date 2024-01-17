@@ -22,7 +22,7 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
             <h2 className="confirm-dialog-heading">Delete Employee</h2>
             <p className="confirm-dialog-msg">
                 To confirm the deletion of this employee, please enter their
-                Email <span>{empEmailToDelete}</span> in the field below.
+                email <span>{empEmailToDelete}</span> in the field below.
             </p>
             <form
                 action=""

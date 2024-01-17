@@ -33,6 +33,9 @@ const EmployeeCard = ({
                                 <LinkButton
                                     to={`/edit-employee/${employeeData.id}`}
                                     className="edit-emp-btn flex-container"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                    }}
                                 >
                                     <span className="material-symbols-rounded">
                                         edit_square
@@ -43,7 +46,8 @@ const EmployeeCard = ({
                                 <Button
                                     type="button"
                                     className="delete-emp-btn flex-container"
-                                    onClick={() => {
+                                    onClick={(e) => {
+                                        e.stopPropagation();
                                         setDeleteEmployee!({
                                             email: employeeData.email,
                                             empId: employeeData.id,
