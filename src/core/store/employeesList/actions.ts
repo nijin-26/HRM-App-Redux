@@ -115,9 +115,10 @@ export const addEmployeeAction = (
             );
 
             await signUp({
-                username: String(data.data.id),
+                username: apiSubmissionData.email,
                 password: userPassword,
             });
+
             dispatch(employeeListClear());
             toast.success("Employee details added successfully.");
             return data.data.id;
