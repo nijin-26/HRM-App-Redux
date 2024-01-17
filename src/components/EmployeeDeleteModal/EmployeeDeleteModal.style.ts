@@ -8,6 +8,9 @@ const StyledEmployeeDeleteModal = styled.div`
 
     .confirm-dialog-msg {
         font-size: 1.2em;
+        & span {
+            font-weight: bold;
+        }
     }
 
     form {

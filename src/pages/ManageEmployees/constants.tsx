@@ -5,7 +5,7 @@ import {
 } from "../../interfaces/common";
 
 export const empTableHeaders = [
-    { value: "id", label: "Emp Id", isSortable: true, sortValue: "id" },
+    // { value: "id", label: "Emp Id", isSortable: true, sortValue: "id" },
     {
         value: "fullName",
         label: "Name",
@@ -70,7 +70,7 @@ export const genders: IReactSelectOption[] = [
 ];
 
 export const sortOptions: IReactSelectOption[] = [
-    { value: "id", label: "Employee ID" },
+    // { value: "id", label: "Employee ID" },
     { value: "firstName", label: "First Name" },
     { value: "email", label: "Email" },
 ];

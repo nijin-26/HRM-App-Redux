@@ -4,6 +4,7 @@ import { Form, Formik } from "formik";
 import { Button, CustomInput, Loader } from "../../components";
 import loginBannerImage from "../../assets/images/login-page-image.svg";
 import loginValidationSchema from "./validation";
+import SEO from "../../components/common/SEO/SEO";
 
 interface ILoginForm {
     username: string;
@@ -14,7 +15,7 @@ const Login: React.FC = () => {
     const { login, loginLoading } = useAuth();
 
     const initialValues: ILoginForm = {
-        username: "497",
+        username: "adminqb@qburst.com",
         password: "admin@123",
     };
 
@@ -24,6 +25,10 @@ const Login: React.FC = () => {
 
     return (
         <>
+            <SEO
+                title="Login HRM App"
+                description="Login to get access to HRM app."
+            />
             {loginLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (
@@ -45,10 +50,10 @@ const Login: React.FC = () => {
                             </h2>
                             <div className="form-row">
                                 <CustomInput
-                                    label="User ID"
+                                    label="Email"
                                     name="username"
                                     id="username"
-                                    type="text"
+                                    type="email"
                                     required
                                 />
                             </div>

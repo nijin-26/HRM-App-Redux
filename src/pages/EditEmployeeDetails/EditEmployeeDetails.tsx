@@ -11,6 +11,7 @@ import {
 } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
 import { clearRequest } from "../../core/store/requests/actions";
+import SEO from "../../components/common/SEO/SEO";
 
 const EditEmployeeDetails: React.FC = () => {
     const navigate = useNavigate();
@@ -43,6 +44,10 @@ const EditEmployeeDetails: React.FC = () => {
 
     return (
         <>
+            <SEO
+                title="Edit Employee - HRM App"
+                description="Edit selected employee"
+            />
             {employeeFetchLoading ? (
                 <Loader className="full-screen-loader" />
             ) : (

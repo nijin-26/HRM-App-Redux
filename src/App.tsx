@@ -8,23 +8,26 @@ import router from "./core/routes/router.tsx";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { HelmetProvider } from "react-helmet-async";
 
 function App() {
     return (
-        <Provider store={store}>
-            <GlobalStyle />
-            <RouterProvider router={router} />
-            <ToastContainer
-                position="bottom-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={false}
-                closeOnClick
-                pauseOnFocusLoss
-                pauseOnHover
-                theme="colored"
-            />
-        </Provider>
+        <HelmetProvider>
+            <Provider store={store}>
+                <GlobalStyle />
+                <RouterProvider router={router} />
+                <ToastContainer
+                    position="bottom-right"
+                    autoClose={5000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    pauseOnFocusLoss
+                    pauseOnHover
+                    theme="colored"
+                />
+            </Provider>
+        </HelmetProvider>
     );
 }
 

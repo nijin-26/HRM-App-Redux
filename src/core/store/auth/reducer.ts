@@ -4,6 +4,7 @@ import { ActionType } from "./actions";
 export interface IAuth {
     isLoggedIn?: boolean;
     userID?: number;
+    userEmail?: string;
     userName: string;
     imageURL?: string;
     isAdmin?: boolean;
@@ -27,6 +28,7 @@ const AuthReducer = (state = initialState, action: ActionType): IAuth => {
                 ...state,
                 userName: "",
                 userID: undefined,
+                userEmail: "",
                 imageURL: "",
                 isAdmin: false,
                 isLoggedIn: false,

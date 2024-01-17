@@ -6,9 +6,10 @@ import { getCookie, removeCookie, setCookie } from "../utils/cookie";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { signIn } from "../core/api/services/auth";
-import { getEmployee } from "../core/api";
 import { IAuth } from "../core/store/auth/reducer";
 import { employeeListClear } from "../core/store/employeesList/actions";
+import { getEmployeeByEmail } from "../core/api/services/employees";
+import { isEmail } from "../utils";
 
 type TDecodedToken = {
     username: string;
@@ -26,10 +27,10 @@ const useAuth = () => {
             const accessToken = getCookie("accessToken");
             if (accessToken) {
                 const decodedToken: TDecodedToken = jwtDecode(accessToken);
-                const userID = Number(decodedToken.username);
+                const userEmail = decodedToken.username;
 
-                if (!isNaN(userID) && typeof userID === "number") {
-                    await fetchUserDetails(userID);
+                if (isEmail(userEmail)) {
+                    await fetchUserDetails(userEmail);
                 } else dispatch(loginUser({ userName: decodedToken.username }));
             } else {
                 //to remove expired token (for firefox browser)
@@ -40,15 +41,16 @@ const useAuth = () => {
         isLoggedIn();
     }, []);
 
-    const fetchUserDetails = async (userID: number) => {
+    const fetchUserDetails = async (userEmail: string) => {
         try {
-            const userResponse = await getEmployee(userID);
+            const userResponse = await getEmployeeByEmail(userEmail);
             if (userResponse) {
                 const user = userResponse.data.data;
                 const moreDetails = JSON.parse(user.moreDetails);
 
                 const userDetails: IAuth = {
-                    userID: userID,
+                    userID: user.id,
+                    userEmail: user.email,
                     userName: user.firstName,
                     imageURL: moreDetails?.photoId ?? "",
                     isAdmin: moreDetails?.isAdmin ?? false,
@@ -73,9 +75,9 @@ const useAuth = () => {
                 setCookie("accessToken", accessToken);
                 setCookie("refreshToken", refreshToken);
 
-                const userID = Number(username);
-                if (!isNaN(userID) && typeof userID === "number") {
-                    await fetchUserDetails(userID);
+                const userEmail = username;
+                if (isEmail(userEmail)) {
+                    await fetchUserDetails(userEmail);
                 } else dispatch(loginUser({ userName: username }));
 
                 toast.success("Welcome. You are succesfully logged in.");

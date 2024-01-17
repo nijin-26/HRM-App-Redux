@@ -28,6 +28,10 @@ export const getEmployee = (employeeId: number) => {
     return API.get<IApiFetchEmployee>(`/employee/${employeeId}`);
 };
 
+export const getEmployeeByEmail = (email: string) => {
+    return API.get<IApiFetchEmployee>(`/employee/email/${email}`);
+};
+
 export const deleteEmployee = (employeeId: number) => {
     return API.delete(`/employee/${employeeId}`);
 };

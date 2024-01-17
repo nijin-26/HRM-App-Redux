@@ -9,6 +9,7 @@ import { useEffect, useRef } from "react";
 import { Loader, NoResultsMessage } from "..";
 import { useSearchParams } from "react-router-dom";
 import { defaultSearchParams } from "../../pages/ManageEmployees/constants";
+import { TEmpDelete } from "../../pages/ManageEmployees/ManageEmployees";
 
 const EmployeeGrid = ({
     employeeList,
@@ -19,7 +20,7 @@ const EmployeeGrid = ({
     employeeList: IApiEmployee[];
     employeesCount: number | undefined;
     setIsModalOpen: (isOpen: boolean) => void;
-    setDeleteEmployee: (deleteEmployeeId: number) => void;
+    setDeleteEmployee: (empData: TEmpDelete) => void;
 }) => {
     const observerTarget = useRef(null);
     const [searchParams, setSearchParams] = useSearchParams();

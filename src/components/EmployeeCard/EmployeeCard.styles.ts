@@ -25,7 +25,7 @@ export const CardHeader = styled.div`
     padding: 16px;
     position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: end;
 
     img {
         position: absolute;
