@@ -54,7 +54,6 @@ const Header: React.FC = () => {
                                 <span
                                     onClick={(e) => {
                                         e.stopPropagation();
-                                        // logout();
                                         setIsModalOpen(true);
                                     }}
                                     className="logout-btn material-symbols-rounded"

@@ -37,10 +37,14 @@ const handleFormSubmit = async (
         skills,
         isAdmin,
         password,
+        moreDetails,
         ...rest
     } = formSubmitData;
 
-    const moreDetails = {
+    const moreDetailsAsObj = moreDetails ? JSON.parse(moreDetails) : {};
+
+    const newMoreDetailsAsObj = {
+        ...moreDetailsAsObj,
         gender: gender,
         location: location ? location.label : null,
         photoId: photoUrl,
@@ -52,7 +56,7 @@ const handleFormSubmit = async (
         role: role ? Number(role.value) : null,
         department: department ? Number(department.value) : null,
         skills: skills.map((skill) => Number(skill.value)),
-        moreDetails: JSON.stringify(moreDetails),
+        moreDetails: JSON.stringify(newMoreDetailsAsObj),
     };
 
     if (formSubmitData.id) {

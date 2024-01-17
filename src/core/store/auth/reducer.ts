@@ -14,7 +14,8 @@ const initialState: IAuth = {
     userName: "",
     imageURL: "",
     isAdmin: false,
-    isLoggedIn: getCookie("accessToken") ? true : false,
+    isLoggedIn:
+        getCookie("accessToken") || getCookie("refreshToken") ? true : false,
 };
 
 const AuthReducer = (state = initialState, action: ActionType): IAuth => {

@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { signIn } from "../core/api/services/auth";
 import { getEmployee } from "../core/api";
 import { IAuth } from "../core/store/auth/reducer";
+import { employeeListClear } from "../core/store/employeesList/actions";
 
 type TDecodedToken = {
     username: string;
@@ -25,20 +26,11 @@ const useAuth = () => {
             const accessToken = getCookie("accessToken");
             if (accessToken) {
                 const decodedToken: TDecodedToken = jwtDecode(accessToken);
-                const currentTime = Math.floor(Date.now() / 1000);
+                const userID = Number(decodedToken.username);
 
-                //check if token expired
-                if (decodedToken.exp && decodedToken.exp <= currentTime) {
-                    logout();
-                } else {
-                    const userID = Number(decodedToken.username);
-                    if (!isNaN(userID) && typeof userID === "number") {
-                        await fetchUserDetails(userID);
-                    } else
-                        dispatch(
-                            loginUser({ userName: decodedToken.username })
-                        );
-                }
+                if (!isNaN(userID) && typeof userID === "number") {
+                    await fetchUserDetails(userID);
+                } else dispatch(loginUser({ userName: decodedToken.username }));
             } else {
                 //to remove expired token (for firefox browser)
                 document.cookie = `accessToken=''; path=/`;
@@ -105,6 +97,7 @@ const useAuth = () => {
     const logout = () => {
         removeCookie("accessToken");
         removeCookie("refreshToken");
+        dispatch(employeeListClear());
         dispatch(logoutUser());
     };
 
