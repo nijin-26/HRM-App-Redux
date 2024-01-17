@@ -90,9 +90,7 @@ const ManageEmployees = () => {
     const deleteConfirmHandler = () => {
         setIsModalOpen(false);
         if (empToDelete?.empId) {
-            dispatch(
-                deleteEmployeeAction(empToDelete?.empId, getSearchParams())
-            );
+            dispatch(deleteEmployeeAction(empToDelete?.empId));
         }
     };
 
