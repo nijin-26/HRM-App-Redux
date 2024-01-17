@@ -11,6 +11,7 @@ import {
     sortOptions,
 } from "../../pages/ManageEmployees/constants";
 import { getObjectFromValue } from "../../utils";
+import { Tooltip } from "react-tooltip";
 
 const Sort = () => {
     const dispatch = useAppDispatch();
@@ -19,12 +20,9 @@ const Sort = () => {
     const [sort, setSort] = useState<SingleValue<IReactSelectOption>>(null);
 
     useEffect(() => {
-        const urlSortValue = searchParams.get("sortBy");
-        urlSortValue
-            ? setSort(getObjectFromValue(urlSortValue, sortOptions))
-            : setSort(
-                  getObjectFromValue(defaultSearchParams.sortBy, sortOptions)
-              );
+        const urlSortValue =
+            searchParams.get("sortBy") || defaultSearchParams.sortBy;
+        setSort(getObjectFromValue(urlSortValue, sortOptions));
     }, [searchParams.get("sortBy")]);
 
     const handleSortChange = (option: SingleValue<IReactSelectOption>) => {
@@ -40,11 +38,8 @@ const Sort = () => {
         setSearchParams(searchParams);
     };
 
-    const getCurrentSortDirection = () => {
-        const sortDirection = searchParams.get("sortDir");
-        if (sortDirection === "asc") return "arrow_upward";
-        else return "arrow_downward";
-    };
+    const getCurrentSortDirection = () =>
+        searchParams.get("sortDir") || defaultSearchParams.sortDir;
 
     const handleSortDirectionChange = () => {
         dispatch(employeeListClear());
@@ -57,6 +52,11 @@ const Sort = () => {
 
     return (
         <SortContainer>
+            <Tooltip anchorSelect={".sort-icon"} noArrow place="right">
+                {getCurrentSortDirection() === "asc"
+                    ? "Ascending"
+                    : "Desceding"}
+            </Tooltip>
             <Select
                 styles={CustomSingleSelectStyle}
                 options={sortOptions}
@@ -70,7 +70,9 @@ const Sort = () => {
                     className="material-symbols-rounded"
                     onClick={handleSortDirectionChange}
                 >
-                    {getCurrentSortDirection()}
+                    {getCurrentSortDirection() === "asc"
+                        ? "arrow_upward"
+                        : "arrow_downward"}
                 </span>
             </div>
         </SortContainer>
