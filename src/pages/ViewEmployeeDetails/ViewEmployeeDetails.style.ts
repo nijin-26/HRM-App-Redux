@@ -84,11 +84,12 @@ const StyledEmpDetailsWrap = styled.section`
         }
 
         & .selected-skills-list {
-            margin: 5px 0 0 0;
             list-style: none;
-            padding: 0;
-            gap: 8px;
+            display: flex;
             flex-wrap: wrap;
+            gap: 8px;
+            margin: 5px 0 0 0;
+            padding: 0;
             max-height: 190px;
             overflow-y: auto;
         }

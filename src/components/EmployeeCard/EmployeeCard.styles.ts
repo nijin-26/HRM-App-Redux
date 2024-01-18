@@ -1,14 +1,13 @@
 import styled from "styled-components";
 
 export const CardContainer = styled.div`
-    box-sizing: border-box;
     height: 320px;
     border: 1px solid #ccc;
     border-radius: 8px;
+    overflow: hidden;
     box-shadow: 0px 0px 10px #ccc;
     display: flex;
     flex-direction: column;
-    gap: 12px;
     cursor: pointer;
     transition: all 0.5s;
 
@@ -21,11 +20,9 @@ export const CardContainer = styled.div`
 export const CardHeader = styled.div`
     min-height: 80px;
     background-color: var(--primary-clr);
-    border-radius: 8px 8px 0 0;
     padding: 16px;
     position: relative;
     display: flex;
-    justify-content: end;
 
     img {
         position: absolute;
@@ -46,11 +43,12 @@ export const CardHeader = styled.div`
     }
 
     .employee-actions {
-        padding-left: 0;
-        margin: 0;
         list-style: none;
+        display: flex;
         align-items: center;
         gap: 25px;
+        padding-left: 0;
+        margin: 0 0 0 auto;
 
         li button,
         li a {
@@ -74,7 +72,7 @@ export const CardBody = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 35px;
+    margin-top: 48px;
     text-align: center;
 
     & * {

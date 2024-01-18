@@ -74,20 +74,8 @@ const GlobalStyle = createGlobalStyle`
         text-align: center;
     }
 
-    .flex-container {
-        display: flex;
-    }
-
-    .border-1 {
-        border: 1px solid #000;
-    }
-
     a {
         text-decoration: none;
-    }
-
-    .flex-grow {
-        flex-grow: 1;
     }
 
     img {
@@ -138,7 +126,7 @@ const GlobalStyle = createGlobalStyle`
     .flex {
         display: flex;
 
-        &.direction {
+        &.column {
         flex-direction: column;
         }
 

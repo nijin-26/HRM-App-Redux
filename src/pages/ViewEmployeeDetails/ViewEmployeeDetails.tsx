@@ -138,7 +138,7 @@ const ViewEmployeeDetails = () => {
                                     <dt>Skills</dt>
                                     <dd>
                                         {employeeDetails.skills.length ? (
-                                            <ul className="selected-skills-list flex-container">
+                                            <ul className="selected-skills-list">
                                                 {employeeDetails.skills?.map(
                                                     (skill) => (
                                                         <li key={skill.value}>

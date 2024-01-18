@@ -11,7 +11,7 @@ const Chip: React.FC<IChip> = ({ children, isDeletable }) => {
         <StyledChip>
             {children}
             {isDeletable && (
-                <Button className="skill-remove-btn flex align-items-center">
+                <Button className="skill-remove-btn">
                     <span className="material-symbols-rounded icon">
                         cancel
                     </span>

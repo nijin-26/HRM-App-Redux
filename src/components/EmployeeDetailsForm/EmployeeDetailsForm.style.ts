@@ -46,6 +46,7 @@ const StyledFormWrap = styled.div`
     }
 
     & .form-row {
+        display: flex;
         justify-content: space-between;
         gap: 20px;
     }
@@ -138,6 +139,7 @@ const StyledFormWrap = styled.div`
     }
 
     & .form-controls-container {
+        display: flex;
         justify-content: end;
         gap: 20px;
         margin: 10px 0 0 0;

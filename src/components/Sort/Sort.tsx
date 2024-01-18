@@ -44,9 +44,10 @@ const Sort = () => {
     const handleSortDirectionChange = () => {
         dispatch(employeeListClear());
         searchParams.set("offset", "0");
-        const sortDirection = searchParams.get("sortDir");
-        if (sortDirection === "asc") searchParams.set("sortDir", "desc");
-        else searchParams.set("sortDir", "asc");
+        getCurrentSortDirection() === "asc"
+            ? searchParams.set("sortDir", "desc")
+            : searchParams.set("sortDir", "asc");
+
         setSearchParams(searchParams);
     };
 

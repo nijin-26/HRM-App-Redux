@@ -13,6 +13,8 @@ const StyledChip = styled.div`
     font-size: 0.8em;
 
     & .skill-remove-btn {
+        display: flex;
+        align-items: center;
         padding: 0;
     }
 

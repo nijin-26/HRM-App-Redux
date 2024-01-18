@@ -27,12 +27,12 @@ const EmployeeCard = ({
         >
             <CardHeader>
                 {user.isAdmin && (
-                    <ul className="employee-actions flex-container">
+                    <ul className="employee-actions">
                         <>
                             <li>
                                 <LinkButton
                                     to={`/edit-employee/${employeeData.id}`}
-                                    className="edit-emp-btn flex-container"
+                                    className="flex"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                     }}
@@ -45,7 +45,7 @@ const EmployeeCard = ({
                             <li>
                                 <Button
                                     type="button"
-                                    className="delete-emp-btn flex-container"
+                                    className="flex"
                                     onClick={(e) => {
                                         e.stopPropagation();
                                         setDeleteEmployee!({

@@ -113,7 +113,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                     onSubmit={props.handleSubmit}
                                     noValidate
                                 >
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <label
                                             htmlFor="photoId"
                                             className="profile-picture-wrap"
@@ -142,7 +142,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </label>
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry">
                                             <CustomInput
                                                 label="Full Name"
@@ -163,7 +163,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry">
                                             <CustomInput
                                                 label="Date of Birth"
@@ -182,7 +182,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             required
                                         />
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry">
                                             <CustomTextarea
                                                 label="Address"
@@ -192,7 +192,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry">
                                             <CustomInput
                                                 label="Password"
@@ -213,7 +213,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry">
                                             <CustomSelect
                                                 name="department"
@@ -233,7 +233,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry">
                                             <CustomInput
                                                 label="Date of Joining"
@@ -255,7 +255,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             />
                                         </div>
                                     </div>
-                                    <div className="flex form-row">
+                                    <div className="form-row">
                                         <div className="form-entry skills-input-container">
                                             <CustomSelect
                                                 name="skills"
@@ -283,7 +283,7 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
                                             </div>
                                         )
                                     }
-                                    <div className="form-controls-container flex">
+                                    <div className="form-controls-container">
                                         <Button
                                             className="outline"
                                             onClick={() => navigate(-1)}

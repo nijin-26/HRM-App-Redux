@@ -146,11 +146,11 @@ export const getEmployeesListingData = (
             skills: skills.map((skill) => Number(skill.value)),
             email: getClippedString(email, 25),
             actions: (
-                <ul className="employee-actions flex-container">
+                <ul className="employee-actions flex">
                     <li>
                         <LinkButton
                             to={`/view-employee/${emp.id}`}
-                            className="view-emp-btn flex-container"
+                            className="view-emp-btn flex"
                         >
                             <span className="material-symbols-rounded">
                                 visibility
@@ -162,7 +162,7 @@ export const getEmployeesListingData = (
                             <li>
                                 <LinkButton
                                     to={`/edit-employee/${emp.id}`}
-                                    className="edit-emp-btn flex-container"
+                                    className="edit-emp-btn flex"
                                 >
                                     <span className="material-symbols-rounded">
                                         edit_square
@@ -172,7 +172,7 @@ export const getEmployeesListingData = (
                             <li>
                                 <Button
                                     type="button"
-                                    className="delete-emp-btn flex-container"
+                                    className="delete-emp-btn flex"
                                     onClick={() => {
                                         setEmpDataToDelete!({
                                             empId: emp.id,
