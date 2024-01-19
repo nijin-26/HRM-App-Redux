@@ -9,6 +9,7 @@ import {
     CustomRadioGroup,
     CustomSelect,
     Loader,
+    Overlay,
 } from "..";
 import StyledFormWrap from "./EmployeeDetailsForm.style";
 import {
@@ -91,225 +92,225 @@ const EmployeeDetailsForm: React.FC<IEmployeeDetailsForm> = ({
         );
         setSubmitting(false);
         setLoading(false);
-        navigate(`/view-employee/${id}`, { replace: true });
+        if (id !== -1) {
+            navigate(`/view-employee/${id}`, { replace: true });
+        }
     };
 
     return (
         <>
-            {loading ? (
-                <Loader className="full-screen-loader" />
-            ) : (
-                <StyledFormWrap>
-                    <Formik
-                        initialValues={prefillData}
-                        enableReinitialize
-                        validationSchema={validate(isAddPage)}
-                        onSubmit={handleForm}
-                    >
-                        {(props) => {
-                            return (
-                                <form
-                                    autoComplete="off"
-                                    onSubmit={props.handleSubmit}
-                                    noValidate
-                                >
-                                    <div className="form-row">
-                                        <label
-                                            htmlFor="photoId"
-                                            className="profile-picture-wrap"
-                                            tabIndex={0}
-                                            onKeyDown={(e) =>
-                                                handlePhotoLabelClick(e)
+            <StyledFormWrap>
+                {loading && (
+                    <Overlay>
+                        <Loader className="full-screen-loader" />
+                    </Overlay>
+                )}
+                <Formik
+                    initialValues={prefillData}
+                    enableReinitialize
+                    validationSchema={validate(isAddPage)}
+                    onSubmit={handleForm}
+                >
+                    {(props) => {
+                        return (
+                            <form
+                                autoComplete="off"
+                                onSubmit={props.handleSubmit}
+                                noValidate
+                            >
+                                <div className="form-row">
+                                    <label
+                                        htmlFor="photoId"
+                                        className="profile-picture-wrap"
+                                        tabIndex={0}
+                                        onKeyDown={(e) =>
+                                            handlePhotoLabelClick(e)
+                                        }
+                                    >
+                                        <img
+                                            src={
+                                                photoId || profilePictureAvatar
                                             }
-                                        >
-                                            <img
-                                                src={
-                                                    photoId ||
-                                                    profilePictureAvatar
-                                                }
-                                                alt="employee profile photo"
-                                                title="Add a profile photo"
-                                                draggable="false"
-                                            />
-                                            <input
-                                                type="file"
-                                                className="display-none"
-                                                name="photoId"
-                                                id="photoId"
-                                                accept="image/*"
-                                                ref={photoRef}
-                                                onChange={photoUploadHandler}
-                                            />
-                                        </label>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-entry">
-                                            <CustomInput
-                                                label="Full Name"
-                                                name="firstName"
-                                                id="name"
-                                                type="text"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="form-entry">
-                                            <CustomInput
-                                                label="Email"
-                                                name="email"
-                                                id="email"
-                                                placeholder="user@qburst.com"
-                                                type="email"
-                                                required
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-entry">
-                                            <CustomInput
-                                                label="Date of Birth"
-                                                name="dob"
-                                                id="dob"
-                                                type="date"
-                                                required
-                                            />
-                                        </div>
-                                        <CustomRadioGroup
-                                            id="gender"
-                                            label="Gender"
-                                            name="gender"
-                                            options={genders}
-                                            className="form-entry"
+                                            alt="employee profile photo"
+                                            title="Add a profile photo"
+                                            draggable="false"
+                                        />
+                                        <input
+                                            type="file"
+                                            className="display-none"
+                                            name="photoId"
+                                            id="photoId"
+                                            accept="image/*"
+                                            ref={photoRef}
+                                            onChange={photoUploadHandler}
+                                        />
+                                    </label>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry">
+                                        <CustomInput
+                                            label="Full Name"
+                                            name="firstName"
+                                            id="name"
+                                            type="text"
                                             required
                                         />
                                     </div>
-                                    <div className="form-row">
-                                        <div className="form-entry">
-                                            <CustomTextarea
-                                                label="Address"
-                                                name="address"
-                                                rows="3"
-                                                required
-                                            />
-                                        </div>
+                                    <div className="form-entry">
+                                        <CustomInput
+                                            label="Email"
+                                            name="email"
+                                            id="email"
+                                            placeholder="user@qburst.com"
+                                            type="email"
+                                            required
+                                        />
                                     </div>
-                                    <div className="form-row">
-                                        <div className="form-entry">
-                                            <CustomInput
-                                                label="Password"
-                                                name="password"
-                                                id="password"
-                                                type="password"
-                                                required
-                                                disabled={!isAddPage}
-                                            />
-                                        </div>
-                                        <div className="form-entry">
-                                            <CustomInput
-                                                label="Mobile Number"
-                                                name="phone"
-                                                id="phone"
-                                                type="text"
-                                                required
-                                            />
-                                        </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry">
+                                        <CustomInput
+                                            label="Date of Birth"
+                                            name="dob"
+                                            id="dob"
+                                            type="date"
+                                            required
+                                        />
                                     </div>
-                                    <div className="form-row">
-                                        <div className="form-entry">
-                                            <CustomSelect
-                                                name="department"
-                                                label="Department"
-                                                options={selectDepartments}
-                                                placeholder="Select a Department"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="form-entry">
-                                            <CustomSelect
-                                                name="role"
-                                                label="Role"
-                                                options={selectRoles}
-                                                placeholder="Select a Role"
-                                                required
-                                            />
-                                        </div>
+                                    <CustomRadioGroup
+                                        id="gender"
+                                        label="Gender"
+                                        name="gender"
+                                        options={genders}
+                                        className="form-entry"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry">
+                                        <CustomTextarea
+                                            label="Address"
+                                            name="address"
+                                            rows="3"
+                                            required
+                                        />
                                     </div>
-                                    <div className="form-row">
-                                        <div className="form-entry">
-                                            <CustomInput
-                                                label="Date of Joining"
-                                                name="dateOfJoining"
-                                                type="date"
-                                                required
-                                            />
-                                        </div>
-                                        <div className="form-entry">
-                                            <CustomSelect
-                                                name="location"
-                                                label="Location"
-                                                options={sortObjByKey(
-                                                    locations,
-                                                    "label"
-                                                )}
-                                                placeholder="Select a Location"
-                                                required
-                                            />
-                                        </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry">
+                                        <CustomInput
+                                            label="Password"
+                                            name="password"
+                                            id="password"
+                                            type="password"
+                                            required
+                                            disabled={!isAddPage}
+                                        />
                                     </div>
-                                    <div className="form-row">
-                                        <div className="form-entry skills-input-container">
-                                            <CustomSelect
-                                                name="skills"
-                                                label="Skills"
-                                                options={selectSkills}
-                                                placeholder="Select one or more skills"
-                                                isMulti
-                                                closeMenuOnSelect={false}
-                                                required
+                                    <div className="form-entry">
+                                        <CustomInput
+                                            label="Mobile Number"
+                                            name="phone"
+                                            id="phone"
+                                            type="text"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry">
+                                        <CustomSelect
+                                            name="department"
+                                            label="Department"
+                                            options={selectDepartments}
+                                            placeholder="Select a Department"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-entry">
+                                        <CustomSelect
+                                            name="role"
+                                            label="Role"
+                                            options={selectRoles}
+                                            placeholder="Select a Role"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry">
+                                        <CustomInput
+                                            label="Date of Joining"
+                                            name="dateOfJoining"
+                                            type="date"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-entry">
+                                        <CustomSelect
+                                            name="location"
+                                            label="Location"
+                                            options={sortObjByKey(
+                                                locations,
+                                                "label"
+                                            )}
+                                            placeholder="Select a Location"
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                <div className="form-row">
+                                    <div className="form-entry skills-input-container">
+                                        <CustomSelect
+                                            name="skills"
+                                            label="Skills"
+                                            options={selectSkills}
+                                            placeholder="Select one or more skills"
+                                            isMulti
+                                            closeMenuOnSelect={false}
+                                            required
+                                        />
+                                    </div>
+                                </div>
+                                {
+                                    // Admins cannot edit their own isAdmin flag
+                                    (isNotAdminEditPage || isAddPage) && (
+                                        <div className="form-entry checkbox">
+                                            <Field
+                                                type="checkbox"
+                                                name="isAdmin"
+                                                id="isAdmin"
                                             />
+                                            <label htmlFor="isAdmin">
+                                                Provide Admin Access
+                                            </label>
                                         </div>
-                                    </div>
-                                    {
-                                        // Admins cannot edit their own isAdmin flag
-                                        (isNotAdminEditPage || isAddPage) && (
-                                            <div className="form-entry checkbox">
-                                                <Field
-                                                    type="checkbox"
-                                                    name="isAdmin"
-                                                    id="isAdmin"
-                                                />
-                                                <label htmlFor="isAdmin">
-                                                    Provide Admin Access
-                                                </label>
-                                            </div>
-                                        )
-                                    }
-                                    <div className="form-controls-container">
-                                        <Button
-                                            className="outline"
-                                            onClick={() => navigate(-1)}
-                                        >
-                                            CANCEL
-                                        </Button>
-                                        <Button
-                                            className="primary"
-                                            type="submit"
-                                            disabled={
-                                                props.isSubmitting ||
-                                                !(
-                                                    props.dirty ||
-                                                    isPhotoInputDirty
-                                                )
-                                            }
-                                        >
-                                            SUBMIT
-                                        </Button>
-                                    </div>
-                                </form>
-                            );
-                        }}
-                    </Formik>
-                </StyledFormWrap>
-            )}
+                                    )
+                                }
+                                <div className="form-controls-container">
+                                    <Button
+                                        className="outline"
+                                        onClick={() => navigate(-1)}
+                                    >
+                                        CANCEL
+                                    </Button>
+                                    <Button
+                                        className="primary"
+                                        type="submit"
+                                        disabled={
+                                            props.isSubmitting ||
+                                            !(props.dirty || isPhotoInputDirty)
+                                        }
+                                    >
+                                        SUBMIT
+                                    </Button>
+                                </div>
+                            </form>
+                        );
+                    }}
+                </Formik>
+            </StyledFormWrap>
+            {/* )} */}
         </>
     );
 };

@@ -16,6 +16,7 @@ import { REQUESTS_ENUM } from "../requests/requestsEnum";
 import { ISearchParams } from "../../../interfaces/common";
 import { signUp } from "../../api/services/auth";
 import { clearEmployeeData } from "../employee/actions";
+import { AxiosError } from "axios";
 
 //Action Creators
 //EMPLOYEES LIST FETCH
@@ -107,7 +108,14 @@ export const addEmployeeAction = (
             return data.data.id;
         } catch (error) {
             console.log(error);
-            toast.error("Could not add employee details. Please try again.");
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.message);
+            } else {
+                toast.error(
+                    "Could not add employee details. Please try again."
+                );
+            }
+            return -1;
         }
     };
 };
@@ -131,7 +139,14 @@ export const editEmployeeAction = (
             return data.data.id;
         } catch (error) {
             console.log(error);
-            toast.error("Could not edit employee details. Please try again.");
+            if (error instanceof AxiosError) {
+                toast.error(error.response?.data.message);
+            } else {
+                toast.error(
+                    "Could not edit employee details. Please try again."
+                );
+            }
+            return -1;
         }
     };
 };

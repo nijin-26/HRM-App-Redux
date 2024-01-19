@@ -14,6 +14,7 @@ enum HTTP_STATUS {
     FORBIDDEN = 403,
     SERVER_ERROR = 500,
     UNAUTHORIZED = 401,
+    CONFLICT = 409,
 }
 
 export async function onResponseError(error: AxiosError): Promise<AxiosError> {
@@ -33,6 +34,10 @@ export async function onResponseError(error: AxiosError): Promise<AxiosError> {
             removeCookie("refreshToken");
             location.reload();
         }
+    }
+
+    if (error.response?.status === HTTP_STATUS.CONFLICT) {
+        return Promise.reject(error);
     }
 
     return Promise.reject(error.response);

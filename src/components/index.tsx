@@ -4,6 +4,7 @@ import Button from "./common/Button/Button";
 import Input from "./common/Input/Input";
 import Table from "./common/Table/Table.tsx";
 import Chip from "./common/Chip/Chip.tsx";
+import Overlay from "./common/Overlay/Overlay.tsx";
 import Modal from "./common/Modal/Modal.tsx";
 import CustomTextarea from "./common/CustomTextarea/CustomTextarea.tsx";
 import CustomRadioGroup from "./common/CustomRadioGroup/CustomRadioGroup.tsx";
@@ -25,6 +26,7 @@ export {
     Button,
     Input,
     Chip,
+    Overlay,
     Modal,
     Table,
     CustomTextarea,
