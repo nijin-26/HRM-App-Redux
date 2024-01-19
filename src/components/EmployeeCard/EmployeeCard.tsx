@@ -92,7 +92,12 @@ const EmployeeCard = ({
                     <div>
                         <span className="material-symbols-rounded">mail</span>
                         <p>
-                            <a href={`mailto:${employeeData.email}`}>
+                            <a
+                                href={`mailto:${employeeData.email}`}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                }}
+                            >
                                 {getClippedString(employeeData.email, 25)}
                             </a>
                         </p>

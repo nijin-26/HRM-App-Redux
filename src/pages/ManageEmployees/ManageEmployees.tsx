@@ -168,16 +168,18 @@ const ManageEmployees = () => {
                         )}
                     </StyledManageEmployeesWrap>
 
-                    <Modal
-                        $isOpen={isModalopen}
-                        cancelClickHandler={() => setIsModalOpen(false)}
-                    >
-                        <EmployeeDeleteModal
-                            confirmClickHandler={deleteConfirmHandler}
+                    {isModalopen && (
+                        <Modal
+                            $isOpen={isModalopen}
                             cancelClickHandler={() => setIsModalOpen(false)}
-                            empEmailToDelete={empToDelete?.email}
-                        />
-                    </Modal>
+                        >
+                            <EmployeeDeleteModal
+                                confirmClickHandler={deleteConfirmHandler}
+                                cancelClickHandler={() => setIsModalOpen(false)}
+                                empEmailToDelete={empToDelete?.email}
+                            />
+                        </Modal>
+                    )}
                 </>
             )}
         </>

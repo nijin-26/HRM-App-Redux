@@ -37,6 +37,7 @@ const EmployeeDeleteModal: React.FC<IEmployeeDeleteModal> = ({
                     onChange={(event: React.ChangeEvent<HTMLInputElement>) =>
                         setEmail(event.target.value)
                     }
+                    autoFocus
                 />
                 <div className="confirm-dialog-actions">
                     <Button

@@ -1,12 +1,8 @@
 import { useField, Field } from "formik";
 
-interface ICustomInput {
+interface ICustomInput extends React.HTMLProps<HTMLInputElement> {
     label: string;
     name: string;
-    id?: string;
-    type: string;
-    placeholder?: string;
-    className?: string;
     required?: boolean;
     disabled?: boolean;
 }

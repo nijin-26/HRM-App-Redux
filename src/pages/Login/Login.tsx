@@ -55,6 +55,7 @@ const Login: React.FC = () => {
                                     id="username"
                                     type="email"
                                     required
+                                    autoFocus
                                 />
                             </div>
                             <div className="form-row">
