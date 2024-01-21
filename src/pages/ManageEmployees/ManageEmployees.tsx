@@ -169,10 +169,7 @@ const ManageEmployees = () => {
                     </StyledManageEmployeesWrap>
 
                     {isModalopen && (
-                        <Modal
-                            $isOpen={isModalopen}
-                            cancelClickHandler={() => setIsModalOpen(false)}
-                        >
+                        <Modal cancelClickHandler={() => setIsModalOpen(false)}>
                             <EmployeeDeleteModal
                                 confirmClickHandler={deleteConfirmHandler}
                                 cancelClickHandler={() => setIsModalOpen(false)}

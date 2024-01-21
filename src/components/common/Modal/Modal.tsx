@@ -3,19 +3,14 @@ import { Button } from "../..";
 
 interface IModal {
     children: JSX.Element;
-    $isOpen: boolean;
     cancelClickHandler?: () => void;
 }
 
-const Modal: React.FC<IModal> = ({
-    children,
-    $isOpen = false,
-    cancelClickHandler,
-}) => {
+const Modal: React.FC<IModal> = ({ children, cancelClickHandler }) => {
     return (
         <>
-            <Overlay $isOpen={$isOpen} />
-            <StyledModal $isOpen={$isOpen}>
+            <Overlay />
+            <StyledModal>
                 <Button onClick={cancelClickHandler} className="cancel-btn">
                     <span className="material-symbols-rounded">
                         disabled_by_default

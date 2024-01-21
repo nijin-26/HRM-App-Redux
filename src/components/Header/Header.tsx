@@ -64,15 +64,14 @@ const Header: React.FC = () => {
                         </div>
                     </li>
                 </ul>
-                <Modal
-                    $isOpen={isModalOpen}
-                    cancelClickHandler={() => setIsModalOpen(false)}
-                >
-                    <LogoutModal
-                        confirmClickHandler={logout}
-                        cancelClickHandler={() => setIsModalOpen(false)}
-                    />
-                </Modal>
+                {isModalOpen && (
+                    <Modal cancelClickHandler={() => setIsModalOpen(false)}>
+                        <LogoutModal
+                            confirmClickHandler={logout}
+                            cancelClickHandler={() => setIsModalOpen(false)}
+                        />
+                    </Modal>
+                )}
             </Navbar>
         </StyledHeader>
     );

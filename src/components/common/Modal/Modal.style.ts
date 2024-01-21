@@ -1,21 +1,16 @@
 import styled from "styled-components";
 
-const Overlay = styled.div<{ $isOpen: boolean }>`
+const Overlay = styled.div`
     position: fixed;
     display: none;
     inset: 0 0 0 0;
     z-index: 3;
     background-color: rgba(0, 0, 0, 0.7);
     backdrop-filter: blur(2.5px);
-
-    ${({ $isOpen }) =>
-        $isOpen &&
-        `
-            display: block;
-    `}
+    display: block;
 `;
 
-const StyledModal = styled.div<{ $isOpen: boolean }>`
+const StyledModal = styled.div`
     display: none;
     position: fixed;
     max-height: 95vh;
@@ -31,12 +26,7 @@ const StyledModal = styled.div<{ $isOpen: boolean }>`
     border: none;
     border-radius: 5px;
     padding: 40px 35px 30px;
-
-    ${({ $isOpen }) =>
-        $isOpen &&
-        `
-            display: block;
-    `}
+    display: block;
 
     .cancel-btn {
         position: absolute;
