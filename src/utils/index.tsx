@@ -139,7 +139,7 @@ export const getEmployeesListingData = (
 
         const newEmp: IEmployeeListing = {
             ...rest,
-            fullName: firstName + " " + lastName,
+            fullName: firstName + (lastName && ` ${lastName}`),
             department: department ? department.label : "N/A",
             role: role ? role.label : "N/A",
             location: location ? location.label : "N/A",
