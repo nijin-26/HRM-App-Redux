@@ -4,12 +4,12 @@ import { getEmployeesListingData } from "../../utils";
 import { EmployeeCard } from "..";
 import { selectRequestInProgress } from "../../core/store/requests/reducer";
 import { REQUESTS_ENUM } from "../../core/store/requests/requestsEnum";
-import { IApiEmployee } from "../../interfaces/ApiDataInterface";
 import { useEffect, useRef } from "react";
 import { Loader, NoResultsMessage } from "..";
 import { useSearchParams } from "react-router-dom";
 import { defaultSearchParams } from "../../pages/ManageEmployees/constants";
-import { TEmpDelete } from "../../pages/ManageEmployees/ManageEmployees";
+import { IEmployeeToDelete } from "../../interfaces/common";
+import { IApiEmployee } from "../../interfaces/ApiDataInterface";
 
 const EmployeeGrid = ({
     employeeList,
@@ -20,7 +20,7 @@ const EmployeeGrid = ({
     employeeList: IApiEmployee[];
     employeesCount: number | undefined;
     setIsModalOpen: (isOpen: boolean) => void;
-    setDeleteEmployee: (empData: TEmpDelete) => void;
+    setDeleteEmployee: (empData: IEmployeeToDelete) => void;
 }) => {
     const observerTarget = useRef(null);
     const [searchParams, setSearchParams] = useSearchParams();

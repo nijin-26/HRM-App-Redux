@@ -2,12 +2,11 @@ import { CardBody, CardContainer, CardHeader } from "./EmployeeCard.styles";
 import { Button, LinkButton } from "..";
 
 import avatar from "../../assets/images/employee-avatar.svg";
-import { IEmployeeListing } from "../../interfaces/common";
+import { IEmployeeListing, IEmployeeToDelete } from "../../interfaces/common";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../hooks/storeHelpers";
 import { getClippedString } from "../../utils";
 import { Tooltip } from "react-tooltip";
-import { TEmpDelete } from "../../pages/ManageEmployees/ManageEmployees";
 
 const EmployeeCard = ({
     employeeData,
@@ -16,7 +15,7 @@ const EmployeeCard = ({
 }: {
     employeeData: IEmployeeListing;
     setIsModalOpen: (isOpen: boolean) => void;
-    setDeleteEmployee: (EmpData: TEmpDelete) => void;
+    setDeleteEmployee: (EmpData: IEmployeeToDelete) => void;
 }) => {
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.auth);

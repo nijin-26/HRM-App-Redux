@@ -2,12 +2,12 @@ import {
     IEmployeeListing,
     IEmployee,
     IReactSelectOption,
+    IEmployeeToDelete,
     // IDeleteEmployee,
 } from "../interfaces/common";
 import { IApiEmployee } from "../interfaces/ApiDataInterface";
 import { Button, LinkButton } from "../components";
 import { locations } from "../pages/ManageEmployees/constants";
-import { TEmpDelete } from "../pages/ManageEmployees/ManageEmployees";
 
 export const fillEmptySlotsWithValue = (arr: any[], value: any) =>
     Array.from(arr, (_, i) => {
@@ -121,7 +121,7 @@ export const modifyFetchedEmployeeData = (employeeObj: IApiEmployee) => {
 export const getEmployeesListingData = (
     employeesList: IApiEmployee[],
     setIsModalOpen?: (isOpen: boolean) => void,
-    setEmpDataToDelete?: (empData: TEmpDelete) => void,
+    setEmpDataToDelete?: (empData: IEmployeeToDelete) => void,
     isAdmin?: boolean
 ) => {
     const newEmpList: IEmployeeListing[] = [];

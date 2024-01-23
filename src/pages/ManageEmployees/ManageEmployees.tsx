@@ -14,7 +14,7 @@ import {
     Loader,
     EmployeeDeleteModal,
 } from "../../components";
-import { ISearchParams } from "../../interfaces/common";
+import { ISearchParams, IEmployeeToDelete } from "../../interfaces/common";
 import { getEmployeesListingData } from "../../utils";
 import {
     fetchEmployees,
@@ -31,17 +31,12 @@ import EmployeeGrid from "../../components/EmployeeGrid/EmployeeGrid";
 import Sort from "../../components/Sort/Sort";
 import SEO from "../../components/common/SEO/SEO";
 
-export type TEmpDelete = {
-    empId: number;
-    email: string;
-};
-
 const ManageEmployees = () => {
     const [searchParams, setSearchParams] = useSearchParams();
     const dispatch = useAppDispatch();
 
     const [isModalopen, setIsModalOpen] = useState(false);
-    const [empToDelete, setEmpToDelete] = useState<TEmpDelete>();
+    const [empToDelete, setEmpToDelete] = useState<IEmployeeToDelete>();
 
     const [toggleGridView, setToggleGridView] = useState(true); // False => Table View :: True => Grid/Card View
 

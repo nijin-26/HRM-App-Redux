@@ -55,3 +55,8 @@ export interface ISearchParams {
     skillIds: string;
     search: string;
 }
+
+export interface IEmployeeToDelete {
+    empId: number;
+    email: string;
+}
