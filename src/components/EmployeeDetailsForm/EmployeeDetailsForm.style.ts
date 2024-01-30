@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
 const StyledFormWrap = styled.div`
     min-width: 1000px;
@@ -55,7 +55,7 @@ const StyledFormWrap = styled.div`
     }
 
     & .required-field::after {
-        content: '*';
+        content: "*";
         color: #b70000;
         position: absolute;
         top: 0;
@@ -64,6 +64,22 @@ const StyledFormWrap = styled.div`
 
     & .form-entry {
         margin-bottom: 12px;
+
+        &.checkbox {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+            gap: 10px;
+
+            label {
+                margin: 0;
+                width: 100%;
+                flex: 1;
+            }
+            input {
+                width: 20px;
+            }
+        }
     }
 
     & .error-msg {

@@ -1,15 +1,22 @@
-import { IEmployee } from '../../interfaces/common';
-import { IApiEmployeeSubmission } from '../../interfaces/ApiDataInterface';
-import { API } from '../../core/api/useApi';
-import { toast } from 'react-toastify';
-import { getPhotoUrl } from '../../core/api/firebase';
+import { toast } from "react-toastify";
+import { IEmployee } from "../../interfaces/common";
+import {
+    IApiEmployee,
+    IApiEmployeeSubmission,
+} from "../../interfaces/ApiDataInterface";
+import { AppDispatch } from "../../core/store";
+import { getPhotoUrl } from "../../core/api/config/firebase";
+import {
+    addEmployeeAction,
+    editEmployeeAction,
+} from "../../core/store/employeesList/actions";
 
 const handleFormSubmit = async (
     formSubmitData: IEmployee,
-    empId: string | null,
-    photoRef: HTMLInputElement | null
+    photoRef: HTMLInputElement | null,
+    dispatch: AppDispatch
 ) => {
-    let photoUrl = '';
+    let photoUrl = "";
     try {
         if (formSubmitData.photoId) {
             photoUrl = formSubmitData.photoId;
@@ -19,17 +26,43 @@ const handleFormSubmit = async (
             photoUrl = await getPhotoUrl(photoRef.files[0]);
         }
     } catch (error) {
-        toast.error('Profile photo could not be uploaded.');
+        toast.error("Profile photo could not be uploaded.");
         console.log(error);
     }
 
-    const { id, gender, location, photoId, role, department, skills, ...rest } =
-        formSubmitData;
+    const {
+        id,
+        gender,
+        location,
+        photoId,
+        role,
+        department,
+        skills,
+        isAdmin,
+        password,
+        ...rest
+    } = formSubmitData;
 
     const moreDetails = {
         gender: gender,
         location: location ? location.label : null,
         photoId: photoUrl,
+        isAdmin: isAdmin,
+    };
+
+    const storeData: IApiEmployee = {
+        ...rest,
+        id,
+        role: role ? { id: Number(role.value), role: role.label } : null,
+        department: department
+            ? { id: Number(department.value), department: department.label }
+            : null,
+        skills: skills.map((skill) => ({
+            id: Number(skill.value),
+            skill: skill.label,
+        })),
+        moreDetails: JSON.stringify(moreDetails),
+        password: password,
     };
 
     const apiSubmitData: IApiEmployeeSubmission = {
@@ -40,19 +73,11 @@ const handleFormSubmit = async (
         moreDetails: JSON.stringify(moreDetails),
     };
 
-    try {
-        await API({
-            method: empId ? 'PATCH' : 'POST',
-            url: empId ? `/employee/${empId}` : '/employee',
-            data: apiSubmitData,
-        });
-        toast.success(
-            `Employee details ${empId ? 'edited' : 'added'} successfully.`
-        );
-    } catch (error) {
-        toast.error(`${empId ? 'Edit' : 'Add'} employee details failed.`);
-        console.log(`${empId ? 'Edit' : 'Add'} failed`, error);
-    }
+    formSubmitData.id
+        ? await dispatch(
+              editEmployeeAction(formSubmitData.id, apiSubmitData, storeData)
+          )
+        : await dispatch(addEmployeeAction(apiSubmitData, storeData));
 };
 
 export default handleFormSubmit;

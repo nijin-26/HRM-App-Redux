@@ -1,8 +1,28 @@
+export interface IAPISignInRequest {
+    username: string;
+    password: string;
+}
+
+export interface IAPISignInResponse {
+    access_token: string;
+    refresh_token: string;
+}
+export interface IAPISignUpRequest {
+    username: string;
+    password: string;
+}
+
+export interface IAPISignUpResponse {
+    id: number;
+    username: string;
+}
+
 export interface IApiEmployee {
     id: number;
     firstName: string;
     lastName: string;
-    isActive: true;
+    isActive: boolean;
+    password?: string;
     dob: string;
     email: string;
     phone: string;
@@ -16,12 +36,14 @@ export interface IApiEmployee {
     moreDetails: string;
 }
 
+export interface IApiEmployeesData {
+    employees: IApiEmployee[];
+    count: number;
+}
+
 export interface IApiFetchEmployeesArray {
     message: string;
-    data: {
-        employees: IApiEmployee[];
-        count: number;
-    };
+    data: IApiEmployeesData;
 }
 
 export interface IApiFetchEmployee {
@@ -46,12 +68,14 @@ export interface IApiEmployeeSubmission {
     moreDetails: string;
 }
 
+export interface IApiEmployeePostRepsonse {
+    message: string;
+    data: { id: number };
+}
+
 export interface IApiFetchSkill {
     message: string;
-    data: {
-        id: number;
-        skill: string;
-    }[];
+    data: IApiSkill[];
 }
 
 export interface IApiSkill {
